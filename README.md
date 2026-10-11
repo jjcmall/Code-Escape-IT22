@@ -1,119 +1,92 @@
 # Code Escape
 
-Code Escape is a 2D/2.5D PC educational game. The player (Alex) moves through six locations, and each locked obstacle or hazard opens a beginner programming question (Python, PHP or SQL). Solving questions unlocks the way forward, earns points and clears levels on a level map.
+Code Escape is a 2D/2.5D PC educational game that teaches beginner programming. The player controls Alex through six locations of a mystery story. Doors, locks and patrolling hazards block the way, and each one opens a short programming question that must be answered correctly to continue.
 
-- **Unity version:** 6000.5.10f1
-- **Cloud packages (added for the cloud save):** `com.unity.services.cloudsave` 3.4.1 (installs `com.unity.services.authentication` 3.7.4 and `com.unity.services.core` 1.18.0 as dependencies). Versions are from `Packages/packages-lock.json`.
+> Capstone project. Course and institution details: **[to be completed by the team]**
 
-## Cloud progression (Unity Cloud Save)
+## Group members
+Group number: **IT22**
 
-Progression is stored in **Unity Cloud Save** (player-specific data). No other cloud service or database is used. The game opens without any login screen: it signs the player in **anonymously** through Unity Authentication, loads the saved progression, and blocks gameplay until that succeeds. This prototype is **online-only**.
+- Jean Joseph C. Mallari
+- Mark Daniel M. Haguisan
+- Louis Angelo D. Junio
+- Alynus Job C. Tombado
 
-### What it is, and is not
-- Cloud Save player data is a per-player **key-value store**. It is not a SQL database: there are no tables, queries or joins.
-- Each player only reads and writes their own data (default access class, written by the signed-in player). There is no shared key.
-- Progression is written by the game client, so **it is not cheat-proof**. A modified client could send any score or level. A trustworthy score would need server-side logic (for example Cloud Code), which is not part of this prototype.
+## Tools and technologies
+- Unity 6000.5.10f1 (C#, Universal Render Pipeline, Input System, uGUI)
+- Unity Gaming Services: Authentication (anonymous sign-in) and Cloud Save, via `com.unity.services.cloudsave` 3.4.1
+- Unity PlayerPrefs for the local save
+- Git and GitHub (GitHub Desktop)
+## Features
+- **Three languages:** Python, PHP and SQL. One is chosen per playthrough, with its own level-map progress.
+- **Six levels:** Home, Maple Street, Warehouse 7, Riverside Tech Facility, Old Station and the Sentinel Control Room, played from a level map. Cleared levels can be replayed.
+- **Questions:** 48 predefined questions (10 obstacle questions per language, plus 18 hazard-challenge questions). Types include multiple choice, predict the output, fill the missing code, fix the incorrect code and choose the correct code. Answers are compared with stored solutions; player code is never executed.
+- **Hints and scoring:** +100 points per solved challenge, -25 for the first hint on a question, with a rank on the results screen.
+- **Story systems:** cutscenes, dialogue, objectives, collectible clues with a journal, settings, and an SDG 4 information panel.
+- **Progress saving:** a local save (PlayerPrefs) plus a **Unity Cloud Save** copy that loads on start. See [Documentation/CloudSave.md](Documentation/CloudSave.md).
 
-### Data stored
-Two Cloud Save keys per player:
-
-| Key | Content |
+## Controls
+| Mode | Keys |
 |---|---|
-| `code_escape_progression` | `PlayerProgressData` JSON (below) |
-| `code_escape_snapshot` | The existing local save files as JSON (selected language, the playthrough `ProgressData`, and each language's `LevelProgressData`), so the level map, checkpoints and Continue work unchanged after a restore |
+| Side view | A / D or Left / Right to walk, W / Up / Space to jump |
+| Top down | WASD or arrow keys to move in eight directions |
 
-`PlayerProgressData` (`Assets/Scripts/Cloud/PlayerProgressData.cs`):
+Menus can be used with the mouse or keyboard (Esc closes panels).
 
-| Field | Meaning |
+## Requirements
+- **Unity 6000.5.10f1** (install through Unity Hub)
+- Windows PC
+- An **internet connection** to play, because progression is loaded from and saved to Unity Cloud Save before gameplay starts
+- A Unity account with this project linked to a Unity Dashboard project (Cloud Save enabled): see the setup section in [Documentation/CloudSave.md](Documentation/CloudSave.md)
+
+## Run the project
+1. Clone the repository and add the folder in Unity Hub (use the exact editor version above).
+2. Open the project. The first import can take a while.
+3. Open `Assets/Scenes/00_MainMenu.unity` and press **Play**.
+4. Wait for the "Connecting to Unity Cloud Save" screen to finish, then choose **Play Adventure**.
+
+To build, use File > Build Profiles (all 12 scenes in `Assets/Scenes` are already in Build Settings).
+
+## Project structure
+| Path | Contents |
 |---|---|
-| `player_id` | Authenticated Unity Player ID |
-| `current_level` | Level ID of the level currently reached |
-| `highest_unlocked_level` | Level ID of the furthest level unlocked in any language |
-| `completed_levels` | Unique level IDs cleared (no duplicates); mirrors the current save |
-| `total_score` | Lifetime score: +100 per distinct solved challenge, -25 per distinct hinted question |
-| `achievements` | Unlocked achievement IDs (see below) |
-| `last_played` | UTC time of the latest progression update (ISO 8601) |
-| `scored_challenges`, `penalised_hints` | Bookkeeping that makes the score idempotent (each entry counted once) |
+| `Assets/Scenes` | Main menu, language select, level map, intro, six level scenes, ending, results |
+| `Assets/Scripts/Programming` | Challenge manager, question data and database, language selection |
+| `Assets/Scripts/Obstacles` | Programming obstacles, catch hazards and their movement |
+| `Assets/Scripts/Player` | Player controller and cameras |
+| `Assets/Scripts/Game` | Game state, level and level-map progress, scene transitions, results, pause |
+| `Assets/Scripts/SaveSystem` | Local save (SaveManager, ProgressSaveService, save data classes) |
+| `Assets/Scripts/Cloud` | Unity Cloud Save integration and its on-screen status UI |
+| `Assets/Scripts/UI`, `Story`, `Clues`, `Dialogue`, `Cutscenes`, `Audio` | Menus and HUD, story flow, clues, dialogue, cutscenes, audio |
+| `Assets/ScriptableObjects/Questions` | The question assets (Python, PHP, SQL, hazards) |
+| `Documentation` | Cloud Save notes and the capstone technical alignment report |
 
-Achievements are my addition, because the game had no achievement system. They are derived from progression: `first_challenge`, `first_level`, `five_challenges`, `halfway` (half the levels cleared in one language), `case_closed` (all levels cleared in one language). Change them in `CloudProgressService.UnlockAchievements`.
+## Database and data
+- **Storage used:** Unity Cloud Save (player data, key-value) through Unity Authentication anonymous sign-in, plus a local save in PlayerPrefs. No credentials are stored in the project; the Unity project is linked to a Unity Dashboard project.
+- **Saved:** current level, highest unlocked level, completed levels, total score, achievements, last played time, and a snapshot used to restore the level map. Saved automatically when a level is cleared or unlocked, when score changes and when the main menu opens.
+- **Retrieved and displayed:** loaded when the game starts, then shown on the level map, the Continue panel and the "Cloud progress" panel.
+- **Details, field list and testing:** [Documentation/CloudSave.md](Documentation/CloudSave.md)
 
-### How loading works (on every start)
-1. `CloudProgressService` (created automatically after the first scene loads) initialises Unity Gaming Services.
-2. It signs in anonymously (`AuthenticationService.SignInAnonymouslyAsync`) if not already signed in.
-3. It loads both keys. If **neither** exists, this player has no progression yet, so a new record is created from the current game state and saved; **only after Cloud Save confirms it does the game unlock**. If only one key exists, or the data cannot be read, the load fails and **nothing is overwritten**.
-4. If a record exists, it is written back through the existing save system (`ProgressSaveService`, `SaveManager`, `LevelProgressManager.ReloadFromSave`, `LanguageManager.RestoreLanguage`), so the level map and Continue show the cloud data.
-5. If anything fails (no internet, services not linked, timeout after 20 s), a full-screen message with a **Retry** button is shown and gameplay stays locked. Progress is never silently reset.
+## Cloud Save setup for a new machine
+No passwords, keys or service account files are needed or stored in this repository. After cloning:
+1. Open the project in Unity 6000.5.10f1 and sign in with your Unity account.
+2. Make sure the project is linked to a Unity Dashboard project (Edit > Project Settings > Services) with Cloud Save enabled. The link is kept in `ProjectSettings`.
+3. Press Play. The game signs in anonymously and loads or creates the player's progress.
 
-One exception, to avoid losing work: if this same Player ID had changes that could not be confirmed last time (the game quit or the network failed), those local changes are newer than the cloud copy and are sent again instead of being overwritten.
-
-### How saving works
-Saves run asynchronously and never block gameplay. Triggers: a level cleared (immediately), a level unlocked, score changes and solved challenges (batched, 3 s debounce), the main menu loading, and the app being paused. Before any request the new record is compared with the last confirmed one; unchanged state sends nothing. Repeated events cannot create duplicate completions or score, because completions are a set and score is computed from distinct solved/hinted IDs.
-
-The status chip (top right) shows **Unsaved changes**, **Saving...**, **Saved to cloud** (only after confirmation) or **Cloud save failed** with a **Retry** button. The **Cloud progress** panel (bottom left on the main menu and level map, collapsible) shows the data last loaded from, or confirmed by, Cloud Save: Player ID (shortened), current level, highest unlocked level, completed levels, total score, achievements and last update. The existing level map also reflects the restored unlocks and completions.
-
-### Persistence and identity: what to expect
-- **Game restart on the same device:** the anonymous session is cached by Unity Authentication, so the same Player ID signs in again and the progression loads.
-- **Different device, cleared local data, or a new Player ID:** anonymous authentication is **not a recoverable account**. A new device, cleared Unity Authentication cache (for example clearing PlayerPrefs / app data, or the editor's session token) or a new profile creates a **new** Player ID with **no progression**, and the old data stays in the cloud but is unreachable by the game. Do not rely on anonymous sign-in to move progress between devices. Real account linking (for example Unity Player Accounts or a platform identity) would be a separate, future feature and is intentionally not implemented here.
-- A progress reset in the game clears levels and the playthrough in the cloud copy, but `total_score` and `achievements` are lifetime totals and are kept.
-
-## Unity Dashboard setup
-Follow the official documentation for current menu names (they change between Unity versions); this is the sequence:
-1. Open the Unity Dashboard (cloud.unity.com), sign in, and create or select a project (inside your organization).
-2. In the Editor, open **Edit > Project Settings > Services**, sign in, and link this project to that Dashboard project. This writes the cloud project ID into `ProjectSettings/ProjectSettings.asset`. (This repository's settings already contain a `cloudProjectId`, so a link existed before this change; check it is the project you intend.)
-3. Install the packages in Package Manager (Unity Registry): **Cloud Save** (`com.unity.services.cloudsave`); Authentication and Core come with it. They are already listed in `Packages/manifest.json`.
-4. In the Dashboard, make sure **Cloud Save** is enabled for the project and environment, and that Authentication allows anonymous sign-in (it is the default identity provider). 
-5. Choose the environment in **Project Settings > Services > Environments** (the default `production` is used if you set nothing). The game calls `UnityServices.InitializeAsync()` with no options, so it uses that environment.
-6. To check data: after playing, open Dashboard > Cloud Save > Player Data and look up the Player ID shown in the game's cloud panel. The two keys above should appear.
-
-## Testing
-
-### Tests I ran (Unity 6000.5.10f1, Play Mode in the Editor, this project, real Unity cloud project)
-| # | Check | Result |
-|---|---|---|
-| 1 | UGS initialises and anonymous sign-in works with no login UI | Passed: the first Play session reached Cloud Save and obtained a Player ID |
-| 2 | New progression is created when no cloud record exists | Passed: log "creating a new record", then a confirmed save |
-| 3 | Existing cloud data loads on the next launch | Passed: second and later sessions logged "Loaded progression from Cloud Save" with the saved values |
-| 4 | Clearing a level updates and saves progression | Passed (simulated by calling `LevelProgressManager.RecordLevelCleared("03_Home", "04_Neighborhood")`): record showed `completed_levels=[home]`, `current_level=neighborhood`, `highest_unlocked_level=neighborhood`, achievement `first_level`, status Synced |
-| 5 | Repeating the same completion adds no duplicate or extra save | Passed: still one completed level, status stayed Synced, no new save logged |
-| 6 | After restart, the level map reflects cloud data | Passed (state read through `LevelProgressManager.GetState`): Home Completed, Neighborhood Available, Warehouse Locked, scene reloaded to the level map |
-| 7 | Project compiles with the packages and changes | Passed: no C# compile errors in the Editor log |
-
-My test data was deleted from Cloud Save afterwards, and the local playthrough and selected language were reset (so you may need to pick a language again). The simulated level clear used the Editor's anonymous test player only.
-
-### Not tested (please run these manually)
-- Visual check of the gate, status chip and progression panel (layout, overlap with existing UI, readability). The UI is built in code and I did not see it rendered.
-- A real play-through: solving questions by hand, hint penalties, score changes in `total_score`, and achievements other than `first_level`.
-- Network failure: disable the network, start the game (expect the gate error and Retry), and go offline mid-game (expect "Cloud save failed" and a working Retry, with progress kept locally and re-sent later).
-- Returning to the main menu triggering a save; quitting the app with unsaved changes and re-launching (the "newer local changes" rule).
-- A standalone Windows build (Editor-only testing so far), and a different device / cleared data (new Player ID, as described above).
-- Cloud Save data-size and rate limits for long playthroughs: see the official limits page.
-- Behaviour when starting the Editor directly in a gameplay scene (the gate covers the screen, but game objects underneath can still tick).
+If Unity shows a Package Manager error, check that `Packages/manifest.json` lists each package only once. Full details: [Documentation/CloudSave.md](Documentation/CloudSave.md).
+## Documentation
+- [Cloud Save progression](Documentation/CloudSave.md): setup, data structure, how loading and saving work, testing and limitations
+- [Technical alignment report](Documentation/TechnicalAlignmentReport/Code_Escape_Technical_Alignment_Report.pdf): requirements, architecture, data and evidence (written before the Cloud Save integration, so its status entries for Authentication and Cloud Save are out of date)
 
 ## Known limitations
-- Anonymous identity only; no recovery or cross-device sync (see above).
-- Not cheat-proof; client-authoritative.
-- Online-only. Unsaved changes are kept in the existing local save (PlayerPrefs) and retried, but they are never reported as saved.
-- Total score is computed from distinct solved and hinted IDs, so replaying a level does not add points, and a hint already penalised once is not penalised again on a replay.
-- Achievements are simple derived rules added for this prototype.
+- Online-only prototype.
+- Anonymous sign-in has no account recovery or cross-device sync: a new device or cleared data starts with empty progress. A login and registration system is planned and will be implemented soon; it is not implemented yet.
+- Progress and scores are written by the game client and are not cheat-proof.
 
-## Files
-
-Created:
-- `Assets/Scripts/Cloud/PlayerProgressData.cs`: record and snapshot data classes
-- `Assets/Scripts/Cloud/CloudProgressService.cs`: initialisation, anonymous sign-in, load, restore, save, retry, achievements
-- `Assets/Scripts/Cloud/ProgressionUI.cs`: online gate, save status chip, progression panel (built in code)
-- `README.md`
-
-Modified:
-- `Packages/manifest.json`: added `com.unity.services.cloudsave` 3.4.1 (`packages-lock.json` updated by Unity)
-- `Assets/Scripts/Programming/LanguageManager.cs`: added `RestoreLanguage` (restores the language without starting a new playthrough)
-- `Assets/Scripts/Game/LevelProgressManager.cs`: added `ReloadFromSave` (re-reads level progress after a restore)
-
-No scene, prefab or gameplay script was changed.
-
-## Documentation references
-- Unity Cloud Save: https://docs.unity.com/ugs/en-us/manual/cloud-save/manual
-- Unity Authentication (anonymous sign-in): https://docs.unity.com/ugs/en-us/manual/authentication/manual/overview
-- Unity Gaming Services overview and Dashboard: https://docs.unity.com/ugs/en-us/manual/overview/manual/unity-gaming-services-home
-
-(Links are given as starting points; Unity reorganises its documentation, so search the title if one has moved.)
+## References
+- Unity Cloud Save documentation: https://docs.unity.com/ugs/en-us/manual/cloud-save/manual
+- Unity Authentication documentation: https://docs.unity.com/ugs/en-us/manual/authentication/manual/overview
+- Unity Gaming Services overview: https://docs.unity.com/ugs/en-us/manual/overview/manual/unity-gaming-services-home
+## Credits and licence
+- Fonts: JetBrains Mono and Orbitron (SIL Open Font Licence; licence files are in `Assets/Fonts`).
+- Project licence: **[to be decided by the team]**. Third-party art and animation assets keep their own licences.
