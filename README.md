@@ -1,6 +1,6 @@
 # Code Escape
 
-Code Escape is a 2D/2.5D PC educational game that teaches beginner programming. The player controls Alex through six locations of a mystery story. Doors, locks and patrolling hazards block the way, and each one opens a short programming question that must be answered correctly to continue.
+Code Escape is a 2D PC educational game. The player (Alex) moves through six locations, and each locked obstacle or hazard opens a beginner programming question (Python, PHP or SQL). Solving questions unlocks the way forward, earns points and clears levels on a level map.
 
 > Capstone project. Course and institution details: **[to be completed by the team]**
 
