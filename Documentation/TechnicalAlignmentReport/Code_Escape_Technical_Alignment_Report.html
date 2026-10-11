@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Code Escape — Capstone Technical Alignment Report</title>
+<style>
+  @page { size: A4; margin: 20mm 17mm 20mm 17mm;
+    @bottom-center { content: "Code Escape — Capstone Technical Alignment Report  |  Page " counter(page); font: 8pt "Segoe UI", Calibri, Arial, sans-serif; color: #667; }
+  }
+  @page :first { margin: 0; @bottom-center { content: ""; } }
+  @page wide { size: A4 landscape; margin: 12mm 12mm 14mm 12mm; }
+  :root { --ink:#1b2430; --muted:#5a6675; --line:#c9d1db; --accent:#0f4c81; --accent2:#e8f0f8;
+          --ok:#176b34; --okbg:#e3f4e8; --wip:#8a5a00; --wipbg:#fff1d0; --plan:#515a66; --planbg:#eceef1; }
+  * { box-sizing: border-box; }
+  html { font-family: "Segoe UI", Calibri, Arial, sans-serif; color: var(--ink); font-size: 10pt; line-height: 1.45; }
+  body { margin: 0; }
+  h1 { font-size: 17pt; color: var(--accent); margin: 0 0 3mm; padding-bottom: 2mm; border-bottom: 2px solid var(--accent); break-after: avoid; }
+  h2 { font-size: 12pt; color: var(--accent); margin: 6mm 0 2mm; break-after: avoid; }
+  h3 { font-size: 10.5pt; margin: 4mm 0 1.5mm; break-after: avoid; }
+  p { margin: 0 0 2.5mm; }
+  .part { break-before: page; }
+  .pts { float: right; font-size: 9pt; font-weight: 600; color: var(--muted); border: 1px solid var(--line); border-radius: 10px; padding: 0 3mm; margin-top: 1.5mm; }
+  .rubric { background: var(--accent2); border-left: 3px solid var(--accent); padding: 2mm 3.5mm; margin: 0 0 3.5mm; font-size: 9pt; color: #25364a; }
+  table { width: 100%; border-collapse: collapse; margin: 2mm 0 4mm; font-size: 8.4pt; table-layout: fixed; }
+  thead { display: table-header-group; }
+  th { background: var(--accent); color: #fff; text-align: left; padding: 1.8mm 2mm; font-weight: 600; border: 1px solid var(--accent); }
+  td { padding: 1.3mm 1.8mm; border: 1px solid var(--line); vertical-align: top; overflow-wrap: anywhere; }
+  tr { break-inside: avoid; }
+  tbody tr:nth-child(even) td { background: #f7f9fb; }
+  code, .f { font-family: Consolas, "Cascadia Mono", monospace; font-size: 8.3pt; background: #f0f3f6; padding: 0 1mm; border-radius: 2px; overflow-wrap: anywhere; }
+  .pill { display: inline-block; font-weight: 700; font-size: 8pt; padding: 0.3mm 2mm; border-radius: 9px; white-space: nowrap; }
+  .Implemented { background: var(--okbg); color: var(--ok); border: 1px solid #9ad0ac; }
+  .InProgress { background: var(--wipbg); color: var(--wip); border: 1px solid #e3c06e; }
+  .Planned { background: var(--planbg); color: var(--plan); border: 1px solid #b7bec8; }
+  .Absent { background: #fde8e8; color: #8c1d1d; border: 1px solid #e5a3a3; }
+  .note { border: 1px solid #e3c06e; background: #fff8e6; padding: 2.5mm 3.5mm; margin: 3mm 0; font-size: 9pt; }
+  .kv td:first-child { width: 33%; font-weight: 600; background: #f3f6f9; }
+  ul { margin: 0 0 3mm 5mm; padding: 0; } li { margin-bottom: 1mm; }
+  /* cover */
+  .cover { height: 296mm; padding: 38mm 25mm 20mm; background: linear-gradient(180deg,#0b2a47 0 52%, #fff 52%); page-break-after: always; break-after: page; position: relative; overflow: hidden; }
+  .cover .kicker { color: #9fc3e6; letter-spacing: 3px; font-size: 10pt; text-transform: uppercase; }
+  .cover h1 { color: #fff; border: 0; font-size: 28pt; line-height: 1.15; margin: 6mm 0 6mm; padding: 0; }
+  .cover .sub { color: #d6e6f5; font-size: 12pt; max-width: 130mm; }
+  .cover .meta { position: absolute; left: 25mm; right: 25mm; top: 165mm; }
+  .cover table { font-size: 10pt; } .cover .kv td { padding: 2.4mm 3mm; }
+  .cover .stat { position: absolute; left: 25mm; right: 25mm; bottom: 16mm; font-size: 8.5pt; color: var(--muted); }
+  .ph { color: #a0521c; font-style: italic; }
+  /* toc */
+  .toc td { border: 0; border-bottom: 1px dotted var(--line); padding: 2.2mm 1mm; background: none !important; }
+  .toc td:last-child { text-align: right; width: 20mm; color: var(--muted); }
+  /* diagram page */
+  .wide { page: wide; break-before: page; break-after: page; }
+  .wide h1 { font-size: 14pt; margin-bottom: 2mm; }
+  .wide svg { width: 100%; height: auto; display: block; }
+  .legend { font-size: 8.5pt; color: var(--muted); margin-top: 1mm; }
+  .shot { border: 1.5px dashed #9aa6b4; height: 44mm; margin: 1.5mm 0 3mm; display: flex; align-items: center; justify-content: center; color: #8a95a3; font-size: 9pt; text-align: center; break-inside: avoid; }
+</style>
+</head>
+<body>
+
+<!-- ================= COVER ================= -->
+<section class="cover">
+  <div class="kicker">Capstone Project · Technical Alignment Activity</div>
+  <h1>Code Escape — Capstone Technical Alignment Report</h1>
+  <div class="sub">Requirements, architecture, data and implementation evidence for the Code Escape Unity PC game, based on inspection of the actual project files.</div>
+  <div class="meta">
+    <table class="kv">
+      <tr><td>Student</td><td class="ph">[Student name — to be completed]</td></tr>
+      <tr><td>Capstone group</td><td class="ph">[Group name / members — to be completed]</td></tr>
+      <tr><td>Course / section</td><td class="ph">[Course code and section — to be completed]</td></tr>
+      <tr><td>Instructor</td><td class="ph">[Instructor name — to be completed]</td></tr>
+      <tr><td>Institution</td><td class="ph">[Institution — to be completed]</td></tr>
+      <tr><td>Project inspected</td><td>Code Escape · Unity 6000.5.10f1 · 2D/2.5D PC game</td></tr>
+      <tr><td>Report prepared</td><td>11 October 2026</td></tr>
+    </table>
+  </div>
+  <div class="stat"><b>Evidence note.</b> Implementation status in this report reflects the evidence inspected (project files, scripts, scenes, prefabs and package configuration) at the time of report preparation. Anything not evidenced in those files is marked Planned or listed as a gap.</div>
+</section>
+
+<!-- ================= TOC / HOW TO READ ================= -->
+<section>
+  <h1>Contents and How to Read This Report</h1>
+  <table class="toc">
+    <tr><td>Part I — Core Requirements Alignment</td><td>8 pts</td></tr>
+    <tr><td>Part II — Requirements-to-Architecture Mapping</td><td>8 pts</td></tr>
+    <tr><td>Part III — System Architecture (diagram and explanation)</td><td>12 pts</td></tr>
+    <tr><td>Part IV — Data and Storage Alignment</td><td>5 pts</td></tr>
+    <tr><td>Part V — Current Implementation Evidence</td><td>5 pts</td></tr>
+    <tr><td>Part VI — Next Technical Milestone</td><td>4 pts</td></tr>
+    <tr><td>Appendix A — Evidence still needed from the group</td><td>—</td></tr>
+  </table>
+
+  <h2>Status definitions used throughout</h2>
+  <table>
+    <thead><tr><th style="width:26mm">Status</th><th>Meaning in this report</th></tr></thead>
+    <tbody>
+      <tr><td><span class="pill Implemented">Implemented</span></td><td>Working code, data or configuration for the item exists in the project files. This inspection read the files; it did <b>not</b> run the game, so runtime behaviour is "present in code, not verified at runtime" unless stated.</td></tr>
+      <tr><td><span class="pill InProgress">In Progress</span></td><td>Part of the item is implemented in the project files and part is still missing.</td></tr>
+      <tr><td><span class="pill Planned">Planned</span></td><td>No implementation evidence in the project. The item is only intended or recommended.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Project at a glance (from the files)</h2>
+  <table class="kv">
+    <tr><td>Game</td><td>Code Escape: a story-driven PC game. The player (Alex) moves through six locations, and each locked obstacle or hazard opens a beginner programming question.</td></tr>
+    <tr><td>Languages taught</td><td>Python, PHP and SQL (<span class="f">ProgrammingLanguage.cs</span>). One language is chosen per playthrough.</td></tr>
+    <tr><td>Playable levels</td><td>6: <span class="f">home</span>, <span class="f">neighborhood</span>, <span class="f">warehouse</span>, <span class="f">facility</span>, <span class="f">station</span>, <span class="f">final_area</span> (list in <span class="f">Assets/Prefabs/Resources/GameSystems.prefab</span>).</td></tr>
+    <tr><td>Question bank</td><td>48 <span class="f">QuestionData</span> assets: 10 obstacle questions each for Python, PHP and SQL, plus 18 hazard-challenge questions (<span class="f">Assets/ScriptableObjects/Questions</span>).</td></tr>
+    <tr><td>Scenes in Build Settings</td><td>12 enabled (<span class="f">00_MainMenu</span> … <span class="f">10_Results</span>, <span class="f">ProjectSettings/EditorBuildSettings.asset</span>).</td></tr>
+    <tr><td>Source control</td><td>The project folder is not a Git repository, so no commit history can be cited. See Appendix A.</td></tr>
+  </table>
+</section>
+
+<!-- ================= PART I ================= -->
+<section class="part">
+  <h1>Part I — Core Requirements Alignment <span class="pts">8 points</span></h1>
+  <div class="rubric"><b>Rubric focus:</b> three to five core requirements that directly affect the technical implementation, written as system capabilities, with who needs each and why it matters.</div>
+  <p>Five requirements were selected because each one is visible in the project files and each forces a technical decision (components, data or storage).</p>
+  <table>
+    <thead><tr><th style="width:5%">ID</th><th style="width:35%">Core Requirement / Capability</th><th style="width:20%">Who Needs It?</th><th>Why It Matters</th></tr></thead>
+    <tbody>
+      <tr><td>R1</td><td><b>Present and evaluate programming questions.</b> The system selects a question for the chosen language, shows it, checks the player's answer against a stored solution, offers a hint, and gives feedback. It does not compile or run player code.</td><td>Student (learner); instructor (learning goal)</td><td>This is the educational core of the game. Without answer checking, obstacles cannot unlock and the game would not teach Python, PHP or SQL.</td></tr>
+      <tr><td>R2</td><td><b>Control the player character and gate movement with obstacles.</b> The system reads keyboard input, moves Alex, and blocks or catches the player at programming obstacles and hazards until the related challenge is solved.</td><td>Student</td><td>It connects play to learning. Obstacles are the trigger for every question, so movement and challenge systems must exchange events reliably.</td></tr>
+      <tr><td>R3</td><td><b>Manage level progression.</b> The system keeps a stable list of levels, unlocks the next level only after the required challenges are solved, shows a level map per language, and allows replay of cleared levels.</td><td>Student; capstone group (content design)</td><td>It enforces the learning order and tells the student where they are in the story. Stable level IDs are needed so saves stay valid when content changes.</td></tr>
+      <tr><td>R4</td><td><b>Calculate and display scores and results.</b> The system awards points for correct answers, deducts a penalty for hints, and presents score, hints, clues, time and a rank on a results screen.</td><td>Student; instructor (performance feedback)</td><td>Scores give immediate feedback and a measurable outcome. They are the main data any later report or leaderboard would use.</td></tr>
+      <tr><td>R5</td><td><b>Persist and restore progress.</b> The system saves progress automatically and restores language, level, score, solved challenges and settings when the game is reopened. Linking progress to a student identity is a possible extension (see note).</td><td>Student; capstone group (testing and demonstration)</td><td>Play sessions are interrupted. Without persistence, students would restart the story each time and the group could not demonstrate continuing progress.</td></tr>
+    </tbody>
+  </table>
+  <div class="note"><b>Note on student accounts.</b> The instructor prompt mentions student accounts "where applicable". The project files contain no login, registration, user or authentication code (Part V, E6), and no document in the project states that accounts are a requirement. Accounts are therefore <b>not</b> counted among R1–R5. They appear as a Planned extension of R5 and are examined again in Part VI. The group should confirm whether accounts are an actual capstone requirement (Appendix A).</div>
+</section>
+
+<!-- ================= PART II ================= -->
+<section class="part">
+  <h1>Part II — Requirements-to-Architecture Mapping <span class="pts">8 points</span></h1>
+  <div class="rubric"><b>Rubric focus:</b> every Part I requirement mapped to specific responsible components, the data needed, and an evidence-based status.</div>
+  <p>Component names are the actual C# classes and assets under <span class="f">Assets/Scripts</span> and <span class="f">Assets/ScriptableObjects</span>.</p>
+  <table>
+    <thead><tr><th style="width:15%">Requirement</th><th style="width:33%">Responsible Component/s</th><th style="width:34%">Data Needed</th><th style="width:18%">Current Status</th></tr></thead>
+    <tbody>
+      <tr><td><b>R1</b> Present and evaluate programming questions</td>
+        <td><span class="f">ProgrammingChallengeManager</span> (opens challenge, <span class="f">SubmitChoice</span>/<span class="f">SubmitTypedAnswer</span>, hint); <span class="f">QuestionData</span> (<span class="f">IsCorrectChoice</span>, <span class="f">IsCorrectTypedAnswer</span>); <span class="f">QuestionDatabase</span>; <span class="f">ChallengeUI</span>; <span class="f">LanguageManager</span></td>
+        <td>Question id, language, topic, difficulty, type, questionText, code, choices, correctChoiceIndex, acceptedAnswers, caseSensitive, hint, explanation; submitted answer; correct/incorrect result</td>
+        <td><span class="pill Implemented">Implemented</span><br>Code and 48 question assets present; not run.</td></tr>
+      <tr><td><b>R2</b> Control player and gate movement with obstacles</td>
+        <td><span class="f">PlayerController</span> (side-view and top-down modes); <span class="f">CameraFollow2D</span>/<span class="f">CameraController</span>; <span class="f">ProgrammingObstacle</span>; <span class="f">CatchHazard</span>; <span class="f">HazardMotion</span>; <span class="f">LevelExit</span>; <span class="f">GameManager</span> + <span class="f">GameState</span></td>
+        <td>Movement input, movement mode, grounded state; obstacleId, required question, hazard type and difficulty; GameState (Playing, Challenge, Paused, Cutscene …); obstacle solved flag</td>
+        <td><span class="pill Implemented">Implemented</span><br>Nine obstacles are placed in scenes 03–08. Hazard scripts are the most recently edited files.</td></tr>
+      <tr><td><b>R3</b> Manage level progression</td>
+        <td><span class="f">LevelManager</span> (<span class="f">LevelInfo</span> list, unlock/complete); <span class="f">LevelProgressManager</span>; <span class="f">LevelMapUI</span> + <span class="f">LevelMapNode</span>; <span class="f">LevelExit</span>; <span class="f">SceneTransitionManager</span>; <span class="f">SceneNames</span></td>
+        <td>levelId, sceneName, displayName, requiredChallenges, unlockedAtStart; unlockedLevels, completedLevels, activeLevel, lastPlayedLevel, per-level checkpoints</td>
+        <td><span class="pill Implemented">Implemented</span><br>Level map (<span class="f">01b_LevelMap</span>) and progress logic present; not run.</td></tr>
+      <tr><td><b>R4</b> Calculate and display scores and results</td>
+        <td><span class="f">ProgrammingChallengeManager</span> (<span class="f">Score</span>, <span class="f">HintsUsed</span>, <span class="f">ScoreChanged</span>); <span class="f">GameplayHUD</span> + <span class="f">ScoreLabel</span>; <span class="f">ResultsManager</span>; <span class="f">ResultsUI</span>; <span class="f">ClueManager</span></td>
+        <td>score (+100 per correct answer, −25 per first hint on a question), hintsUsed, completed challenges / total, clues collected / total, timePlayed, rank, completion status</td>
+        <td><span class="pill Implemented">Implemented</span><br>Scoring and results screen exist. Score is a single running total; no per-level score.</td></tr>
+      <tr><td><b>R5</b> Persist and restore progress</td>
+        <td><b>Existing:</b> <span class="f">SaveManager</span> (PlayerPrefs + JSON); <span class="f">ProgressSaveService</span> (autosave); <span class="f">ProgressData</span>; <span class="f">LevelProgressData</span>; <span class="f">SettingsData</span>; <span class="f">SettingsManager</span>; <span class="f">MainMenuUI</span> (Continue).<br><b>Not present:</b> Login/Registration UI, Unity Authentication, Unity Cloud Save</td>
+        <td>Existing: language, storyStage, currentLevel, activeLevel, completed/unlocked levels, completedChallenges, completedQuestions, hintedQuestions, collectedClues, score, hintsUsed, timePlayed, settings.<br>Not present: student id, credentials, cloud copy</td>
+        <td><span class="pill InProgress">In Progress</span><br>Local save <span class="pill Implemented">Implemented</span>; student identity and cloud storage <span class="pill Planned">Planned</span>.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ================= PART III DIAGRAM (landscape) ================= -->
+<section class="wide">
+  <h1>Part III — System Architecture <span class="pts">12 points</span></h1>
+  <svg viewBox="0 0 1100 600" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Calibri, Arial, sans-serif" role="img" aria-label="Code Escape system architecture diagram">
+    <defs>
+      <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1b2430"/></marker>
+      <marker id="ahp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b7480"/></marker>
+    </defs>
+    <rect x="0" y="0" width="1100" height="600" fill="#ffffff"/>
+
+    <!-- system boundary + external -->
+    <rect x="190" y="25" width="735" height="568" rx="10" fill="#f8fbff" stroke="#0f4c81" stroke-width="2" stroke-dasharray="9 5"/>
+    <text x="202" y="42" font-size="12" font-weight="700" fill="#0f4c81">CAPSTONE SYSTEM BOUNDARY — Code Escape Unity PC game client (runs on the student's computer)</text>
+    <rect x="965" y="25" width="130" height="568" rx="10" fill="#f4f4f6" stroke="#8b94a1" stroke-width="1.5" stroke-dasharray="4 4"/>
+    <text x="1030" y="42" font-size="11" font-weight="700" fill="#515a66" text-anchor="middle">EXTERNAL SERVICES</text>
+    <text x="1030" y="55" font-size="9.5" fill="#515a66" text-anchor="middle">(none connected today)</text>
+
+    <!-- player -->
+    <rect x="8" y="70" width="102" height="330" rx="10" fill="#fff4e0" stroke="#b36b00" stroke-width="1.6"/>
+    <text x="59" y="215" font-size="13" font-weight="700" text-anchor="middle" fill="#1b2430">Student /</text>
+    <text x="59" y="231" font-size="13" font-weight="700" text-anchor="middle" fill="#1b2430">Player</text>
+    <text x="59" y="248" font-size="10" text-anchor="middle" fill="#5a6675">keyboard + UI</text>
+    <text x="59" y="260" font-size="10" text-anchor="middle" fill="#5a6675">input</text>
+    <text x="59" y="440" font-size="10" text-anchor="middle" fill="#5a6675">(outside the system)</text>
+
+    <!-- Col 1 -->
+    <rect x="210" y="70" width="170" height="70" rx="7" fill="#eceef1" stroke="#6b7480" stroke-width="1.5" stroke-dasharray="6 4"/>
+    <text x="295" y="88" font-size="12" font-weight="700" text-anchor="middle">Login &amp; Registration UI</text>
+    <text x="295" y="104" font-size="10" text-anchor="middle" fill="#3b4450">no script or scene exists</text>
+    <text x="295" y="130" font-size="10" font-weight="700" text-anchor="middle" fill="#515a66">PLANNED</text>
+
+    <rect x="210" y="160" width="170" height="70" rx="7" fill="#e3f4e8" stroke="#176b34" stroke-width="1.5"/>
+    <text x="295" y="177" font-size="12" font-weight="700" text-anchor="middle">Main Menu &amp; Level Selection</text>
+    <text x="295" y="192" font-size="9.5" text-anchor="middle" fill="#25364a">MainMenuUI · LanguageSelectUI</text>
+    <text x="295" y="204" font-size="9.5" text-anchor="middle" fill="#25364a">· LevelMapUI</text>
+    <text x="295" y="222" font-size="10" font-weight="700" text-anchor="middle" fill="#176b34">IMPLEMENTED</text>
+
+    <rect x="210" y="250" width="170" height="82" rx="7" fill="#e3f4e8" stroke="#176b34" stroke-width="1.5"/>
+    <text x="295" y="267" font-size="12" font-weight="700" text-anchor="middle">Player Controller &amp; Obstacles</text>
+    <text x="295" y="282" font-size="9.5" text-anchor="middle" fill="#25364a">PlayerController</text>
+    <text x="295" y="294" font-size="9.5" text-anchor="middle" fill="#25364a">ProgrammingObstacle · CatchHazard</text>
+    <text x="295" y="306" font-size="9.5" text-anchor="middle" fill="#25364a">· LevelExit</text>
+    <text x="295" y="324" font-size="10" font-weight="700" text-anchor="middle" fill="#176b34">IMPLEMENTED</text>
+
+    <rect x="210" y="352" width="170" height="68" rx="7" fill="#e3f4e8" stroke="#176b34" stroke-width="1.5"/>
+    <text x="295" y="369" font-size="12" font-weight="700" text-anchor="middle">Challenge UI &amp; HUD</text>
+    <text x="295" y="385" font-size="9.5" text-anchor="middle" fill="#25364a">ChallengeUI · GameplayHUD</text>
+    <text x="295" y="410" font-size="10" font-weight="700" text-anchor="middle" fill="#176b34">IMPLEMENTED</text>
+
+    <!-- Col 2 -->
+    <rect x="480" y="160" width="190" height="86" rx="7" fill="#e3f4e8" stroke="#176b34" stroke-width="1.5"/>
+    <text x="575" y="178" font-size="12" font-weight="700" text-anchor="middle">Level &amp; Game State Manager</text>
+    <text x="575" y="194" font-size="9.5" text-anchor="middle" fill="#25364a">GameManager · LevelManager</text>
+    <text x="575" y="206" font-size="9.5" text-anchor="middle" fill="#25364a">· LevelProgressManager</text>
+    <text x="575" y="238" font-size="10" font-weight="700" text-anchor="middle" fill="#176b34">IMPLEMENTED</text>
+
+    <rect x="480" y="300" width="190" height="104" rx="7" fill="#e3f4e8" stroke="#176b34" stroke-width="1.5"/>
+    <text x="575" y="318" font-size="12" font-weight="700" text-anchor="middle">Programming Challenge System</text>
+    <text x="575" y="334" font-size="9.5" text-anchor="middle" fill="#25364a">ProgrammingChallengeManager</text>
+    <text x="575" y="346" font-size="9.5" text-anchor="middle" fill="#25364a">QuestionDatabase · QuestionData</text>
+    <text x="575" y="361" font-size="9" text-anchor="middle" fill="#3b4450">answer checking only; player code</text>
+    <text x="575" y="372" font-size="9" text-anchor="middle" fill="#3b4450">is never compiled or executed</text>
+    <text x="575" y="396" font-size="10" font-weight="700" text-anchor="middle" fill="#176b34">IMPLEMENTED</text>
+
+    <!-- Col 3 -->
+    <rect x="760" y="300" width="150" height="104" rx="7" fill="#e3f4e8" stroke="#176b34" stroke-width="1.5"/>
+    <text x="835" y="318" font-size="12" font-weight="700" text-anchor="middle">Scoring &amp; Progress</text>
+    <text x="835" y="334" font-size="9.5" text-anchor="middle" fill="#25364a">Score · hints · clues</text>
+    <text x="835" y="346" font-size="9.5" text-anchor="middle" fill="#25364a">ResultsManager</text>
+    <text x="835" y="358" font-size="9.5" text-anchor="middle" fill="#25364a">· ResultsUI</text>
+    <text x="835" y="396" font-size="10" font-weight="700" text-anchor="middle" fill="#176b34">IMPLEMENTED</text>
+
+    <!-- save service + storage -->
+    <rect x="480" y="458" width="430" height="52" rx="7" fill="#e3f4e8" stroke="#176b34" stroke-width="1.5"/>
+    <text x="695" y="476" font-size="12" font-weight="700" text-anchor="middle">Save Service — ProgressSaveService (autosave) · SaveManager</text>
+    <text x="695" y="492" font-size="9.5" text-anchor="middle" fill="#25364a">listens to game events; serialises ProgressData / LevelProgressData as JSON</text>
+    <text x="695" y="505" font-size="10" font-weight="700" text-anchor="middle" fill="#176b34">IMPLEMENTED</text>
+
+    <rect x="210" y="530" width="700" height="52" rx="7" fill="#e3f4e8" stroke="#176b34" stroke-width="2"/>
+    <text x="560" y="548" font-size="12" font-weight="700" text-anchor="middle">Local persistent storage — Unity PlayerPrefs on the student's PC (only storage that exists)</text>
+    <text x="560" y="563" font-size="9.5" text-anchor="middle" fill="#25364a">keys: CodeEscape.Progress · CodeEscape.LevelProgress.{python|php|sql} · SelectedLanguage · settings</text>
+    <text x="560" y="576" font-size="10" font-weight="700" text-anchor="middle" fill="#176b34">IMPLEMENTED (no database)</text>
+
+    <!-- external boxes -->
+    <rect x="975" y="70" width="110" height="82" rx="7" fill="#eceef1" stroke="#6b7480" stroke-width="1.5" stroke-dasharray="6 4"/>
+    <text x="1030" y="90" font-size="11" font-weight="700" text-anchor="middle">Unity</text>
+    <text x="1030" y="104" font-size="11" font-weight="700" text-anchor="middle">Authentication</text>
+    <text x="1030" y="120" font-size="9" text-anchor="middle" fill="#3b4450">no package or code</text>
+    <text x="1030" y="142" font-size="10" font-weight="700" text-anchor="middle" fill="#515a66">PLANNED</text>
+
+    <rect x="975" y="452" width="110" height="68" rx="7" fill="#eceef1" stroke="#6b7480" stroke-width="1.5" stroke-dasharray="6 4"/>
+    <text x="1030" y="472" font-size="11" font-weight="700" text-anchor="middle">Unity</text>
+    <text x="1030" y="486" font-size="11" font-weight="700" text-anchor="middle">Cloud Save</text>
+    <text x="1030" y="510" font-size="10" font-weight="700" text-anchor="middle" fill="#515a66">PLANNED</text>
+
+    <!-- player arrows -->
+    <g stroke="#6b7480" stroke-width="1.6" fill="none" stroke-dasharray="6 4"><path d="M110,105 H208" marker-end="url(#ahp)"/></g>
+    <g stroke="#1b2430" stroke-width="1.6" fill="none">
+      <path d="M110,195 H208" marker-end="url(#ah)"/>
+      <path d="M110,291 H208" marker-end="url(#ah)"/>
+      <path d="M110,386 H208" marker-start="url(#ah)" marker-end="url(#ah)"/>
+    </g>
+    <g font-size="10" fill="#1b2430" text-anchor="middle">
+      <text x="159" y="90" fill="#515a66">credentials</text><text x="159" y="101" fill="#515a66">(Planned)</text>
+      <text x="159" y="178">select language</text><text x="159" y="189">/ level</text>
+      <text x="159" y="274">move · jump</text><text x="159" y="285">(arrow/WASD)</text>
+      <text x="159" y="368">answers · hints</text><text x="159" y="379">questions</text>
+    </g>
+
+    <!-- authentication (planned) -->
+    <path d="M380,105 H973" stroke="#6b7480" stroke-width="1.6" fill="none" stroke-dasharray="6 4" marker-end="url(#ahp)"/>
+    <text x="676" y="97" font-size="10.5" text-anchor="middle" fill="#515a66">authentication: register / sign in, returns student id (Planned)</text>
+
+    <!-- internal arrows -->
+    <g stroke="#1b2430" stroke-width="1.6" fill="none">
+      <path d="M380,195 H478" marker-end="url(#ah)"/>
+      <path d="M380,291 H455 V350 H478" marker-end="url(#ah)"/>
+      <path d="M380,386 H478" marker-start="url(#ah)" marker-end="url(#ah)"/>
+      <path d="M575,300 V248" marker-end="url(#ah)"/>
+      <path d="M670,350 H758" marker-end="url(#ah)"/>
+      <path d="M670,210 H835 V298" marker-end="url(#ah)"/>
+      <path d="M835,404 V456" marker-end="url(#ah)"/>
+      <path d="M600,510 V528" marker-end="url(#ah)"/>
+    </g>
+    <!-- retrieval (storage -> save service -> managers) -->
+    <path d="M735,458 V178 H672" stroke="#176b34" stroke-width="1.8" fill="none" marker-end="url(#ah)" stroke-dasharray="1 0"/>
+    <!-- cloud sync planned -->
+    <path d="M910,484 H973" stroke="#6b7480" stroke-width="1.6" fill="none" stroke-dasharray="6 4" marker-end="url(#ahp)"/>
+
+    <g font-size="10" fill="#1b2430">
+      <text x="429" y="184" text-anchor="middle">start level</text>
+      <text x="417" y="269" text-anchor="middle">obstacle</text><text x="417" y="280" text-anchor="middle">contact</text>
+      <text x="429" y="368" text-anchor="middle">question /</text><text x="429" y="379" text-anchor="middle">answer event</text>
+      <text x="582" y="270">obstacle solved</text><text x="582" y="282">→ unlock exit</text>
+      <text x="700" y="338" text-anchor="middle">score update</text><text x="700" y="349" text-anchor="middle" font-size="9">+100 / −25</text>
+      <text x="745" y="202">level cleared</text>
+      <text x="829" y="426" text-anchor="end">progress save</text><text x="829" y="438" text-anchor="end">(event-driven)</text>
+      <text x="610" y="523">JSON write / read</text>
+      <text x="728" y="440" text-anchor="end" fill="#176b34" font-weight="700">data retrieval</text><text x="728" y="452" text-anchor="end" fill="#176b34">LoadProgress() at start</text>
+      <text x="940" y="470" text-anchor="middle" fill="#515a66" font-size="9">sync</text><text x="940" y="500" text-anchor="middle" fill="#515a66" font-size="9">(Planned)</text>
+    </g>
+  </svg>
+  <div class="legend">
+    <b>Legend:</b> solid green box = Implemented (present in project files, not run during this inspection) · dashed grey box / dashed arrow = Planned (no implementation evidence) · solid arrows = communication that exists in code (C# events and singleton references) · green arrow = data retrieval. No component was found that is only partly built, so none is drawn In Progress.
+  </div>
+</section>
+
+<!-- ================= PART III TEXT ================= -->
+<section>
+  <h2>Architecture explanation (Part III)</h2>
+  <p>The student interacts with the Unity PC client through keyboard and UI input: menu and level-map selection (<span class="f">MainMenuUI</span>, <span class="f">LevelMapUI</span>), movement (<span class="f">PlayerController</span>) and answering questions in <span class="f">ChallengeUI</span>. Main processing happens on the client, inside a persistent <span class="f">GameSystems</span> object. <span class="f">ProgrammingChallengeManager</span> compares answers with stored solutions, without executing player code, and updates the score, while <span class="f">LevelManager</span> and <span class="f">LevelProgressManager</span> unlock levels. Persistent data is stored on the student's own device in PlayerPrefs as JSON through <span class="f">SaveManager</span>. No database, authentication or cloud service exists in the project. Components communicate through C# static events (such as <span class="f">ChallengeCompleted</span>, <span class="f">ScoreChanged</span> and <span class="f">LevelUnlocked</span>) and singleton <span class="f">Instance</span> references; <span class="f">ProgressSaveService</span> listens to these events to autosave. File modification dates show that hazard-triggered challenges and the level map were edited most recently, so they appear to be the area under active work (the group should confirm). The next component to implement is student identity, meaning a Login/Registration UI backed by a storage interface, which Unity Authentication and Cloud Save would later depend on.</p>
+  <h3>Evidence behind each point</h3>
+  <ul>
+    <li><b>Interaction:</b> <span class="f">PlayerController.cs</span> uses the Input System package; UI scripts under <span class="f">Assets/Scripts/UI</span>.</li>
+    <li><b>Processing and communication:</b> events declared in <span class="f">ProgrammingChallengeManager.cs</span>, <span class="f">LevelManager.cs</span>, <span class="f">ClueManager.cs</span>, <span class="f">StoryManager.cs</span>; subscribed in <span class="f">ProgressSaveService.cs</span> (<span class="f">OnEnable</span>).</li>
+    <li><b>Storage:</b> <span class="f">SaveManager.cs</span> calls only <span class="f">PlayerPrefs</span>. A search of <span class="f">Assets/Scripts</span> found no use of Unity Services, web requests, SQLite, Firebase, file I/O, login or registration.</li>
+    <li><b>Current / next work:</b> inference from file timestamps (10 Oct 2026) and from the absence of any identity code. It is not a statement from the group.</li>
+  </ul>
+</section>
+
+<!-- ================= PART IV ================= -->
+<section class="part">
+  <h1>Part IV — Data and Storage Alignment <span class="pts">5 points</span></h1>
+  <div class="rubric"><b>Rubric focus:</b> relevant entities and fields, why each must persist, and where it is stored, separating existing storage, planned storage, temporary session data and persistent data.</div>
+  <div class="note"><b>Honest summary:</b> the project has <b>no database</b>. The only implemented storage is Unity <span class="f">PlayerPrefs</span> on the local computer (on Windows standalone builds Unity keeps PlayerPrefs in the current user's registry). All other storage below is Planned.</div>
+  <p style="font-size:9pt"><b>Gaps found in the current storage design.</b> (1) Every user of one computer account shares the same save slot. (2) Finishing the story calls <span class="f">ClearSave()</span>, so the final score and results are not kept after the Results screen. (3) Score is one running total with no per-level or per-question score history.</p>
+  <table>
+    <thead><tr><th style="width:17%">Data / Entity</th><th style="width:37%">Important Fields</th><th style="width:25%">Why It Must Persist</th><th style="width:21%">Storage</th></tr></thead>
+    <tbody>
+      <tr><td><b>Selected language</b><br><span class="pill Implemented">Persistent</span></td>
+        <td><span class="f">language</span> (Python / PHP / SQL)</td>
+        <td>Decides which question set and which level-map progress belong to the player on the next launch.</td>
+        <td>Existing: PlayerPrefs key <span class="f">CodeEscape.SelectedLanguage</span></td></tr>
+      <tr><td><b>Playthrough progress</b> (<span class="f">ProgressData</span>)<br><span class="pill Implemented">Persistent</span></td>
+        <td>version, language, storyStage, currentLevel, currentObjective, activeLevel, completedEvents, unlockedLevels, completedLevels, completedChallenges, completedQuestions, hintedQuestions, collectedClues, <b>score</b>, hintsUsed, timePlayed</td>
+        <td>Lets the student continue and keeps solved challenges, clues and score.</td>
+        <td>Existing: one JSON string in PlayerPrefs key <span class="f">CodeEscape.Progress</span>. Deleted when the story is finished (<span class="f">ResultsManager</span>).</td></tr>
+      <tr><td><b>Level-map progress</b> (<span class="f">LevelProgressData</span>)<br><span class="pill Implemented">Persistent</span></td>
+        <td>version, language, completedLevels (stable levelIds), lastPlayedLevel, checkpoints[ levelId, ProgressData state ]</td>
+        <td>Keeps cleared levels unlocked and allows replay or skip-to from the level map, separately for each language.</td>
+        <td>Existing: one JSON string per language, key <span class="f">CodeEscape.LevelProgress.&lt;language&gt;</span></td></tr>
+      <tr><td><b>Player settings</b> (<span class="f">SettingsData</span>)<br><span class="pill Implemented">Persistent</span></td>
+        <td>musicVolume, sfxVolume, fullscreen, resolutionWidth, resolutionHeight</td>
+        <td>Restores the student's audio and display preferences.</td>
+        <td>Existing: separate PlayerPrefs keys (<span class="f">CodeEscape.MusicVolume</span> etc.)</td></tr>
+      <tr><td><b>Question bank</b> (<span class="f">QuestionData</span>)<br><span class="pill Planned" style="background:#e9eef6;color:#0f4c81;border-color:#a9bdd6">Design-time content</span></td>
+        <td>id, language, topic, difficulty, questionType, questionText, code, choices, correctChoiceIndex, acceptedAnswers, hint, explanation</td>
+        <td>Content authored by the group; read-only at runtime. It is not player data and is not saved by the player.</td>
+        <td>Existing: 48 ScriptableObject assets in <span class="f">Assets/ScriptableObjects/Questions</span>, referenced by a <span class="f">QuestionDatabase</span></td></tr>
+      <tr><td><b>Active challenge / game state</b><br><span class="pill InProgress" style="background:#fff;border-color:#b7bec8;color:#515a66">Temporary session data</span></td>
+        <td>activeQuestion, activeSolved, selected answer, GameState, current hazard, dialogue/cutscene queue</td>
+        <td>Needed only while playing; it is rebuilt at each launch. Persisting it is not required.</td>
+        <td>Memory only (managers in the <span class="f">GameSystems</span> object)</td></tr>
+      <tr><td><b>Student account and cloud progress copy</b><br><span class="pill Planned">Planned</span></td>
+        <td>studentId, username (credentials handled by the authentication service, not by game code); cloud copy of the playthrough and level-map progress keyed by studentId</td>
+        <td>Would tie progress to a person instead of a device and allow resuming on another computer. Needed only if the group confirms accounts as a requirement.</td>
+        <td>Planned: Unity Authentication and Unity Cloud Save. Nothing exists today.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ================= PART V ================= -->
+<section class="part">
+  <h1>Part V — Current Implementation Evidence <span class="pts">5 points</span></h1>
+  <div class="rubric"><b>Rubric focus:</b> at least three pieces of genuine evidence with file names, current status and the requirement or component supported.</div>
+  <p>Evidence was gathered by reading project files. The game was <b>not run</b> for this report, so "Implemented" means "present in code or configuration, not verified at runtime".</p>
+  <table>
+    <thead><tr><th style="width:44%">Evidence</th><th style="width:19%">Current Status</th><th>Requirement / Component Supported</th></tr></thead>
+    <tbody>
+      <tr><td><b>E1 Local save system.</b> <span class="f">Assets/Scripts/SaveSystem/SaveManager.cs</span> stores language, settings, progress and per-language level progress in PlayerPrefs; progress is serialised with <span class="f">JsonUtility</span>. <span class="f">ProgressSaveService.cs</span> saves after clue, challenge, score, story, unlock and scene events, every 30 s during play, on pause and on quit. <span class="f">ProgressData.cs</span> and <span class="f">LevelProgressData.cs</span> define the saved fields.</td>
+        <td><span class="pill Implemented">Implemented</span><br>in code; save/load round trip not verified</td>
+        <td>R5; components SaveManager, ProgressSaveService, ProgressData, LevelProgressData</td></tr>
+      <tr><td><b>E2 Question evaluation and scoring.</b> <span class="f">Programming/ProgrammingChallengeManager.cs</span> defines <span class="f">PointsPerCorrectAnswer = 100</span> and <span class="f">HintPenalty = 25</span>, and routes answers to <span class="f">QuestionData.IsCorrectChoice</span> / <span class="f">IsCorrectTypedAnswer</span>. The code comment in <span class="f">QuestionData.cs</span> states player input is only compared with the stored answer and never executed. 48 question assets exist: 16 per language (10 obstacle + 6 hazard questions).</td>
+        <td><span class="pill Implemented">Implemented</span><br>in code and data assets; not run</td>
+        <td>R1 and R4; ProgrammingChallengeManager, QuestionData, QuestionDatabase, ChallengeUI</td></tr>
+      <tr><td><b>E3 Player and obstacles.</b> <span class="f">Player/PlayerController.cs</span> (Rigidbody2D movement, side-view and top-down). <span class="f">Obstacles/ProgrammingObstacle.cs</span>, <span class="f">CatchHazard.cs</span>, <span class="f">HazardMotion.cs</span>. Scenes <span class="f">03_Home</span> to <span class="f">08_FinalArea</span> contain nine obstacle IDs: home_hallway_door, neighborhood_gate, warehouse_security, facility_door_a/b, station_lock, final_lock_a/b, final_door.</td>
+        <td><span class="pill Implemented">Implemented</span><br>in code and scenes; not run</td>
+        <td>R2; PlayerController, ProgrammingObstacle, CatchHazard, LevelExit</td></tr>
+      <tr><td><b>E4 Level progression and level map.</b> <span class="f">Prefabs/Resources/GameSystems.prefab</span> lists six levels with stable <span class="f">levelId</span>, <span class="f">sceneName</span> and <span class="f">requiredChallenges</span> (1+1+1+2+1+3 = 9). <span class="f">Game/LevelManager.cs</span>, <span class="f">LevelProgressManager.cs</span>, <span class="f">UI/LevelMapUI.cs</span>, scene <span class="f">01b_LevelMap.unity</span>. <span class="f">EditorBuildSettings.asset</span> enables all 12 scenes.</td>
+        <td><span class="pill Implemented">Implemented</span><br>in code, prefab and scene; not run</td>
+        <td>R3; LevelManager, LevelProgressManager, LevelMapUI, SceneTransitionManager</td></tr>
+      <tr><td><b>E5 Results screen.</b> <span class="f">Game/ResultsManager.cs</span> collects language, score, challenges, clues, hints, time and rank; <span class="f">UI/ResultsUI.cs</span> displays them in scene <span class="f">10_Results.unity</span>.</td>
+        <td><span class="pill Implemented">Implemented</span><br>in code and scene; not run</td>
+        <td>R4; ResultsManager, ResultsUI</td></tr>
+      <tr><td><b>E6 Absence of accounts, authentication, cloud and database.</b> <span class="f">Packages/manifest.json</span> lists no <span class="f">com.unity.services.*</span> package (no Authentication, no Cloud Save). A text search of <span class="f">Assets/Scripts</span> for Unity.Services, CloudSave, UnityWebRequest, Firebase, Sqlite, login, register and password returned no matches except PlayerPrefs. No login or registration scene exists among the 12 scenes.</td>
+        <td><span class="pill Planned">Planned</span><br>(nothing implemented)</td>
+        <td>R5 extension; Login/Registration UI, Unity Authentication, Unity Cloud Save</td></tr>
+      <tr><td><b>E7 Automated tests.</b> The Unity Test Framework package is installed (<span class="f">manifest.json</span>), but no test scripts or assembly definitions were found under <span class="f">Assets</span>.</td>
+        <td><span class="pill Absent">Not found</span></td>
+        <td>Verification of R1–R5. No automated test result can be cited.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Screenshots</h2>
+  <p>No screenshots, exported runtime logs or test results were available in the project folder, and none are invented here. The frames below are placeholders for the student to fill (details in Appendix A).</p>
+  <div class="shot">[Screenshot S1 — Main Menu with Continue / Play Adventure — to be supplied]</div>
+  <div class="shot">[Screenshot S2 — Level Map showing locked / available / completed levels — to be supplied]</div>
+  <div class="shot">[Screenshot S3 — Programming challenge open at an obstacle (ChallengeUI) — to be supplied]</div>
+  <div class="shot">[Screenshot S4 — Results screen, and Unity Console log showing a save/load — to be supplied]</div>
+</section>
+
+<!-- ================= PART VI ================= -->
+<section class="part">
+  <h1>Part VI — Next Technical Milestone <span class="pts">4 points</span></h1>
+  <div class="rubric"><b>Rubric focus:</b> one milestone chosen from the real gap, with the gap, the milestone, the reason and the expected output.</div>
+  <table class="kv">
+    <tr><td>Current Gap</td><td>Progress is saved only on the local computer and is not tied to any student. <span class="f">SaveManager</span> is a static class that calls PlayerPrefs directly, so it cannot be replaced by a different storage without editing every caller. There is no Login/Registration UI, no student identifier, and no service package in <span class="f">manifest.json</span>. In addition, the save and load path has not been verified at runtime, and finishing the story deletes the saved result.</td></tr>
+    <tr><td>Next Technical Milestone</td><td><b>Student identity and a swappable progress store, verified locally.</b>
+      <ul style="margin-top:1.5mm">
+        <li>Add a small storage interface (for example <span class="f">IProgressStore</span>) with the current PlayerPrefs code as its first implementation.</li>
+        <li>Introduce a <span class="f">studentId</span> and key every saved record by it, with a minimal Login/Registration scene that produces the ID (a local ID first).</li>
+        <li>Run and record a save, quit, relaunch, continue test for R3 and R5.</li>
+      </ul></td></tr>
+    <tr><td>Reason</td><td>Unity Authentication and Cloud Save both depend on having a student ID and on a storage layer that can change backend. Adding either service before those two pieces would mean rewriting the save code twice. The milestone adds no new technology, it uses the existing, already coded save system, and it closes the verification gap shown in E1 and E7. It also tests whether the group really needs accounts before spending effort on cloud services.</td></tr>
+    <tr><td>Expected Output</td><td>
+      <ul style="margin-top:1mm">
+        <li>Source: the interface, the PlayerPrefs implementation, and a Login/Registration scene with its script.</li>
+        <li>Save data keyed by <span class="f">studentId</span>; two different IDs on one computer keep separate progress.</li>
+        <li>Evidence for the next report: screenshots of the login scene and of the Continue flow, a Console log of save and load, and a short written test table (steps and observed results).</li>
+        <li>An updated Part III diagram with the Login UI marked Implemented and Unity Authentication/Cloud Save still Planned, or Implemented only if they are added later.</li>
+      </ul></td></tr>
+  </table>
+  <p class="note"><b>Assumption to confirm.</b> This milestone assumes the capstone requires student accounts. If the group decides accounts are out of scope, the alternative milestone is the same runtime verification of the local save plus keeping the final score instead of clearing it in <span class="f">ResultsManager</span>.</p>
+</section>
+
+<!-- ================= APPENDIX ================= -->
+<section class="part">
+  <h1>Appendix A — Evidence Still Needed From the Group</h1>
+  <p>The following could not be established from the files and must be supplied or confirmed by the student. Nothing below has been assumed in the report.</p>
+  <table>
+    <thead><tr><th style="width:5%">#</th><th style="width:45%">Missing item</th><th>Why it is needed</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Screenshots S1–S4 of the running game (main menu, level map, challenge, results).</td><td>Part V can then show runtime evidence rather than code evidence only.</td></tr>
+      <tr><td>2</td><td>A Unity Console log or short notes from running a save → quit → relaunch → Continue test.</td><td>Confirms R5 and the local save at runtime.</td></tr>
+      <tr><td>3</td><td>Confirmation (or the course document) stating whether student accounts and cloud storage are required.</td><td>Decides whether the Part VI assumption holds.</td></tr>
+      <tr><td>4</td><td>Git or other source-control history, if the group uses it elsewhere. The project folder is not a repository.</td><td>Allows real commit references; none were invented.</td></tr>
+      <tr><td>5</td><td>Whether the project is linked to a Unity Cloud project (Project Settings → Services) and whether any Unity Dashboard setup exists.</td><td>Needed before any status for Authentication or Cloud Save could change from Planned.</td></tr>
+      <tr><td>6</td><td>Which component the group considers "currently in progress".</td><td>The report infers it from file dates only.</td></tr>
+      <tr><td>7</td><td>Student name, group members, course, instructor and institution (cover placeholders).</td><td>Not invented.</td></tr>
+    </tbody>
+  </table>
+  <h2>Method and limits</h2>
+  <ul>
+    <li>Files read: all scripts under <span class="f">Assets/Scripts/SaveSystem</span>, <span class="f">Programming</span>, <span class="f">Game</span> (key files), <span class="f">Player</span> and <span class="f">Obstacles</span>; <span class="f">Packages/manifest.json</span>; <span class="f">ProjectSettings/EditorBuildSettings.asset</span>; <span class="f">GameSystems.prefab</span>; scene files (obstacle IDs); ScriptableObject question assets (counts).</li>
+    <li>The game and the Unity Editor were not run for this report, and no project file was changed.</li>
+  </ul>
+</section>
+
+</body>
+</html>
