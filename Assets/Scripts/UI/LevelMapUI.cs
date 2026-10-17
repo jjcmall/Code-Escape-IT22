@@ -72,6 +72,17 @@ namespace CodeEscape.UI
 
         public bool IsPanelOpen => levelPanel != null && levelPanel.activeSelf;
         public int PanelLevelIndex => IsPanelOpen ? panelIndex : -1;
+        /// <summary>Index of the level to play next (the last one when everything is cleared); -1 before the map is set up. Read-only, for visuals.</summary>
+        public int NextLevelIndex
+        {
+            get
+            {
+                if (progress == null || levels.Count == 0)
+                    return -1;
+                LevelInfo next = progress.GetNextLevel(language);
+                return next != null ? levels.IndexOf(next) : levels.Count - 1;
+            }
+        }
 
         void Start()
         {
