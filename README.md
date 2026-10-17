@@ -1,8 +1,7 @@
 # Code Escape
 
-Code Escape is a 2D PC educational game. The player (Alex) moves through six locations, and each locked obstacle or hazard opens a beginner programming question (Python, PHP or SQL). Solving questions unlocks the way forward, earns points and clears levels on a level map.
+Code Escape is a 2.5D PC educational game. The player (Alex) moves through six locations, and each locked obstacle or hazard opens a beginner programming question (Python, PHP or SQL). Solving questions unlocks the way forward, earns points and clears levels on a level map.
 
-> Capstone project. Course and institution details: **[to be completed by the team]**
 
 ## Group members
 Group number: **IT22**
@@ -39,13 +38,6 @@ Menus can be used with the mouse or keyboard (Esc closes panels).
 - An **internet connection** to play, because progression is loaded from and saved to Unity Cloud Save before gameplay starts
 - A Unity account with this project linked to a Unity Dashboard project (Cloud Save enabled): see the setup section in [Documentation/CloudSave.md](Documentation/CloudSave.md)
 
-## Run the project
-1. Clone the repository and add the folder in Unity Hub (use the exact editor version above).
-2. Open the project. The first import can take a while.
-3. Open `Assets/Scenes/00_MainMenu.unity` and press **Play**.
-4. Wait for the "Connecting to Unity Cloud Save" screen to finish, then choose **Play Adventure**.
-
-To build, use File > Build Profiles (all 12 scenes in `Assets/Scenes` are already in Build Settings).
 
 ## Project structure
 | Path | Contents |
@@ -114,7 +106,7 @@ My test data was deleted from Cloud Save afterwards, and the local playthrough a
 - Anonymous identity only; no recovery or cross-device sync (see above).
 - Online-only. Unsaved changes are kept in the existing local save (PlayerPrefs) and retried, but they are never reported as saved.
 - Total score is computed from distinct solved and hinted IDs, so replaying a level does not add points, and a hint already penalised once is not penalised again on a replay.
-- Achievements are simple derived rules added for this prototype.
+
 
 ## Files
 
