@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Database Connectivity Activity: Code Escape</title>
+<style>
+  @page { size: A4; margin: 20mm 18mm 20mm 18mm;
+    @bottom-center { content: "Page " counter(page); font: 9pt Arial, sans-serif; color: #000; } }
+  @page :first { @bottom-center { content: ""; } }
+  html { font-family: Arial, Helvetica, sans-serif; font-size: 10pt; line-height: 1.4; color: #000; }
+  body { margin: 0; }
+  h1 { font-size: 14pt; margin: 0 0 4mm; border-bottom: 1px solid #000; padding-bottom: 1mm; break-after: avoid; }
+  h2 { font-size: 11pt; margin: 6mm 0 2mm; break-after: avoid; }
+  p { margin: 0 0 2.5mm; }
+  .part { break-before: page; }
+  table { width: 100%; border-collapse: collapse; margin: 2mm 0 4mm; font-size: 9pt; table-layout: fixed; }
+  thead { display: table-header-group; }
+  th, td { border: 1px solid #000; padding: 1.3mm 1.8mm; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+  th { background: #e6e6e6; }
+  tr { break-inside: avoid; }
+  code { font-family: Consolas, monospace; font-size: 8.5pt; }
+  pre { font-family: Consolas, monospace; font-size: 8pt; margin: 2mm 0 4mm; border: 1px solid #000; padding: 2mm; white-space: pre-wrap; break-inside: avoid; }
+  ul { margin: 0 0 3mm 5mm; padding: 0; }
+  .cover { text-align: center; padding-top: 60mm; page-break-after: always; break-after: page; }
+  .cover h1 { font-size: 22pt; border: 0; margin-bottom: 10mm; }
+  .cover table { width: 140mm; margin: 6mm auto; font-size: 10.5pt; }
+  .cover td:first-child { width: 42mm; font-weight: bold; }
+  .ph { font-style: italic; }
+  .shot { border: 1px dashed #000; height: 52mm; margin: 1.5mm 0 4mm; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 9pt; break-inside: avoid; }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <h1>Database Connectivity Activity</h1>
+  <p><b>Code Escape: Cloud Save Progress Prototype</b></p>
+  <p>Capstone-Based Prototype (Unity)</p>
+  <table>
+    <tr><td>Group Number</td><td>IT22</td></tr>
+    <tr><td>Group Members</td><td style="text-align:left">Jean Joseph C. Mallari<br>Mark Daniel M. Haguisan<br>Louis Angelo D. Junio<br>Alynus Job C. Tombado</td></tr>
+    <tr><td>Course / Section</td><td class="ph">[Course and section]</td></tr>
+    <tr><td>Instructor</td><td class="ph">[Instructor]</td></tr>
+    <tr><td>Date prepared</td><td>11 October 2026</td></tr>
+  </table>
+  <p style="margin-top:10mm; font-size:9pt">Contents: Parts I to VIII, screenshots, references.</p>
+</section>
+
+<!-- ================= PART I ================= -->
+<section>
+  <h1>Part I. Game Prototype Overview</h1>
+  <table>
+    <thead><tr><th style="width:30%">Item</th><th>Answer</th></tr></thead>
+    <tbody>
+      <tr><td>Group Number</td><td>IT22</td></tr>
+      <tr><td>Group Members</td><td>Jean Joseph C. Mallari; Mark Daniel M. Haguisan; Louis Angelo D. Junio; Alynus Job C. Tombado</td></tr>
+      <tr><td>Prototype Direction</td><td>Capstone-Based</td></tr>
+      <tr><td>Game Title</td><td>Code Escape</td></tr>
+      <tr><td>Game Type or Genre</td><td>Educational programming puzzle / story adventure (2D / 2.5D)</td></tr>
+      <tr><td>Target Users</td><td>Students learning beginner programming (Python, PHP, SQL)</td></tr>
+      <tr><td>Platform Used</td><td>Unity desktop game, Windows PC</td></tr>
+      <tr><td>Development Tool Used</td><td>Unity Editor 6000.5.10f1, C#; code editor: <span class="ph">[confirm: Visual Studio or VS Code]</span></td></tr>
+      <tr><td>Database or Storage Used</td><td>Unity Cloud Save (player data, key-value) with Unity Authentication anonymous sign-in; local PlayerPrefs as the on-device save. <span class="ph">Not in the activity's example list: instructor approval to be confirmed.</span></td></tr>
+    </tbody>
+  </table>
+  <p><b>Main purpose.</b> Code Escape teaches beginner programming through a mystery story. The player must answer programming questions to unlock doors, locks and hazards and move through six levels.</p>
+  <p><b>What the player does.</b> The player chooses a language and a level on the level map, moves the character, reaches an obstacle, and answers a question (choosing or typing an answer, optionally using a hint). A correct answer earns points and unlocks the way forward; clearing a level unlocks the next.</p>
+  <p><b>Data saved.</b> Current level, highest unlocked level, completed levels, total score, achievements, the time of the latest update, and a snapshot used to restore the level map.</p>
+  <p><b>Why this direction.</b> The group already has the Code Escape project as its capstone. Saving and restoring learning progress is a real requirement of that project, so the database work is useful beyond this activity. The game was already playable, so this activity added the cloud storage to existing gameplay.</p>
+</section>
+
+<!-- ================= PART II ================= -->
+<section class="part">
+  <h1>Part II. Data Requirement Analysis</h1>
+  <p>Example values come from the group's test runs in the Unity Editor on 11 October 2026.</p>
+  <table>
+    <thead><tr><th style="width:20%">Data Item</th><th style="width:42%">Purpose</th><th>Example Value</th></tr></thead>
+    <tbody>
+      <tr><td>Player Name</td><td>Not stored yet. The game signs in anonymously, so the player is identified only by the Unity Player ID. A name will be stored when the planned login system exists.</td><td>(none) Player ID is a text value assigned by Unity</td></tr>
+      <tr><td>Score (<code>total_score</code>)</td><td>Records points: +100 per solved challenge, -25 per hinted question, counted once each.</td><td>0 at the start of a new record</td></tr>
+      <tr><td>Level or Stage (<code>current_level</code>, <code>highest_unlocked_level</code>)</td><td>Shows where the player is and how far they have unlocked.</td><td><code>neighborhood</code> after clearing <code>home</code></td></tr>
+      <tr><td>Result or Remarks (<code>completed_levels</code>, <code>achievements</code>)</td><td>Records which levels are cleared and which achievements are unlocked.</td><td><code>["home"]</code>; <code>["first_level"]</code></td></tr>
+      <tr><td>Date or Time (<code>last_played</code>)</td><td>Time of the latest progress update.</td><td><code>2026-10-10T20:01:39Z</code> (UTC)</td></tr>
+      <tr><td>Other Data</td><td>A restore snapshot (selected language, playthrough state, level progress per language) so the existing level map and Continue work after loading.</td><td>JSON text, about 1 KB in the test</td></tr>
+    </tbody>
+  </table>
+  <p><b>Why the game stores this data.</b> Players stop and return. Without stored progress they would repeat solved questions and levels, and the group could not show learning progress or build a score summary later.</p>
+  <p><b>How it improves the experience.</b> On the next start the level map shows cleared and unlocked levels, Continue resumes the level in progress, and the Cloud progress panel shows the saved score and achievements.</p>
+  <p><b>Data that should not be stored.</b> Passwords or sign-in secrets (the planned login will be handled by Unity Authentication, not by the game); the player's typed answers or code (answers are only compared with a stored solution and never executed); real names or other personal details that are not needed; question content (it belongs to the project, not to a player); and credentials or keys in the repository.</p>
+</section>
+
+<!-- ================= PART III ================= -->
+<section class="part">
+  <h1>Part III. Database Design</h1>
+  <p>Unity Cloud Save stores key-value items for each signed-in player, not SQL tables. The structure is one record type, <code>PlayerProgressData</code>, stored as JSON text under the key <code>code_escape_progression</code>, plus a second key, <code>code_escape_snapshot</code>, for restoring the game state. Cloud Save stores each player's items under that player, so one player's data cannot overwrite another's.</p>
+  <table>
+    <thead><tr><th style="width:28%">Field Name</th><th style="width:20%">Data Type</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>player_id</code></td><td>Text</td><td>Unity Player ID of the owner (unique identifier)</td></tr>
+      <tr><td><code>version</code></td><td>Number</td><td>Record format version</td></tr>
+      <tr><td><code>current_level</code></td><td>Text</td><td>Level ID of the level reached</td></tr>
+      <tr><td><code>highest_unlocked_level</code></td><td>Text</td><td>Level ID of the furthest level unlocked</td></tr>
+      <tr><td><code>completed_levels</code></td><td>List of text</td><td>Cleared level IDs, no duplicates</td></tr>
+      <tr><td><code>total_score</code></td><td>Number</td><td>Accumulated score (not below 0)</td></tr>
+      <tr><td><code>achievements</code></td><td>List of text</td><td>Unlocked achievement IDs</td></tr>
+      <tr><td><code>last_played</code></td><td>Text (ISO date and time)</td><td>When the record was last updated (UTC)</td></tr>
+      <tr><td><code>scored_challenges</code>, <code>penalised_hints</code></td><td>List of text</td><td>Bookkeeping so each solved challenge and hint is counted once</td></tr>
+    </tbody>
+  </table>
+  <p>Mapping to the suggested <code>player_scores</code> fields: player_id = <code>player_id</code>; player_name = not stored yet; score = <code>total_score</code>; level = <code>current_level</code>; remarks = <code>achievements</code> and <code>completed_levels</code>; created_at = <code>last_played</code>.</p>
+  <div class="shot">[Screenshot: Unity Dashboard, Cloud Save, Player Data, showing the keys code_escape_progression and code_escape_snapshot. The group already has this screenshot.]</div>
+  <p><b>Purpose of the structure.</b> It keeps each student's progress, score and achievements so the game can restore them on the next start.</p>
+  <p><b>Unique identifier.</b> <code>player_id</code>, the authenticated Unity Player ID. Cloud Save stores the items under that player.</p>
+  <p><b>Fields required before saving.</b> <code>player_id</code> (set from the signed-in player), <code>version</code>, and the level and score fields. The game fills missing lists with empty lists, clamps the score at 0 and removes duplicate or unknown level IDs before saving. A load fails, without overwriting anything, if only one of the two keys exists or the data cannot be read.</p>
+</section>
+
+<!-- ================= PART IV ================= -->
+<section class="part">
+  <h1>Part IV. Database Connectivity Implementation</h1>
+  <h2>How the connection works</h2>
+  <p>On start, <code>CloudProgressService</code> (<code>Assets/Scripts/Cloud</code>) initialises Unity Gaming Services, signs in anonymously with Unity Authentication, and loads the two keys from Cloud Save. If a record exists, it is restored into the game's save system; if not, a new record is created. When progress changes, the service builds the record and saves both keys in one request. No password or key is in the code: the project is linked to a Unity Dashboard project, and Cloud Save only accepts requests from a signed-in player.</p>
+<pre>// Load (CloudProgressService.cs)
+var items = await CloudSaveService.Instance.Data.Player.LoadAsync(
+    new HashSet&lt;string&gt; { KeyProgression, KeySnapshot },
+    new PlayerData.LoadOptions(new PlayerData.DefaultReadAccessClassOptions()));
+
+// Save (CloudProgressService.cs)
+await CloudSaveService.Instance.Data.Player.SaveAsync(
+    new Dictionary&lt;string, object&gt; { { KeyProgression, recordJson }, { KeySnapshot, snapshotJson } },
+    new PlayerData.SaveOptions(new PlayerData.DefaultWriteAccessClassOptions()));</pre>
+  <div class="shot">[Screenshot: relevant code or connection setup in the Unity or code editor]</div>
+
+  <h2>Required evidence</h2>
+  <div class="shot">[Screenshot 1: the game before saving data (for example the level map or a level before it is cleared)]</div>
+  <div class="shot">[Screenshot 2: a successful save, the "Saved to cloud" message in the top-right corner]</div>
+  <div class="shot">[Screenshot 3: the saved data in Unity Dashboard, Cloud Save, Player Data (open the value of code_escape_progression)]</div>
+  <div class="shot">[Screenshot 4: the game displaying the retrieved data, the "Cloud progress" panel and the level map after restarting]</div>
+
+  <h2>Answers</h2>
+  <p><b>What action triggers saving?</b> Clearing a level (saved at once), unlocking a level, solving a challenge or changing the score (grouped together after 3 seconds), returning to the main menu, and the app being paused. If the data has not changed, nothing is sent.</p>
+  <p><b>How does the game retrieve stored data?</b> At startup it calls Cloud Save <code>LoadAsync</code> for the signed-in player. Gameplay stays locked behind a "Connecting to Unity Cloud Save" screen until the load succeeds; on failure the screen shows the error and a Retry button.</p>
+  <p><b>Where is the retrieved data displayed?</b> On the existing level map (cleared, available and locked levels), in the Continue panel of the main menu, and in a "Cloud progress" panel on the main menu and level map showing the Player ID, current and highest unlocked level, completed levels, total score, achievements and last update. <span class="ph">The group should confirm the panel's appearance in the screenshot, because it was built in code and its layout was not checked on screen when this report was prepared.</span></p>
+  <p><b>Problem encountered.</b> After the Cloud Save package was added, Unity showed a "Package Manager Error": <code>Packages/manifest.json</code> was not valid JSON because the line for <code>com.unity.services.cloudsave</code> appeared twice. Other early problems: looking for the saved data in the Dashboard's Game Data page (which is for server-written items) instead of Cloud Save, Player Data; and the Editor pausing the game while the window was in the background, which delayed saves during testing.</p>
+  <p><b>How it was solved.</b> The duplicate line was removed and the file was checked as valid JSON; Unity then loaded the packages. The Player Data page was used to view the saved keys. For testing, the game was kept running in the background for that Editor session.</p>
+</section>
+
+<!-- ================= PART V ================= -->
+<section class="part">
+  <h1>Part V. Repository Information</h1>
+  <table>
+    <thead><tr><th style="width:34%">Item</th><th>Answer</th></tr></thead>
+    <tbody>
+      <tr><td>Repository Platform</td><td>GitHub (with GitHub Desktop)</td></tr>
+      <tr><td>Repository Name</td><td>IT22_DatabaseConnectivity</td></tr>
+      <tr><td>Repository Link</td><td>https://github.com/jjcmall/IT22_DatabaseConnectivity</td></tr>
+      <tr><td>Repository Visibility</td><td>Private</td></tr>
+      <tr><td>Instructor Access Confirmed</td><td class="ph">[Yes or No: if Private, add the instructor as collaborator]</td></tr>
+      <tr><td>Number of Meaningful Commits</td><td class="ph">[Count from GitHub: at least 5 required, with clear messages]</td></tr>
+    </tbody>
+  </table>
+  <p><b>Files included.</b> The Unity project: <code>Assets</code> (scenes, scripts, prefabs, art, question assets), <code>Packages/manifest.json</code> and <code>packages-lock.json</code>, <code>ProjectSettings</code>, <code>README.md</code>, a Unity <code>.gitignore</code> (Library, Temp, Logs and UserSettings are left out), and a <code>Documentation</code> folder. No password, key or service account file is in the project; Cloud Save uses the signed-in player's session, and the project ID in <code>ProjectSettings</code> is an identifier, not a secret.</p>
+  <p><b>Where the save and retrieve functions are.</b> <code>Assets/Scripts/Cloud/CloudProgressService.cs</code> (initialise, sign in, <code>LoadAsync</code>, <code>SaveAsync</code>, retry), <code>PlayerProgressData.cs</code> (the record), and <code>ProgressionUI.cs</code> (status and progress display). The local save is in <code>Assets/Scripts/SaveSystem</code>.</p>
+  <p><b>What the README explains.</b> Project title, group members, description, controls, requirements and how to run the project, the folder structure, the database and data saved and retrieved, known limitations, and credits. <span class="ph">The group number and course are still placeholders in the README; references and tutorials used can be added if the instructor wants them in the README.</span></p>
+  <p><b>How the repository is used.</b> <span class="ph">[The group to describe: for example one commit per milestone with clear messages, which member commits what.]</span></p>
+</section>
+
+<!-- ================= PART VI ================= -->
+<section class="part">
+  <h1>Part VI. Application Output Demonstration</h1>
+  <p>Steps for the demonstration (live, or recorded if required). These steps were run in the Unity Editor on 11 October 2026; the level clear was triggered by a test command rather than by hand-playing the level.</p>
+  <table>
+    <thead><tr><th style="width:6%">#</th><th style="width:34%">Step</th><th>What to show</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Open the game</td><td>Press Play on <code>00_MainMenu</code>. The "Connecting to Unity Cloud Save" screen appears, then the main menu. No login screen.</td></tr>
+      <tr><td>2</td><td>Play</td><td>Choose Play Adventure, pick a language and a level on the level map, move the character to an obstacle, answer the question.</td></tr>
+      <tr><td>3</td><td>Save data</td><td>Clear a level. The top-right message changes to "Saving to cloud..." and then "Saved to cloud".</td></tr>
+      <tr><td>4</td><td>View saved data</td><td>In the Unity Dashboard, open Cloud Save, then Player Data, find the Player ID and open <code>code_escape_progression</code>.</td></tr>
+      <tr><td>5</td><td>Retrieve and display</td><td>Stop and start the game again. The level map shows the cleared level and the unlocked next level, and the Cloud progress panel shows the saved values.</td></tr>
+    </tbody>
+  </table>
+  <p>Observed in the Editor: the first run created a record and confirmed the save; a repeated level-clear event added no duplicate and sent no extra save; after a restart the record loaded and the level map showed Home completed, Neighborhood available and Warehouse locked.</p>
+  <p><b>Not yet tested by the group:</b> a hand play-through of the questions, losing the network (error screen and Retry), and a standalone build. Video link, if required: <span class="ph">[link]</span></p>
+</section>
+
+<!-- ================= PART VII ================= -->
+<section class="part">
+  <h1>Part VII. Systems Thinking Explanation</h1>
+  <table>
+    <thead><tr><th style="width:26%">Component</th><th>Role in the Prototype</th></tr></thead>
+    <tbody>
+      <tr><td>User or Player</td><td>A student who chooses levels, moves the character and answers programming questions.</td></tr>
+      <tr><td>Game Application</td><td>The Unity game client: menus, level map, gameplay, question system and the cloud service component.</td></tr>
+      <tr><td>Input</td><td>Keyboard and mouse input, the chosen language and level, and the answers submitted.</td></tr>
+      <tr><td>Process</td><td>Checking answers, calculating score, unlocking levels, building the progress record and comparing it with the last saved one.</td></tr>
+      <tr><td>Database or Storage</td><td>Unity Cloud Save (player data) for the cloud copy, and PlayerPrefs on the device for the local save.</td></tr>
+      <tr><td>Output</td><td>Question feedback, score, the level map, the save status message and the Cloud progress panel.</td></tr>
+      <tr><td>Network or API, if applicable</td><td>The internet connection and the Unity Gaming Services SDK, which call Unity Authentication and Unity Cloud Save. The group has no backend of its own.</td></tr>
+      <tr><td>Repository</td><td>GitHub repository holding the project files, README and history.</td></tr>
+      <tr><td>Development Tool</td><td>Unity Editor 6000.5.10f1 and a C# code editor; Unity Dashboard for the cloud project; GitHub Desktop for source control.</td></tr>
+    </tbody>
+  </table>
+  <p><b>How this activity shows that a game application is a system of connected parts.</b></p>
+  <p>Code Escape is more than a game screen. A player gives input, the game logic turns it into results such as a score or an unlocked level, and those results become data. That data does not stay inside one script: an event announces it, the cloud service builds a record, the network carries the record to Unity Cloud Save, and Cloud Save keeps it under the player's identity. On the next start the same parts work backwards: authentication identifies the player, storage returns the record, the save system restores it, and the interface displays it. Each part depends on the others. If the network fails, the game cannot load and shows an error; if the data design is wrong, the level map shows the wrong levels; if the repository is missing a file, another developer cannot run it. The game is therefore a system with inputs, processes, storage, outputs and supporting tools that must fit together.</p>
+</section>
+
+<!-- ================= PART VIII ================= -->
+<section class="part">
+  <h1>Part VIII. Group Reflection and Technical Learning</h1>
+  <p><i>Draft based on the work done. The group should review and edit it so it reflects its own experience.</i></p>
+  <p><b>What the group achieved.</b> The existing Code Escape game now saves progress to Unity Cloud Save and loads it when the game starts, without a login screen. The level map and a progress panel show the saved data, and the game blocks play with an error and Retry button when the cloud cannot be reached.</p>
+  <p><b>Technical learning.</b></p>
+  <ul>
+    <li>Cloud Save needs a signed-in identity. Anonymous sign-in gives one without a login screen, but it cannot recover progress on another device, so a login system is planned.</li>
+    <li>Player data in Cloud Save is key-value JSON, not SQL tables, so the data design is a record structure rather than a table with relationships.</li>
+    <li>Saving should be confirmed before the game says "saved". The game shows Unsaved, Saving, Saved or Failed, and keeps the local save as a backup.</li>
+    <li>Repeated events can corrupt a score. Counting each solved challenge once, and removing duplicate level IDs, prevents double counting.</li>
+    <li>Client-side data is not cheat-proof, because the game itself writes the score.</li>
+    <li>Small configuration errors, such as a duplicated line in <code>manifest.json</code>, can stop the whole project from loading packages.</li>
+  </ul>
+  <p><b>Limitations and next steps.</b> The maps and gameplay are still in progress. The Login and Registration system and an administrator account that can change the coding questions are planned and not implemented. Network-failure behaviour and a standalone build still need testing.</p>
+</section>
+
+<section class="part">
+  <h1>Screenshots</h1>
+  <p>The group must add the screenshots listed in Parts III, IV and VI here or in the parts above. Nothing has been fabricated.</p>
+  <ul>
+    <li>Game before saving; successful save message; Unity Dashboard showing the saved keys; game showing retrieved data; relevant code.</li>
+    <li>Repository page on GitHub showing the files and the commit history.</li>
+  </ul>
+  <h1 style="margin-top:8mm">References</h1>
+  <ul>
+    <li>Unity Technologies. Unity Cloud Save documentation. docs.unity.com (Unity Gaming Services).</li>
+    <li>Unity Technologies. Unity Authentication documentation (anonymous sign-in). docs.unity.com.</li>
+    <li>Project documentation: <code>README.md</code> and <code>Documentation/CloudSave.md</code> in the repository.</li>
+  </ul>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Capstone Technical Design and Implementation Baseline</title>
+<style>
+  @page { size: A4; margin: 20mm 18mm 20mm 18mm;
+    @bottom-center { content: "Page " counter(page); font: 9pt Arial, sans-serif; color: #000; } }
+  @page :first { @bottom-center { content: ""; } }
+  html { font-family: Arial, Helvetica, sans-serif; font-size: 10pt; line-height: 1.4; color: #000; }
+  body { margin: 0; }
+  h1 { font-size: 14pt; margin: 0 0 4mm; border-bottom: 1px solid #000; padding-bottom: 1mm; break-after: avoid; }
+  h2 { font-size: 11pt; margin: 6mm 0 2mm; break-after: avoid; }
+  p { margin: 0 0 2.5mm; }
+  .part { break-before: page; }
+  table { width: 100%; border-collapse: collapse; margin: 2mm 0 4mm; font-size: 8.8pt; table-layout: fixed; }
+  thead { display: table-header-group; }
+  th, td { border: 1px solid #000; padding: 1.3mm 1.8mm; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+  th { background: #e6e6e6; }
+  tr { break-inside: avoid; }
+  code { font-family: Consolas, monospace; font-size: 8.5pt; }
+  pre { font-family: Consolas, monospace; font-size: 8.5pt; margin: 2mm 0 4mm; border: 1px solid #000; padding: 2mm; white-space: pre-wrap; break-inside: avoid; }
+  ul { margin: 0 0 3mm 5mm; padding: 0; }
+  .cover { text-align: center; padding-top: 70mm; page-break-after: always; break-after: page; }
+  .cover h1 { font-size: 22pt; border: 0; margin-bottom: 14mm; }
+  .cover table { width: 130mm; margin: 0 auto; font-size: 10.5pt; }
+  .cover td:first-child { width: 40mm; font-weight: bold; }
+  .ph { font-style: italic; }
+  svg { width: 100%; height: auto; display: block; break-inside: avoid; }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <h1>Capstone Technical Design and Implementation Baseline</h1>
+  <p><b>Project Title: Code Escape</b></p>
+  <p>Educational programming puzzle game (Unity, PC)</p>
+  <br>
+  <table>
+    <tr><td>Group Number</td><td class="ph">[Group number]</td></tr>
+    <tr><td>Group Members</td><td class="ph">[Complete list of group members]</td></tr>
+    <tr><td>Course / Section</td><td class="ph">[Course and section]</td></tr>
+    <tr><td>Instructor</td><td class="ph">[Instructor]</td></tr>
+    <tr><td>Date prepared</td><td>11 October 2026</td></tr>
+  </table>
+  <p style="margin-top:14mm; font-size:9pt">Implementation status in this document reflects the project files inspected and the tests run on 11 October 2026.</p>
+</section>
+
+<!-- ================= PART I ================= -->
+<section>
+  <h1>Part I. Final System Architecture</h1>
+  <p>Code Escape is a Unity PC game. Gameplay runs entirely in the game client. Progress is saved locally and copied to Unity Cloud Save, which is the only external service. The group does not use its own backend, API, SQL or Firebase database. A <b>Login and Registration system is planned and will be implemented soon</b>; it is not implemented yet, and the game currently signs the player in anonymously with no login screen. An <b>administrator account that can change the coding questions is also planned</b>; it depends on the login system and is not implemented.</p>
+
+<svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif" fill="#000" stroke="#000" stroke-width="1.3">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#000" stroke="none"/></marker>
+  </defs>
+  <rect x="0" y="0" width="800" height="800" fill="#fff" stroke="none"/>
+
+  <!-- boundary -->
+  <rect x="130" y="12" width="510" height="768" fill="none" stroke-dasharray="8 5"/>
+  <text x="140" y="30" font-size="12" font-weight="bold" stroke="none">SYSTEM BOUNDARY: Code Escape Unity PC game client</text>
+  <rect x="665" y="12" width="130" height="768" fill="none" stroke-dasharray="3 4"/>
+  <text x="730" y="30" font-size="11" font-weight="bold" text-anchor="middle" stroke="none">EXTERNAL</text>
+  <text x="730" y="44" font-size="11" font-weight="bold" text-anchor="middle" stroke="none">SERVICES</text>
+
+  <!-- player -->
+  <rect x="8" y="70" width="100" height="60" fill="#fff"/>
+  <text x="58" y="97" font-size="12" font-weight="bold" text-anchor="middle" stroke="none">Student /</text>
+  <text x="58" y="112" font-size="12" font-weight="bold" text-anchor="middle" stroke="none">Player</text>
+
+  <!-- UI -->
+  <rect x="160" y="55" width="460" height="82" fill="#fff"/>
+  <text x="390" y="74" font-size="12" font-weight="bold" text-anchor="middle" stroke="none">Game UI (Unity uGUI)</text>
+  <text x="390" y="90" font-size="10" text-anchor="middle" stroke="none">MainMenuUI · LanguageSelectUI · LevelMapUI · ChallengeUI</text>
+  <text x="390" y="103" font-size="10" text-anchor="middle" stroke="none">GameplayHUD · ResultsUI · ProgressionUI (cloud gate, save status, progress panel)</text>
+  <text x="390" y="127" font-size="10" font-weight="bold" text-anchor="middle" stroke="none">[Implemented]</text>
+
+  <!-- core logic -->
+  <rect x="160" y="190" width="260" height="62" fill="#fff"/>
+  <text x="290" y="209" font-size="12" font-weight="bold" text-anchor="middle" stroke="none">Player Controller &amp; Obstacles</text>
+  <text x="290" y="224" font-size="10" text-anchor="middle" stroke="none">PlayerController · ProgrammingObstacle · CatchHazard</text>
+  <text x="290" y="244" font-size="10" font-weight="bold" text-anchor="middle" stroke="none">[Implemented]</text>
+
+  <rect x="160" y="290" width="340" height="82" fill="#fff"/>
+  <text x="330" y="309" font-size="12" font-weight="bold" text-anchor="middle" stroke="none">Challenge &amp; Scoring System</text>
+  <text x="330" y="324" font-size="10" text-anchor="middle" stroke="none">ProgrammingChallengeManager (answer check, hints, score)</text>
+  <text x="330" y="337" font-size="10" text-anchor="middle" stroke="none">QuestionDatabase · QuestionData (48 question assets)</text>
+  <text x="330" y="362" font-size="10" font-weight="bold" text-anchor="middle" stroke="none">[Implemented]</text>
+
+  <rect x="160" y="410" width="460" height="68" fill="#fff"/>
+  <text x="390" y="429" font-size="12" font-weight="bold" text-anchor="middle" stroke="none">Level &amp; Game State Manager</text>
+  <text x="390" y="444" font-size="10" text-anchor="middle" stroke="none">GameManager · LevelManager · LevelProgressManager · ResultsManager</text>
+  <text x="390" y="468" font-size="10" font-weight="bold" text-anchor="middle" stroke="none">[In Progress]</text>
+
+  <!-- persistence -->
+  <rect x="160" y="530" width="220" height="70" fill="#fff"/>
+  <text x="270" y="549" font-size="12" font-weight="bold" text-anchor="middle" stroke="none">Local Save</text>
+  <text x="270" y="565" font-size="10" text-anchor="middle" stroke="none">ProgressSaveService · SaveManager</text>
+  <text x="270" y="590" font-size="10" font-weight="bold" text-anchor="middle" stroke="none">[In Progress]</text>
+
+  <rect x="410" y="530" width="210" height="70" fill="#fff"/>
+  <text x="515" y="549" font-size="12" font-weight="bold" text-anchor="middle" stroke="none">Cloud Progress Service</text>
+  <text x="515" y="565" font-size="10" text-anchor="middle" stroke="none">CloudProgressService</text>
+  <text x="515" y="590" font-size="10" font-weight="bold" text-anchor="middle" stroke="none">[In Progress]</text>
+
+  <rect x="160" y="635" width="220" height="45" fill="#fff"/>
+  <text x="270" y="653" font-size="12" font-weight="bold" text-anchor="middle" stroke="none">Local Storage: PlayerPrefs</text>
+  <text x="270" y="670" font-size="10" font-weight="bold" text-anchor="middle" stroke="none">[In Progress] JSON strings</text>
+
+  <rect x="410" y="635" width="210" height="45" fill="#fff" stroke-dasharray="6 4"/>
+  <text x="515" y="653" font-size="12" font-weight="bold" text-anchor="middle" stroke="none">Login &amp; Registration UI</text>
+  <text x="515" y="670" font-size="10" font-weight="bold" text-anchor="middle" stroke="none">[Planned] not built yet</text>
+
+  <rect x="8" y="715" width="100" height="50" fill="#fff" stroke-dasharray="6 4"/>
+  <text x="58" y="733" font-size="12" font-weight="bold" text-anchor="middle" stroke="none">Administrator</text>
+  <text x="58" y="746" font-size="9" text-anchor="middle" stroke="none">edits questions</text>
+  <text x="58" y="759" font-size="10" font-weight="bold" text-anchor="middle" stroke="none">[Planned]</text>
+  <rect x="160" y="715" width="220" height="50" fill="#fff" stroke-dasharray="6 4"/>
+  <text x="270" y="735" font-size="12" font-weight="bold" text-anchor="middle" stroke="none">Admin Question Editor</text>
+  <text x="270" y="752" font-size="10" font-weight="bold" text-anchor="middle" stroke="none">[Planned] not built yet</text>
+
+  <!-- external -->
+  <rect x="675" y="520" width="112" height="70" fill="#fff"/>
+  <text x="731" y="540" font-size="11" font-weight="bold" text-anchor="middle" stroke="none">Unity</text>
+  <text x="731" y="554" font-size="11" font-weight="bold" text-anchor="middle" stroke="none">Authentication</text>
+  <text x="731" y="570" font-size="9" text-anchor="middle" stroke="none">anonymous sign-in</text>
+  <text x="731" y="583" font-size="9" font-weight="bold" text-anchor="middle" stroke="none">[In Progress]</text>
+
+  <rect x="675" y="620" width="112" height="62" fill="#fff"/>
+  <text x="731" y="640" font-size="11" font-weight="bold" text-anchor="middle" stroke="none">Unity Cloud Save</text>
+  <text x="731" y="655" font-size="9" text-anchor="middle" stroke="none">player data (key-value)</text>
+  <text x="731" y="670" font-size="9" font-weight="bold" text-anchor="middle" stroke="none">[In Progress]</text>
+
+  <!-- arrows -->
+  <g fill="none">
+    <path d="M108,95 H158" marker-end="url(#a)"/>
+    <path d="M108,115 L190,190" marker-end="url(#a)"/>
+    <path d="M440,137 V288" marker-start="url(#a)" marker-end="url(#a)"/>
+    <path d="M590,137 V408" marker-start="url(#a)" marker-end="url(#a)"/>
+    <path d="M230,252 V288" marker-end="url(#a)"/>
+    <path d="M330,372 V408" marker-end="url(#a)"/>
+    <path d="M270,478 V528" marker-end="url(#a)"/>
+    <path d="M515,478 V528" marker-end="url(#a)"/>
+    <path d="M270,600 V633" marker-start="url(#a)" marker-end="url(#a)"/>
+    <path d="M410,565 H382" marker-end="url(#a)"/>
+    <path d="M620,545 H673" marker-end="url(#a)"/>
+    <path d="M58,130 V698 H395 V657 H408" stroke-dasharray="6 4" marker-end="url(#a)"/>
+    <path d="M110,740 H158" stroke-dasharray="6 4" marker-end="url(#a)"/>
+    <path d="M380,740 H731 V684" stroke-dasharray="6 4" marker-end="url(#a)"/>
+    <path d="M515,635 V602" stroke-dasharray="6 4" marker-end="url(#a)"/>
+    <path d="M620,585 H650 V645 H673" marker-start="url(#a)" marker-end="url(#a)"/>
+  </g>
+  <g font-size="9.5" stroke="none">
+    <text x="112" y="86">input</text>
+    <text x="150" y="168" text-anchor="start">move, jump</text>
+    <text x="446" y="205">question shown /</text>
+    <text x="446" y="217">answer, hint</text>
+    <text x="596" y="205">level choice /</text>
+    <text x="596" y="217">map state</text>
+    <text x="238" y="274">obstacle contact</text>
+    <text x="336" y="394">obstacle solved: unlock exit</text>
+    <text x="276" y="498">level / score events</text>
+    <text x="521" y="498">same events</text>
+    <text x="276" y="620">JSON write / read</text>
+    <text x="386" y="586">restore</text>
+    <text x="386" y="598">on start</text>
+    <text x="626" y="536">sign in</text>
+    <text x="118" y="711">register / sign in (Planned)</text>
+    
+    <text x="400" y="732">edited questions (Planned)</text>
+    <text x="508" y="622" text-anchor="end">credentials (Planned)</text>
+    <text x="646" y="620" text-anchor="end">save / load</text>
+  </g>
+</svg>
+
+  <h2>Architecture explanation</h2>
+  <p><b>Overall structure.</b> A single Unity PC client contains the user interface, the game logic and the persistence layer. Unity Authentication and Unity Cloud Save are the only external services. The legend: the dashed rectangle is the system boundary, solid arrows are communication or data movement, and each box shows its implementation status.</p>
+  <p><b>User interaction.</b> The student uses the keyboard and mouse on the Game UI (menus, level map, question panel) and moves the character with the Player Controller.</p>
+  <p><b>Main processing.</b> It happens inside the client: obstacle contact opens a question, <code>ProgrammingChallengeManager</code> compares the answer with the stored solution (player code is never executed), updates the score, and the level managers unlock levels.</p>
+  <p><b>Persistent data.</b> Progress is written to local storage (PlayerPrefs, JSON) and copied to Unity Cloud Save under the signed-in player. On start, the cloud copy is loaded and restored into the local save before gameplay is allowed.</p>
+  <p><b>Communication.</b> Inside the client, components communicate through C# static events (<code>ChallengeCompleted</code>, <code>ScoreChanged</code>, <code>LevelUnlocked</code>, <code>LevelCleared</code>) and singleton <code>Instance</code> references. The client talks to the two Unity services through the Unity Gaming Services SDK over the internet.</p>
+  <p><b>External services.</b> Unity Authentication (currently anonymous sign-in) and Unity Cloud Save (player-scoped key-value data). Not used: own backend or API, SQL or Firebase database. Planned: a Login and Registration UI that will feed the existing sign-in step, and an Admin Question Editor used by an administrator account to change the coding questions (both dashed in the diagram). Where edited questions will be stored is not decided yet; Unity Cloud Save Game Data (server-written custom items) is a candidate, and the game would then load questions from it instead of only from the bundled assets.</p>
+  <h2>Changes from the previous alignment report</h2>
+  <ul>
+    <li>Unity Authentication (anonymous) and Unity Cloud Save moved from Planned to Implemented (code present, tested in the Editor on 11 October 2026).</li>
+    <li>A Login and Registration UI stays in the design as <b>Planned</b>: it will be implemented soon. Until then the game signs in anonymously, so progress is tied to the device and cannot be recovered on another one.</li>
+    <li>Aligned with the Capstone System Cohesion Check: persistent progress is In Progress (local and cloud save implemented, login accounts planned); the cloud status UI is In Progress; the login system and the administrator account are Planned; the next milestone is the Login and Registration system.</li>
+    <li>An administrator account with an Admin Question Editor is added as <b>Planned</b>. Questions are currently fixed ScriptableObject assets, so they cannot be changed without editing the project.</li>
+  </ul>
+</section>
+
+<!-- ================= PART II ================= -->
+<section class="part">
+  <h1>Part II. Component Responsibility Specification</h1>
+  <table>
+    <thead><tr><th style="width:12%">Component</th><th style="width:17%">Responsibility</th><th style="width:15%">Input</th><th style="width:22%">Processing / Function</th><th style="width:15%">Output</th><th style="width:19%">Depends On</th></tr></thead>
+    <tbody>
+      <tr><td>Game UI</td><td>Shows menus, level map, questions, score, results and cloud status</td><td>Mouse and keyboard; data from managers and the cloud service</td><td>Displays state, sends the player's choices and answers to the managers</td><td>Screens; level choice; submitted answer</td><td>Unity uGUI, Challenge &amp; Scoring, Level &amp; Game State, Cloud Progress Service</td></tr>
+      <tr><td>Login &amp; Registration UI (Planned)</td><td>Lets a student register and sign in</td><td>Username and password (or chosen sign-in method)</td><td>Validates the input and passes it to the Cloud Progress Service, which calls Unity Authentication</td><td>Signed-in Player ID; error messages</td><td>Cloud Progress Service, Unity Authentication</td></tr>
+      <tr><td>Administrator account and Admin Question Editor (Planned)</td><td>Lets an administrator add, edit and remove coding questions</td><td>Administrator sign-in; question fields (text, code, choices, correct answer, hint, language, difficulty)</td><td>Checks the administrator role, validates the question, writes it to the question store</td><td>Updated question set; validation errors</td><td>Login system, question store (to be decided), Unity Authentication</td></tr>
+      <tr><td>Player Controller</td><td>Moves the character</td><td>Keyboard (A/D, arrows, W, Space)</td><td>Converts input into velocity (side-view or top-down mode)</td><td>Updated player position and animation state</td><td>Unity Input System, Rigidbody2D</td></tr>
+      <tr><td>Obstacles and Hazards</td><td>Block the way until a question is solved; catch the player</td><td>Player contact; solved flag</td><td>Opens a challenge on contact; unlocks the obstacle when solved</td><td>Challenge request; unlocked obstacle</td><td>Player Controller, Challenge &amp; Scoring</td></tr>
+      <tr><td>Challenge &amp; Scoring System</td><td>Runs a question, checks the answer, keeps the score</td><td>Challenge request; chosen or typed answer; hint request</td><td>Picks a question for the selected language, compares with the stored answer, adds 100 points per solved challenge, subtracts 25 for a hint</td><td>Correct or incorrect result; score; solved-obstacle event</td><td>Question Database, Game UI</td></tr>
+      <tr><td>Question Database</td><td>Holds the predefined questions</td><td>Language, topic, difficulty</td><td>Looks up a matching question asset</td><td>QuestionData</td><td>ScriptableObject assets</td></tr>
+      <tr><td>Level &amp; Game State Manager</td><td>Tracks game state, unlocked and cleared levels and the story</td><td>Solved-obstacle events; level exit use; level choice</td><td>Unlocks the next level after required challenges, records cleared levels once, loads scenes</td><td>Unlocked/cleared levels; scene change; level-cleared event</td><td>Challenge &amp; Scoring, Unity SceneManager</td></tr>
+      <tr><td>Local Save</td><td>Saves and loads the game state on the device</td><td>Game events; app pause and quit; restore request</td><td>Captures state from the managers and writes it as JSON (autosave); reads it back on start</td><td>Saved JSON; restored state</td><td>Local Storage, Level &amp; Game State, Challenge &amp; Scoring</td></tr>
+      <tr><td>Cloud Progress Service</td><td>Signs in, loads and saves progress in the cloud, blocks play until loaded</td><td>Level and score events; Unity services responses</td><td>Initialises services, signs in anonymously, loads or creates the record, restores it, saves changes (batched), reports status</td><td>Saved/loaded cloud record; status; retry</td><td>Unity Authentication, Unity Cloud Save, Local Save</td></tr>
+      <tr><td>Local Storage</td><td>Stores persistent data on the device</td><td>JSON strings and settings values</td><td>Key-value storage (PlayerPrefs)</td><td>Stored / retrieved values</td><td>Unity PlayerPrefs</td></tr>
+      <tr><td>Unity Authentication</td><td>Gives the player an identity</td><td>Anonymous sign-in request</td><td>Creates or reuses an anonymous player session</td><td>Player ID and session token</td><td>Unity Gaming Services, internet</td></tr>
+      <tr><td>Unity Cloud Save</td><td>Stores player data online</td><td>Key-value pairs for the signed-in player</td><td>Stores and retrieves per-player data</td><td>Saved / retrieved items</td><td>Unity Authentication, internet</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ================= PART III ================= -->
+<section class="part">
+  <h1>Part III. Data / Database Design</h1>
+  <p>The project has no SQL or document database. Data is stored in two places: <b>local storage</b> (Unity PlayerPrefs, JSON strings) and <b>Unity Cloud Save</b> (player-scoped key-value items). Both store JSON text written with Unity's <code>JsonUtility</code>.</p>
+
+  <h2>Storage structure</h2>
+<pre>LOCAL STORAGE (PlayerPrefs, per device)
+  CodeEscape.SelectedLanguage        int
+  CodeEscape.Progress                JSON  ProgressData
+  CodeEscape.LevelProgress.python    JSON  LevelProgressData
+  CodeEscape.LevelProgress.php       JSON  LevelProgressData
+  CodeEscape.LevelProgress.sql       JSON  LevelProgressData
+  CodeEscape.MusicVolume, SfxVolume, Fullscreen, ResolutionWidth/Height
+  CodeEscape.SaveVersion             int
+  CodeEscape.Cloud.Unsynced, CodeEscape.Cloud.PlayerId   (cloud bookkeeping)
+
+UNITY CLOUD SAVE (per authenticated player, default access class)
+  code_escape_progression            JSON  PlayerProgressData
+  code_escape_snapshot               JSON  ProgressSnapshot
+                                           |-- progress_json     = ProgressData as text
+                                           '-- level_progress[]  = { language, json = LevelProgressData as text }</pre>
+  <p>The cloud record is identified by the authenticated Unity Player ID: Cloud Save stores data under that player, so no shared key exists. Question content is not stored per player: it is 48 read-only ScriptableObject assets in <code>Assets/ScriptableObjects/Questions</code>.</p>
+
+  <h2>Data dictionary</h2>
+  <table>
+    <thead><tr><th style="width:17%">Entity / Collection</th><th style="width:22%">Field</th><th style="width:15%">Data Type</th><th style="width:16%">Key / Identifier</th><th>Purpose</th></tr></thead>
+    <tbody>
+      <tr><td>Administrator role (Planned)</td><td>player_id, role</td><td>string, string</td><td>Unity Player ID</td><td>Marks which accounts may change questions. Must be checked on the server side, not only in the game.</td></tr>
+      <tr><td>Student account (Planned)</td><td>player_id, username</td><td>string</td><td>Unity Player ID</td><td>Would identify a registered student. Credentials are handled by Unity Authentication, not stored by the game.</td></tr>
+      <tr><td>PlayerProgressData (cloud)</td><td>player_id</td><td>string</td><td>Unity Player ID (owner)</td><td>Player who owns the record</td></tr>
+      <tr><td></td><td>version</td><td>int</td><td></td><td>Record format version</td></tr>
+      <tr><td></td><td>current_level</td><td>string (levelId)</td><td>References a level</td><td>Level currently reached</td></tr>
+      <tr><td></td><td>highest_unlocked_level</td><td>string (levelId)</td><td>References a level</td><td>Furthest level unlocked in any language</td></tr>
+      <tr><td></td><td>completed_levels</td><td>list of string</td><td>levelIds</td><td>Levels cleared, no duplicates</td></tr>
+      <tr><td></td><td>total_score</td><td>int</td><td></td><td>Lifetime score</td></tr>
+      <tr><td></td><td>achievements</td><td>list of string</td><td>achievement ids</td><td>Unlocked achievements</td></tr>
+      <tr><td></td><td>last_played</td><td>string (ISO 8601 UTC)</td><td></td><td>Time of latest progress update</td></tr>
+      <tr><td></td><td>scored_challenges</td><td>list of string</td><td>"language:obstacleId"</td><td>Makes score counting once-only</td></tr>
+      <tr><td></td><td>penalised_hints</td><td>list of string</td><td>"language:questionId"</td><td>Makes hint penalty counting once-only</td></tr>
+      <tr><td>ProgressSnapshot (cloud)</td><td>version</td><td>int</td><td></td><td>Snapshot format version</td></tr>
+      <tr><td></td><td>language</td><td>int</td><td>1 Python, 2 PHP, 3 SQL</td><td>Selected language</td></tr>
+      <tr><td></td><td>progress_json</td><td>string (JSON)</td><td></td><td>Playthrough state (ProgressData); empty if none active</td></tr>
+      <tr><td></td><td>level_progress[].language / .json</td><td>int / string (JSON)</td><td>language</td><td>Level map progress of each language</td></tr>
+      <tr><td>ProgressData (local, inside snapshot)</td><td>version, language</td><td>int, int</td><td></td><td>Format version; language of the playthrough</td></tr>
+      <tr><td></td><td>storyStage</td><td>int</td><td></td><td>Position in the story</td></tr>
+      <tr><td></td><td>currentLevel</td><td>string (scene name)</td><td></td><td>Scene the player is in</td></tr>
+      <tr><td></td><td>activeLevel</td><td>string (levelId)</td><td></td><td>Level started from the level map</td></tr>
+      <tr><td></td><td>currentObjective</td><td>string</td><td></td><td>Objective text shown to the player</td></tr>
+      <tr><td></td><td>completedEvents, unlockedLevels, completedLevels, completedChallenges, completedQuestions, hintedQuestions, collectedClues</td><td>list of string</td><td>ids</td><td>What the player has done, unlocked, solved, hinted and found</td></tr>
+      <tr><td></td><td>score, hintsUsed</td><td>int</td><td></td><td>Current playthrough score and hints</td></tr>
+      <tr><td></td><td>timePlayed</td><td>float</td><td></td><td>Seconds played</td></tr>
+      <tr><td>LevelProgressData (local, one per language)</td><td>language</td><td>string</td><td>"python", "php", "sql"</td><td>Language this progress belongs to</td></tr>
+      <tr><td></td><td>completedLevels</td><td>list of string</td><td>levelIds</td><td>Cleared levels (unlocks the next one)</td></tr>
+      <tr><td></td><td>lastPlayedLevel</td><td>string</td><td>levelId</td><td>Last level started</td></tr>
+      <tr><td></td><td>checkpoints[].levelId / .state</td><td>string / ProgressData</td><td>levelId</td><td>State each unlocked level starts from</td></tr>
+      <tr><td>SettingsData (local)</td><td>musicVolume, sfxVolume</td><td>float 0 to 1</td><td></td><td>Audio levels</td></tr>
+      <tr><td></td><td>fullscreen, resolutionWidth, resolutionHeight</td><td>bool, int, int</td><td></td><td>Display preferences (0 x 0 = keep current)</td></tr>
+      <tr><td>QuestionData (asset, read-only)</td><td>id</td><td>string</td><td>Unique question id</td><td>Identifies the question</td></tr>
+      <tr><td></td><td>language, topic, difficulty, questionType</td><td>enum, string, enum, enum</td><td></td><td>Selection and display</td></tr>
+      <tr><td></td><td>questionText, code, choices, correctChoiceIndex, acceptedAnswers, hint, explanation</td><td>string, string, string[], int, string[], string, string</td><td></td><td>Question content and stored solution</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Data integrity and validation</h2>
+  <table>
+    <thead><tr><th style="width:42%">Rule</th><th>How it is enforced</th></tr></thead>
+    <tbody>
+      <tr><td>A completed level appears only once</td><td><code>LevelProgressData.MarkCompleted</code> and the cloud record use unique sets; <code>Sanitize</code> removes duplicates.</td></tr>
+      <tr><td>Level IDs must refer to existing levels</td><td><code>LevelProgressData.Sanitize</code> drops unknown or empty IDs on load and before saving.</td></tr>
+      <tr><td>Score cannot be negative; counting twice is prevented</td><td>Score is clamped at 0 (<code>Mathf.Max</code>) and computed from distinct solved and hinted IDs, so repeated events do not add points.</td></tr>
+      <tr><td>The record belongs to the signed-in player</td><td><code>player_id</code> is set from the authenticated Player ID; Cloud Save stores data per player.</td></tr>
+      <tr><td>Both cloud keys must exist together; data must be readable and not from a newer version</td><td>If only one key exists, JSON cannot be read, or the version is newer, the load fails with an error and nothing is overwritten.</td></tr>
+      <tr><td>Null or missing lists are repaired</td><td><code>PlayerProgressData.Sanitize</code> replaces null fields and lists.</td></tr>
+      <tr><td>Language must be valid (Python, PHP, SQL)</td><td><code>ProgrammingLanguage.IsValid</code> is checked before saving or loading progress by language.</td></tr>
+      <tr><td>Volumes stay between 0 and 1; resolution is both set or both 0</td><td><code>SettingsData.Sanitize</code>.</td></tr>
+      <tr><td>Only an administrator may change questions (Planned)</td><td>Not implemented. The role must be checked by a server-side service, because the game client cannot be trusted.</td></tr>
+      <tr><td>An edited question stays valid (Planned)</td><td>Not implemented. Rules to apply: unique question id, valid language, at least two choices with a valid correct index (or an accepted answer for typed questions).</td></tr>
+      <tr><td>Unchanged data is not re-saved</td><td>A fingerprint of the record is compared with the last confirmed save before any cloud request.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ================= PART IV ================= -->
+<section class="part">
+  <h1>Part IV. End-to-End Integration Design</h1>
+
+  <h2>Process 1: Save player progress</h2>
+<pre>Player clears a level
+ -> LevelManager / LevelProgressManager.RecordLevelCleared
+ -> Local Save (level progress and playthrough written to PlayerPrefs)
+ -> LevelCleared event -> Cloud Progress Service (RequestSave)
+ -> Build record (PlayerProgressData + ProgressSnapshot), compare with last confirmed
+ -> Unity Cloud Save (SaveAsync, two keys)
+ -> Save confirmed
+ -> Game UI: "Saved to cloud"</pre>
+  <table>
+    <thead><tr><th style="width:24%">Item</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td>Trigger</td><td>A level is cleared. Also: level unlocked, score changed, challenge solved (batched after 3 seconds), main menu loaded, app paused.</td></tr>
+      <tr><td>Source Component</td><td>Level &amp; Game State Manager (and Challenge &amp; Scoring for score events)</td></tr>
+      <tr><td>Data Generated / Sent</td><td><code>PlayerProgressData</code> JSON and <code>ProgressSnapshot</code> JSON (two Cloud Save keys)</td></tr>
+      <tr><td>Processing Component</td><td>Cloud Progress Service (builds the record, removes duplicates, computes the score, unlocks achievements)</td></tr>
+      <tr><td>Destination</td><td>Unity Cloud Save, under the signed-in player. The local save is written first.</td></tr>
+      <tr><td>Stored / Retrieved Data</td><td>Stored: current and highest unlocked level, completed levels, total score, achievements, timestamp, restore snapshot</td></tr>
+      <tr><td>Expected Response</td><td>Cloud Save confirms the write; the service marks the record as confirmed and clears the "unsynced" flag.</td></tr>
+      <tr><td>User Output</td><td>Status chip: "Saving to cloud...", then "Saved to cloud" with the time. "Saved" is shown only after confirmation.</td></tr>
+      <tr><td>If it fails</td><td>
+        <b>No internet or save error / timeout (20 s):</b> the chip shows "Cloud save failed" with the reason and a Retry button; progress stays in the local save and is flagged unsynced; the game keeps running. Retry sends the full current state. On the next launch, unsynced local changes of the same player are sent again instead of being overwritten.<br>
+        <b>Data unchanged:</b> no request is sent.<br>
+        <b>Invalid input:</b> unknown level IDs are dropped and negative scores clamped before sending.</td></tr>
+    </tbody>
+  </table>
+
+  <p><i>Planned change:</i> when the Login and Registration UI is implemented, the sign-in step in Process 2 will use the student's registered account instead of an anonymous session. The rest of both flows stays the same.</p>
+
+  <h2>Process 2: Load saved progress at startup</h2>
+<pre>Game starts
+ -> Cloud Progress Service
+ -> Unity Gaming Services initialised
+ -> Unity Authentication (anonymous sign-in) -> Player ID
+ -> Unity Cloud Save (LoadAsync, two keys)
+ -> Record found: restore into Local Save, managers, language and level map
+    Record missing: create a new record from the current state and save it
+ -> Game UI: gate removed, level map and progress panel show the data</pre>
+  <table>
+    <thead><tr><th style="width:24%">Item</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td>Trigger</td><td>The game opens (first scene loaded), or the player presses Retry on the connection screen.</td></tr>
+      <tr><td>Source Component</td><td>Cloud Progress Service</td></tr>
+      <tr><td>Data Generated / Sent</td><td>Anonymous sign-in request; load request for <code>code_escape_progression</code> and <code>code_escape_snapshot</code></td></tr>
+      <tr><td>Processing Component</td><td>Unity Authentication, Unity Cloud Save, then Cloud Progress Service and Local Save (restore)</td></tr>
+      <tr><td>Destination</td><td>Local Save, Level &amp; Game State Manager, Language Manager, Game UI</td></tr>
+      <tr><td>Stored / Retrieved Data</td><td>Retrieved: the saved record and snapshot. Written locally: language, playthrough, level progress per language.</td></tr>
+      <tr><td>Expected Response</td><td>Player ID obtained; record loaded and applied; state becomes Ready.</td></tr>
+      <tr><td>User Output</td><td>"Connecting to Unity Cloud Save" screen, then the main menu. The level map shows saved unlocks and completions, and the Cloud progress panel shows the cloud data.</td></tr>
+      <tr><td>If it fails</td><td>
+        <b>No internet or timeout:</b> a full-screen "Cannot connect to Cloud Save" message with the reason and a Retry button; gameplay stays locked. Nothing is reset.<br>
+        <b>Record not found (new player):</b> a new record is created and saved; the game unlocks only after the save is confirmed.<br>
+        <b>Only one key found, data unreadable, or newer version:</b> an error is shown, the stored data is left untouched, and the player cannot start until it is resolved.<br>
+        <b>Project not linked or service disabled:</b> initialisation error shown on the same screen.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ================= PART V ================= -->
+<section class="part">
+  <h1>Part V. Repository and Implementation Structure</h1>
+  <table>
+    <tbody>
+      <tr><td style="width:32%"><b>Repository name</b></td><td>IT22_DatabaseConnectivity (GitHub, created and managed with GitHub Desktop)</td></tr>
+      <tr><td><b>Repository link</b></td><td>https://github.com/jjcmall/IT22_DatabaseConnectivity</td></tr>
+      <tr><td><b>Repository visibility</b></td><td>Private <span class="ph">[confirm; add the instructor as collaborator]</span></td></tr>
+      <tr><td><b>Development platform</b></td><td>Unity 6000.5.10f1, C#, Universal Render Pipeline (2D / 2.5D), Input System, uGUI</td></tr>
+      <tr><td><b>README status</b></td><td>Exists: <code>README.md</code> (overview, controls, requirements, structure) and <code>Documentation/CloudSave.md</code> (Cloud Save details)</td></tr>
+      <tr><td><b>.gitignore status</b></td><td>Exists (Unity template), so Library, Temp, Logs and UserSettings are excluded</td></tr>
+      <tr><td><b>Git LFS</b></td><td>Not configured (<code>.gitattributes</code> has no LFS rules). The largest asset is about 33 MB (<code>Assets/Animations/Sam/Sam.fbx</code>), below GitHub's 100 MB file limit, so LFS is not required now. Reconsider if larger assets are added.</td></tr>
+      <tr><td><b>Branching approach</b></td><td>Branch <code>main</code> exists. Further branching approach: <span class="ph">[to be agreed by the group]</span></td></tr>
+    </tbody>
+  </table>
+
+  <h2>Main folders</h2>
+<pre>Code Escape/
+|-- Assets/
+|   |-- Scenes/                 00_MainMenu ... 10_Results (12 scenes)
+|   |-- Scripts/
+|   |   |-- Player/             PlayerController, cameras
+|   |   |-- Obstacles/          ProgrammingObstacle, CatchHazard, HazardMotion
+|   |   |-- Programming/        ProgrammingChallengeManager, QuestionData, QuestionDatabase, LanguageManager
+|   |   |-- Game/               GameManager, LevelManager, LevelProgressManager, ResultsManager, SceneTransitionManager
+|   |   |-- SaveSystem/         SaveManager, ProgressSaveService, ProgressData, LevelProgressData, SettingsData
+|   |   |-- Cloud/              CloudProgressService, PlayerProgressData, ProgressionUI
+|   |   |-- UI/                 MainMenuUI, LevelMapUI, ChallengeUI, GameplayHUD, ResultsUI, ...
+|   |   |-- Story/ Clues/ Dialogue/ Cutscenes/ Audio/
+|   |-- ScriptableObjects/Questions/   Python, PHP, SQL, Hazards
+|   |-- Prefabs/Resources/GameSystems.prefab
+|   |-- Art/ Art3D/ Sprites/ Animations/ Audio/ Fonts/ UI/
+|-- Packages/manifest.json
+|-- ProjectSettings/
+|-- Documentation/
+|-- README.md</pre>
+
+  <h2>Where the architecture components are located</h2>
+  <table>
+    <thead><tr><th style="width:38%">Architecture Component</th><th>Repository / Project Location</th></tr></thead>
+    <tbody>
+      <tr><td>Admin Question Editor (Planned)</td><td>Not created yet; questions currently live in <code>Assets/ScriptableObjects/Questions</code></td></tr>
+      <tr><td>Login &amp; Registration UI (Planned)</td><td>Not created yet; expected in <code>Assets/Scripts/UI</code> with a new scene in <code>Assets/Scenes</code></td></tr>
+      <tr><td>Game UI</td><td><code>Assets/Scripts/UI</code>; scenes in <code>Assets/Scenes</code>; cloud gate and status in <code>Assets/Scripts/Cloud/ProgressionUI.cs</code></td></tr>
+      <tr><td>Player Controller</td><td><code>Assets/Scripts/Player/PlayerController.cs</code></td></tr>
+      <tr><td>Obstacles and Hazards</td><td><code>Assets/Scripts/Obstacles</code></td></tr>
+      <tr><td>Challenge &amp; Scoring System</td><td><code>Assets/Scripts/Programming/ProgrammingChallengeManager.cs</code></td></tr>
+      <tr><td>Question Database</td><td><code>Assets/Scripts/Programming/QuestionDatabase.cs</code>, <code>QuestionData.cs</code>; assets in <code>Assets/ScriptableObjects/Questions</code></td></tr>
+      <tr><td>Level &amp; Game State Manager</td><td><code>Assets/Scripts/Game</code> (LevelManager, LevelProgressManager, GameManager)</td></tr>
+      <tr><td>Local Save and Local Storage</td><td><code>Assets/Scripts/SaveSystem</code></td></tr>
+      <tr><td>Cloud Progress Service and data classes</td><td><code>Assets/Scripts/Cloud</code></td></tr>
+      <tr><td>Unity Authentication, Cloud Save (packages)</td><td><code>Packages/manifest.json</code> (<code>com.unity.services.cloudsave</code> 3.4.1; Authentication 3.7.4 and Core 1.18.0 as dependencies)</td></tr>
+      <tr><td>Persistent global managers</td><td><code>Assets/Prefabs/Resources/GameSystems.prefab</code>, created by <code>GameBootstrapper</code></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ================= PART VI ================= -->
+<section class="part">
+  <h1>Part VI. Implementation Baseline and Development Plan</h1>
+  <p>Evidence was taken from the project files and from Editor Play Mode tests on 11 October 2026. "Implemented" means the code or asset exists; features not tested in a real play-through are noted. There is no commit history to cite yet.</p>
+  <table>
+    <thead><tr><th style="width:16%">Component / Feature</th><th style="width:13%">Current State</th><th style="width:33%">Evidence</th><th style="width:22%">Next Action</th><th style="width:16%">Assigned Member/s</th></tr></thead>
+    <tbody>
+      <tr><td>Player movement</td><td>Implemented</td><td><code>PlayerController.cs</code></td><td>Test on a built game</td><td class="ph">[Member]</td></tr>
+      <tr><td>Obstacles and hazards</td><td>Implemented</td><td><code>ProgrammingObstacle.cs</code>, <code>CatchHazard.cs</code>; nine obstacle IDs in scenes 03 to 08</td><td>Play-test every obstacle</td><td class="ph">[Member]</td></tr>
+      <tr><td>Questions and scoring</td><td>Implemented</td><td><code>ProgrammingChallengeManager.cs</code> (100 / -25); 48 question assets</td><td>Review question content; test scoring by hand</td><td class="ph">[Member]</td></tr>
+      <tr><td>Level progression and level map</td><td>Implemented</td><td><code>LevelManager.cs</code>, <code>LevelProgressManager.cs</code>, <code>01b_LevelMap.unity</code>; Editor test showed Home completed, Neighborhood available, Warehouse locked after reload</td><td>Test all six levels</td><td class="ph">[Member]</td></tr>
+      <tr><td>Results screen</td><td>Implemented</td><td><code>ResultsManager.cs</code>, <code>10_Results.unity</code></td><td>Decide whether finished results must be kept (currently the local save is cleared at the end)</td><td class="ph">[Member]</td></tr>
+      <tr><td>Local save</td><td>Implemented</td><td><code>SaveManager.cs</code>, <code>ProgressSaveService.cs</code></td><td>Include in automated tests</td><td class="ph">[Member]</td></tr>
+      <tr><td>Anonymous authentication</td><td>Implemented</td><td><code>CloudProgressService.cs</code>; Editor Play Mode obtained a Player ID without a login UI</td><td>Test in a standalone build</td><td class="ph">[Member]</td></tr>
+      <tr><td>Cloud Save load / save / restore</td><td>Implemented</td><td><code>CloudProgressService.cs</code>; Editor test: record created, saved after a level clear without duplicates, loaded on restart; data seen in the Unity Dashboard</td><td>Test network failure and retry; test quit with unsaved changes</td><td class="ph">[Member]</td></tr>
+      <tr><td>Cloud status UI</td><td>In Progress</td><td><code>ProgressionUI.cs</code> compiles; not yet seen on screen</td><td>Check layout in the Game view and fix overlaps</td><td class="ph">[Member]</td></tr>
+      <tr><td>Achievements</td><td>In Progress</td><td>Five derived achievements in <code>CloudProgressService.cs</code>; only <code>first_level</code> triggered in tests</td><td>Confirm the list with the group; test all</td><td class="ph">[Member]</td></tr>
+      <tr><td>Login and registration system</td><td>Planned</td><td>None yet. The game uses anonymous sign-in, which cannot recover progress on another device.</td><td>Build the Login and Registration UI (milestone 1)</td><td class="ph">[Member]</td></tr>
+      <tr><td>Administrator account and question editing</td><td>Planned</td><td>None. Questions are ScriptableObject assets in <code>Assets/ScriptableObjects/Questions</code>.</td><td>Decide the question store and role check; build after the login system (milestone 1)</td><td class="ph">[Member]</td></tr>
+      <tr><td>Automated tests</td><td>Planned</td><td>Unity Test Framework installed; no test scripts found</td><td>See milestone 3</td><td class="ph">[Member]</td></tr>
+      <tr><td>Repository</td><td>In Progress</td><td>GitHub repository IT22_DatabaseConnectivity on <code>main</code> with Unity <code>.gitignore</code>; project files and commits being pushed</td><td>Push the project files with clear commits; add commit hashes to this document</td><td class="ph">[Member]</td></tr>
+    </tbody>
+  </table>
+
+  <p>Administrator question editing depends on the login system (milestone 1) and a decision on where edited questions are stored, so it follows milestone 1 and is not one of the next three milestones.</p>
+
+  <h2>Next three technical milestones</h2>
+  <table>
+    <thead><tr><th style="width:7%">Order</th><th style="width:30%">Technical Milestone</th><th style="width:33%">Dependency / What Must Exist First</th><th>Expected Output</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Implement the Login and Registration system</td><td>Cloud save and the sign-in step (exist); a sign-in method chosen from those Unity Authentication supports; a Login scene design</td><td>A Login and Registration UI connected to Unity Authentication, replacing anonymous sign-in; progress tied to the registered account and retrievable on another device; updated diagram and data design</td></tr>
+      <tr><td>2</td><td>Verify and harden cloud save and load with accounts, including failure cases and a standalone build</td><td>Milestone 1; a Windows build; a way to disable the network</td><td>Written test results; fixes for any defects found; confirmed gate, retry and unsynced-change behaviour</td></tr>
+      <tr><td>3</td><td>Add automated tests for progress rules</td><td>Stable data model (Part III); Unity Test Framework (installed)</td><td>Edit Mode tests for duplicate-level prevention, score counting, sanitising and record building; a passing test run</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="part">
+  <h1>References</h1>
+  <ul>
+    <li>Unity Technologies. Unity Cloud Save documentation. docs.unity.com (Unity Gaming Services, Cloud Save).</li>
+    <li>Unity Technologies. Unity Authentication documentation (anonymous sign-in). docs.unity.com.</li>
+    <li>Unity Technologies. Unity Manual: PlayerPrefs and JsonUtility. docs.unity.com.</li>
+    <li>Project files: <code>README.md</code> and <code>Documentation/CloudSave.md</code> in the Code Escape repository.</li>
+  </ul>
+</section>
+
+</body>
+</html>
