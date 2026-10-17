@@ -29,3 +29,7 @@ MonoBehaviour:
   explanation: return sends a value back to the place that called the function, so
     print(get_code()) prints 4321.
   hint: It's the keyword that hands a value back from a function.
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: That keyword doesn't send a value back. print only shows a
+    value - the function needs the keyword that hands a value back to the code that
+    called it.

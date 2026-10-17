@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42a7ef911f4c60e408989a759d2b9b18, type: 3}
+  m_Name: PY_COMPARISON
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.LessonData
+  id: PY_COMPARISON
+  language: 1
+  conceptTitle: Comparison Operators
+  symbol: ==
+  relatedQuestionIds:
+  - PY_04_COMPARISON
+  topics:
+  - Comparison
+  definition: A comparison checks how two values relate to each other. The answer
+    is always True or False.
+  howItWorks: 'Python''s comparison operators are == (equal to), != (not equal to),
+    < (less than), > (greater than), <= (less than or equal to) and >= (greater than
+    or equal to). Comparisons are often used in an if statement. Careful: a single
+    = stores a value - it does not compare.'
+  exampleCode: 'lives = 0
+
+    print(lives == 0)
+
+    print(lives != 0)
+
+    print(lives
+    >= 3)'
+  exampleExplanation: lives == 0 asks "is lives equal to 0?" - yes, so it prints
+    True. lives != 0 asks "is it different from 0?" - no, so False. lives >= 3 asks
+    "is it 3 or more?" - no, so False.
+  tip: Say == out loud as "is equal to" so you don't mix it up with =.

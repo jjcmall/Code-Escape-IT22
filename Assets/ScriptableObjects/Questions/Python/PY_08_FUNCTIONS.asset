@@ -32,3 +32,12 @@ MonoBehaviour:
   explanation: A function only sends a value back with return. Without it, Python
     returns None. Adding  return result  makes double(4) give 8.
   hint: Which keyword sends a value back out of a function?
+  wrongChoiceFeedback:
+  - 
+  - Changing * to + would give 6, not 8 - and the function would still print None,
+    because nothing is sent back.
+  - Moving print around doesn't change what double(4) gives back. The missing part
+    is inside the function's body.
+  - The function's name doesn't change what it gives back. The missing part is inside
+    the function's body.
+  wrongAnswerFeedback: 

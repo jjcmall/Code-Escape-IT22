@@ -33,3 +33,9 @@ MonoBehaviour:
   caseSensitive: 1
   explanation: List positions start at 0, so rooms[0] is hall and rooms[1] is lab.
   hint: The first item is at position 0.
+  wrongChoiceFeedback:
+  - hall is the first item, at position 0. Check which position rooms[1] points to.
+  - 
+  - vault is further along the list. Remember that positions start at 0.
+  - print(rooms[1]) shows one item from the list, not the variable's name.
+  wrongAnswerFeedback: 

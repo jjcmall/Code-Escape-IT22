@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42a7ef911f4c60e408989a759d2b9b18, type: 3}
+  m_Name: PHP_DATA_TYPES
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.LessonData
+  id: PHP_DATA_TYPES
+  language: 2
+  conceptTitle: 'Data Types: Numbers, Text and true/false'
+  symbol: int
+  relatedQuestionIds:
+  - PHP_03_NUMBERS
+  topics:
+  - Numbers
+  definition: A data type is the kind of value a variable holds. PHP works out the
+    type from the value you store.
+  howItWorks: 'The basic types are: integer - a whole number like 12; float - a number
+    with a decimal point like 3.75; string - text inside quotes like "hello"; boolean
+    - true or false. A number inside quotes, like "9", is a string, not a number.'
+  exampleCode: '<?php
+
+    $lives = 3;
+
+    $speed = 2.5;
+
+    $name = "Ace";
+
+    $door
+    = "9";
+
+    $open = false;
+
+    ?>'
+  exampleExplanation: $lives is an integer. $speed is a float because it has a decimal
+    point. $name is a string, and so is $door, because "9" is inside quotes. $open
+    is a boolean.
+  tip: var_dump($speed); shows a value's type and value - here float(2.5).

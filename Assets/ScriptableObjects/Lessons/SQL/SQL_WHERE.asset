@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42a7ef911f4c60e408989a759d2b9b18, type: 3}
+  m_Name: SQL_WHERE
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.LessonData
+  id: SQL_WHERE
+  language: 3
+  conceptTitle: 'WHERE: Filtering Rows'
+  symbol: WHERE
+  relatedQuestionIds:
+  - SQL_02_WHERE
+  - HZ_SQL_02_WHERE
+  topics:
+  - WHERE
+  definition: WHERE filters a query, so only the rows that match a condition are
+    returned.
+  howItWorks: WHERE comes after FROM table_name. Write a condition such as animal
+    = 'Dog' or age > 3. Text values go inside single quotes; numbers don't need quotes.
+    Rows that don't match the condition are left out.
+  exampleCode: "Table: pets\n id | name  | animal | age\n  1 | Bolt  | Dog    |  
+    4\n  2 | Misty | Cat    |   2\n  3 | Rex   | Dog    |   7\n\nSELECT name FROM
+    pets\nWHERE animal = 'Dog';"
+  exampleExplanation: The query checks the animal column of every row. Bolt and Rex
+    are dogs, so the result is Bolt and Rex. Misty is a cat, so her row is left out.
+  tip: The order is always SELECT ... FROM ... WHERE ...

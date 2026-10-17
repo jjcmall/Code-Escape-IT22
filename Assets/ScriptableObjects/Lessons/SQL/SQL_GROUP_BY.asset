@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42a7ef911f4c60e408989a759d2b9b18, type: 3}
+  m_Name: SQL_GROUP_BY
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.LessonData
+  id: SQL_GROUP_BY
+  language: 3
+  conceptTitle: 'GROUP BY: Grouping Rows'
+  symbol: GROUP
+  relatedQuestionIds:
+  - SQL_09_GROUP_BY
+  - HZ_SQL_06_GROUP_BY
+  topics:
+  - GROUP BY
+  definition: GROUP BY puts rows that have the same value in a column into groups,
+    so you can work something out for each group.
+  howItWorks: 'Write GROUP BY and the column to group by. It is usually used with
+    COUNT(*): the result has one row per group, showing the group''s value and how
+    many rows it has.'
+  exampleCode: "Table: pets\n id | name  | animal | age\n  1 | Bolt  | Dog    |  
+    4\n  2 | Misty | Cat    |   2\n  3 | Rex   | Dog    |   7\n\nSELECT animal, COUNT(*)
+    FROM pets\nGROUP BY animal;"
+  exampleExplanation: 'The rows are grouped by animal: Dog (Bolt and Rex) and Cat
+    (Misty). The result has two rows: Dog 2 and Cat 1.'
+  tip: GROUP BY makes groups; ORDER BY only sorts. They do different jobs.

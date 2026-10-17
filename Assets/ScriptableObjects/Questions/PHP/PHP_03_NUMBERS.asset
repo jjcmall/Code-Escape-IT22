@@ -42,3 +42,9 @@ MonoBehaviour:
   explanation: $c = 12.5 has a decimal point, so it is a float. $a is an integer,
     $b is a string (it's in quotes) and $d is a boolean.
   hint: Look for a number with a decimal point and no quotes.
+  wrongChoiceFeedback:
+  - 12 is a whole number, so $a is an integer, not a float.
+  - '"12" is inside quotes, so $b is a string (text), not a number.'
+  - 
+  - true is a boolean value (true or false), not a number.
+  wrongAnswerFeedback: 

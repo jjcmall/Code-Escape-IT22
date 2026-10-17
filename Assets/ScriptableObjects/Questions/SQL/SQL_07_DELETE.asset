@@ -49,3 +49,10 @@ MonoBehaviour:
   explanation: DELETE FROM table WHERE condition; removes only the matching rows.
     Without WHERE, DELETE FROM clues; would erase every clue! SQL has no REMOVE command.
   hint: Always pair DELETE with a WHERE clause.
+  wrongChoiceFeedback:
+  - 
+  - Without WHERE, this deletes every row in the table, not just the Note.
+  - The parts are in the wrong order. The condition belongs in a WHERE clause after
+    FROM clues.
+  - SQL has no REMOVE command.
+  wrongAnswerFeedback: 

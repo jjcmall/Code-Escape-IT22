@@ -58,3 +58,12 @@ MonoBehaviour:
     but only Library (15:40) is after 15:30. With OR instead, Library, Bus Stop and
     Arcade would all match.
   hint: With AND, a row needs both conditions to be true at the same time.
+  wrongChoiceFeedback:
+  - 
+  - Arcade was reported by Leo, but at 15:25 - that isn't after 15:30, so the AND
+    fails.
+  - Both rows are Leo's, but AND also needs the time to be after 15:30. Check each
+    time.
+  - That would be the result with OR. AND keeps only the rows where both conditions
+    are true.
+  wrongAnswerFeedback: 

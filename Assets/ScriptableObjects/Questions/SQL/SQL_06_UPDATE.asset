@@ -55,3 +55,10 @@ MonoBehaviour:
   explanation: Without WHERE, UPDATE changes every row in the table. UPDATE clues
     SET room = 'Garage' WHERE item = 'Map'; changes only the Map row.
   hint: Which clause limits a query to certain rows?
+  wrongChoiceFeedback:
+  - 
+  - INSERT adds new rows. You still want to change an existing row - just not all
+    of them.
+  - Text values like 'Garage' need single quotes. The quotes are not the problem.
+  - ORDER BY only sorts results. It doesn't choose which rows UPDATE changes.
+  wrongAnswerFeedback: 

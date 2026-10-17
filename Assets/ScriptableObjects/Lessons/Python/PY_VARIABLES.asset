@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42a7ef911f4c60e408989a759d2b9b18, type: 3}
+  m_Name: PY_VARIABLES
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.LessonData
+  id: PY_VARIABLES
+  language: 1
+  conceptTitle: Variables
+  symbol: x = 1
+  relatedQuestionIds:
+  - PY_01_VARIABLES
+  - HZ_PY_01_VARIABLES
+  topics:
+  - Variables
+  definition: A variable is a name that stores a value, like a labelled box. Later,
+    the program can use the name to get the value back.
+  howItWorks: 'You create a variable with = : the name goes on the left and the value
+    on the right. Python works out the right side first, then stores the result.
+    Giving a variable a new value replaces the old one, so a variable only remembers
+    its latest value.'
+  exampleCode: 'pet = "cat"
+
+    pet = "dog"
+
+    coins = 10
+
+    coins = coins *
+    2
+
+    print(pet, coins)'
+  exampleExplanation: 'pet first stores "cat", then "dog" replaces it. coins * 2
+    uses the current value (10), and the answer, 20, is stored back in coins. The
+    program prints: dog 20'
+  tip: In code, = means "store this value". It does not mean "is equal to".

@@ -32,3 +32,10 @@ MonoBehaviour:
   explanation: PHP puts the condition in round brackets ( ) and the code to run in
     curly braces { }. == compares values; => is used for array keys, not for comparing.
   hint: Round brackets around the condition, curly braces around the code.
+  wrongChoiceFeedback:
+  - 
+  - In PHP the condition must be inside round brackets ( ).
+  - Square brackets [ ] are for arrays. The code to run belongs in curly braces {
+    }.
+  - => is used for array keys, not for comparing values.
+  wrongAnswerFeedback: 

@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42a7ef911f4c60e408989a759d2b9b18, type: 3}
+  m_Name: PY_LOOP_AND_IF
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.LessonData
+  id: PY_LOOP_AND_IF
+  language: 1
+  conceptTitle: Loops and Conditions Together
+  symbol: for+if
+  relatedQuestionIds:
+  - PY_10_MIXED
+  topics:
+  - Mixed
+  definition: Real programs often combine ideas. Putting an if inside a loop lets
+    a program check every item and act only on the ones that match.
+  howItWorks: The for line goes through the items one by one. The if line is indented
+    inside the loop, so it is checked for every item. The print is indented again,
+    so it only runs when the condition is True. The % operator gives the remainder
+    of a division, which is handy for testing numbers.
+  exampleCode: "nums = [5, 8, 11, 12]\nfor n in nums:\n    if n % 2 == 1:\n       
+    print(n)"
+  exampleExplanation: n % 2 is the remainder after dividing by 2. For 5 and 11 the
+    remainder is 1, so they are printed. For 8 and 12 the remainder is 0, so the
+    condition is False and nothing is printed. This loop prints the odd numbers 5
+    and 11.
+  tip: Both the for line and the if line need a colon at the end.

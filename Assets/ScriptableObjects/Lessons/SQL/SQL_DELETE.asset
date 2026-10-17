@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42a7ef911f4c60e408989a759d2b9b18, type: 3}
+  m_Name: SQL_DELETE
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.LessonData
+  id: SQL_DELETE
+  language: 3
+  conceptTitle: 'DELETE: Removing Rows'
+  symbol: DELETE
+  relatedQuestionIds:
+  - SQL_07_DELETE
+  topics:
+  - DELETE
+  definition: DELETE removes rows from a table.
+  howItWorks: Write DELETE FROM and the table's name, then WHERE and a condition
+    that picks the rows to remove. Without WHERE, DELETE removes every row in the
+    table, so always check the condition.
+  exampleCode: "Table: pets\n id | name  | animal | age\n  1 | Bolt  | Dog    |  
+    4\n  2 | Misty | Cat    |   2\n  3 | Rex   | Dog    |   7\n\nDELETE FROM pets\nWHERE
+    name = 'Rex';"
+  exampleExplanation: Only the row where name is Rex matches the condition, so only
+    Rex's row is removed. Bolt and Misty stay in the table.
+  tip: DELETE removes whole rows. To change a value inside a row, use UPDATE.

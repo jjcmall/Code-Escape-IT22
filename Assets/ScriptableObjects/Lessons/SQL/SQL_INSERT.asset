@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42a7ef911f4c60e408989a759d2b9b18, type: 3}
+  m_Name: SQL_INSERT
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.LessonData
+  id: SQL_INSERT
+  language: 3
+  conceptTitle: 'INSERT: Adding a Row'
+  symbol: INSERT
+  relatedQuestionIds:
+  - SQL_05_INSERT
+  topics:
+  - INSERT
+  definition: INSERT adds a new row to a table.
+  howItWorks: Write INSERT INTO, the table's name and, in round brackets, the columns
+    you are filling. Then write VALUES and, in round brackets, the values in the
+    same order as the columns. Text values go in single quotes.
+  exampleCode: "Table: pets\n id | name  | animal | age\n  1 | Bolt  | Dog    |  
+    4\n  2 | Misty | Cat    |   2\n\nINSERT INTO pets (name, animal, age)\nVALUES
+    ('Nemo', 'Fish', 1);"
+  exampleExplanation: 'This adds a third row to pets: Nemo, a fish aged 1. ''Nemo''
+    goes into name, ''Fish'' into animal and 1 into age, because the values follow
+    the order of the column list.'
+  tip: Many databases fill in the id column by themselves, so it is often left out.

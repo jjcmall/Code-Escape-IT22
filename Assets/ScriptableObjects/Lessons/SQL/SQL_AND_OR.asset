@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42a7ef911f4c60e408989a759d2b9b18, type: 3}
+  m_Name: SQL_AND_OR
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.LessonData
+  id: SQL_AND_OR
+  language: 3
+  conceptTitle: 'AND and OR: Combining Conditions'
+  symbol: AND
+  relatedQuestionIds:
+  - SQL_04_AND_OR
+  - HZ_SQL_03_AND_OR
+  topics:
+  - AND / OR
+  definition: AND and OR join two conditions inside a WHERE clause.
+  howItWorks: With AND, a row is kept only when both conditions are true. With OR,
+    a row is kept when at least one condition is true. So AND usually returns fewer
+    rows, and OR returns more.
+  exampleCode: "Table: pets\n id | name  | animal | age\n  1 | Bolt  | Dog    |  
+    4\n  2 | Misty | Cat    |   2\n  3 | Rex   | Dog    |   7\n\nSELECT name FROM
+    pets\nWHERE animal = 'Dog' AND age < 5;"
+  exampleExplanation: 'Bolt is a dog and 4 is less than 5, so both conditions are
+    true: Bolt is returned. Rex is a dog, but 7 is not less than 5, so he is left
+    out. Misty is not a dog. With OR instead, all three would be returned.'
+  tip: Check each row against both conditions, one row at a time.

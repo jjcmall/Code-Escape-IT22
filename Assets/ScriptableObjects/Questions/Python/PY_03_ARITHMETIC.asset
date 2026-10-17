@@ -38,3 +38,10 @@ MonoBehaviour:
     so 7 // 2 is 3. / would give 3.5, % gives the remainder (1) and * multiplies
     (14).'
   hint: You need a division that drops the decimal part.
+  wrongChoiceFeedback:
+  - / gives the exact answer with a decimal, so 7 / 2 would print 3.5, not 3.
+  - 
+  - '% gives the remainder of the division, which here is 1 - not the size of each
+    pile.'
+  - '* multiplies: 7 * 2 is 14. You need an operator that divides.'
+  wrongAnswerFeedback: 

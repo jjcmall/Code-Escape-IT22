@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42a7ef911f4c60e408989a759d2b9b18, type: 3}
+  m_Name: PHP_OPERATORS
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.LessonData
+  id: PHP_OPERATORS
+  language: 2
+  conceptTitle: Operators and Shortcuts
+  symbol: += %
+  relatedQuestionIds:
+  - PHP_04_OPERATORS
+  topics:
+  - Operators
+  definition: Operators are symbols that do something with values, such as adding
+    them together.
+  howItWorks: '+ - * / do normal maths. % (modulo) gives the remainder after division:
+    10 % 4 is 2. += is a shortcut: $x += 5 means $x = $x + 5. Lines run from top
+    to bottom, so each line uses the value left by the line before.'
+  exampleCode: '<?php
+
+    $apples = 9;
+
+    $apples -= 2;
+
+    $left = $apples %
+    3;
+
+    echo $left;
+
+    ?>'
+  exampleExplanation: '$apples -= 2 takes away 2, so $apples becomes 7. 7 % 3 is
+    the remainder of 7 divided by 3: 3 goes into 7 twice (6) with 1 left over, so
+    $left is 1 and echo outputs 1.'
+  tip: -=, *= and /= work the same way as +=.

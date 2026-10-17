@@ -57,3 +57,9 @@ MonoBehaviour:
   explanation: COUNT(*) counts the rows that match the WHERE clause. Leo appears
     in two rows (Library and Arcade), so the result is 2.
   hint: Count the rows where the witness column is Leo.
+  wrongChoiceFeedback:
+  - Check the witness column again - Leo appears in more than one row.
+  - 
+  - 4 is the total number of rows. WHERE witness = 'Leo' counts only Leo's rows.
+  - COUNT(*) returns a number, not a name.
+  wrongAnswerFeedback: 

@@ -57,3 +57,10 @@ MonoBehaviour:
   explanation: 'GROUP BY makes one row per department: Security (2), Lab (1) and
     Archive (1). That is 3 rows.'
   hint: How many different departments are there?
+  wrongChoiceFeedback:
+  - GROUP BY makes one row per different department, and there is more than one department.
+  - Count the different values in the department column again.
+  - 
+  - 4 is the number of rows in the table. GROUP BY combines rows that have the same
+    department.
+  wrongAnswerFeedback: 

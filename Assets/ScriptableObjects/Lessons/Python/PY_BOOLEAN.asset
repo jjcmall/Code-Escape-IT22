@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42a7ef911f4c60e408989a759d2b9b18, type: 3}
+  m_Name: PY_BOOLEAN
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.LessonData
+  id: PY_BOOLEAN
+  language: 1
+  conceptTitle: 'Boolean Logic: and, or, not'
+  symbol: and
+  relatedQuestionIds:
+  - PY_06_BOOLEAN
+  - HZ_PY_03_BOOLEAN
+  topics:
+  - Boolean Logic
+  definition: Boolean logic works with the values True and False. It lets a program
+    combine several conditions into one answer.
+  howItWorks: 'and is True only when both sides are True. or is True when at least
+    one side is True. not flips a value: not True is False and not False is True.
+    Work out not first, then and, then or.'
+  exampleCode: 'raining = False
+
+    umbrella = True
+
+    stay_dry = not raining
+    or umbrella
+
+    go_out = raining and not umbrella
+
+    print(stay_dry, go_out)'
+  exampleExplanation: 'not raining flips False to True, so stay_dry is True or True,
+    which is True. go_out needs raining to be True, but it is False, so the whole
+    and is False. The program prints: True False'
+  tip: For and, check both sides. For or, one True side is enough.

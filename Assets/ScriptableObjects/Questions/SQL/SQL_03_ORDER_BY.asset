@@ -57,3 +57,11 @@ MonoBehaviour:
   explanation: DESC sorts from the highest value to the lowest, so the latest time
     (16:05, Bus Stop) comes first. ASC, the default, would start with Park at 15:10.
   hint: 'DESC means descending: the biggest (latest) value comes first.'
+  wrongChoiceFeedback:
+  - 
+  - Park has the earliest time. DESC sorts from the biggest (latest) value to the
+    smallest.
+  - Library is in the middle. Sort the times from latest to earliest and look at
+    the top.
+  - Arcade doesn't have the latest time. With DESC, the latest time comes first.
+  wrongAnswerFeedback: 

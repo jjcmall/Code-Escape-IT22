@@ -30,3 +30,7 @@ MonoBehaviour:
     3) and a step ($i++). It repeats while the condition is true, so it outputs 1
     2 3.'
   hint: It's a three-letter loop keyword, followed by (start; condition; step).
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: That isn't the keyword for this loop. The brackets hold three
+    parts (start; condition; step) - which loop keyword uses that pattern? Review
+    the concept if you're unsure.

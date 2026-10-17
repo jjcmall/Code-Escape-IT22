@@ -37,3 +37,10 @@ MonoBehaviour:
   explanation: not door_locked is not True, which is False. True and False is False,
     because and needs both sides to be True.
   hint: Work out not door_locked first, then combine it with and.
+  wrongChoiceFeedback:
+  - has_key is True, but and needs both sides to be True. Work out not door_locked
+    first - what does not do to True?
+  - 
+  - and and not always give True or False, never None.
+  - This is valid Python - and and not can be combined in one line.
+  wrongAnswerFeedback: 

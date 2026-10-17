@@ -33,3 +33,10 @@ MonoBehaviour:
     remainder 0, so option A prints 4 and 10. B divides instead, C picks the odd
     numbers, and D is missing the colon after the for line.
   hint: The % operator gives the remainder of a division.
+  wrongChoiceFeedback:
+  - 
+  - n / 2 divides the number, and that is only 0 when n is 0. You need the remainder,
+    which uses a different operator.
+  - A remainder of 1 means the number is odd. Which remainder do even numbers have?
+  - This for line is missing its colon, so the code would stop with a SyntaxError.
+  wrongAnswerFeedback: 

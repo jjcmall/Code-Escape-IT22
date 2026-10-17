@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42a7ef911f4c60e408989a759d2b9b18, type: 3}
+  m_Name: PHP_VARIABLES
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.LessonData
+  id: PHP_VARIABLES
+  language: 2
+  conceptTitle: Variables
+  symbol: $x
+  relatedQuestionIds:
+  - PHP_01_VARIABLES
+  - HZ_PHP_01_VARIABLES
+  topics:
+  - Variables
+  definition: A variable is a name that stores a value. In PHP every variable name
+    starts with a dollar sign ($).
+  howItWorks: Store a value with =, for example $score = 10; Every PHP statement
+    ends with a semicolon (;), and echo shows a value. The right side of = is worked
+    out first. Storing a new value in the same variable replaces the old one.
+  exampleCode: '<?php
+
+    $pet = "cat";
+
+    $pet = "dog";
+
+    $coins = 10;
+
+    $coins
+    = $coins * 2;
+
+    echo $pet;
+
+    echo $coins;
+
+    ?>'
+  exampleExplanation: $pet first holds "cat", then "dog" replaces it. $coins * 2
+    uses the current value (10), and 20 is stored back in $coins. The two echo lines
+    output dog and then 20.
+  tip: 'Variable names are case-sensitive: $Score and $score are two different variables.'

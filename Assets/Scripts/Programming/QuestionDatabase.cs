@@ -4,13 +4,19 @@ using UnityEngine;
 
 namespace CodeEscape.Programming
 {
-    /// <summary>All predefined questions. Lookups always filter by programming language.</summary>
+    /// <summary>
+    /// All predefined questions, and the lessons (learning cards) that teach them. Lookups always filter
+    /// by programming language.
+    /// </summary>
     [CreateAssetMenu(fileName = "QuestionDatabase", menuName = "Code Escape/Question Database")]
     public class QuestionDatabase : ScriptableObject
     {
         [SerializeField] List<QuestionData> questions = new List<QuestionData>();
+        [SerializeField, Tooltip("Learning cards shown before a question. Each question should be taught by one lesson of its language.")]
+        List<LessonData> lessons = new List<LessonData>();
 
         public IReadOnlyList<QuestionData> Questions => questions;
+        public IReadOnlyList<LessonData> Lessons => lessons;
 
         public List<QuestionData> GetQuestions(ProgrammingLanguage language)
         {
@@ -58,7 +64,28 @@ namespace CodeEscape.Programming
             return fallback;
         }
 
-        /// <summary>Lists authoring problems (empty entries, invalid questions, duplicate IDs).</summary>
+        /// <summary>
+        /// The lesson that teaches a question: one that lists the question by ID, otherwise one of the same
+        /// language that covers its topic. Null when there is none (the question is then asked directly).
+        /// </summary>
+        public LessonData FindLesson(QuestionData question)
+        {
+            if (question == null)
+                return null;
+            foreach (LessonData lesson in lessons)
+            {
+                if (lesson != null && lesson.ListsQuestion(question))
+                    return lesson;
+            }
+            foreach (LessonData lesson in lessons)
+            {
+                if (lesson != null && lesson.CoversTopic(question))
+                    return lesson;
+            }
+            return null;
+        }
+
+        /// <summary>Lists authoring problems (empty entries, invalid questions or lessons, duplicate IDs, questions without a lesson).</summary>
         public List<string> Validate()
         {
             var problems = new List<string>();
@@ -77,6 +104,24 @@ namespace CodeEscape.Programming
                     problems.Add($"{question.name}: {error}");
                 if (!string.IsNullOrEmpty(question.Id) && !ids.Add(question.Id))
                     problems.Add($"{question.name}: duplicate ID '{question.Id}'");
+                if (lessons.Count > 0 && FindLesson(question) == null)
+                    problems.Add($"{question.name}: no lesson teaches this question");
+            }
+
+            var lessonIds = new HashSet<string>();
+            for (int i = 0; i < lessons.Count; i++)
+            {
+                LessonData lesson = lessons[i];
+                if (lesson == null)
+                {
+                    problems.Add($"Lesson entry {i} is empty");
+                    continue;
+                }
+                string error = lesson.Validate();
+                if (error != null)
+                    problems.Add($"{lesson.name}: {error}");
+                if (!string.IsNullOrEmpty(lesson.Id) && !lessonIds.Add(lesson.Id))
+                    problems.Add($"{lesson.name}: duplicate lesson ID '{lesson.Id}'");
             }
             return problems;
         }

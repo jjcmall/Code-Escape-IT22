@@ -57,3 +57,9 @@ MonoBehaviour:
   explanation: DESC sorts from the highest value to the lowest. Rosa has the highest
     level (3), so she comes first.
   hint: DESC means highest first.
+  wrongChoiceFeedback:
+  - 
+  - Omar has level 1, one of the lowest. DESC puts the highest value first.
+  - Kim's level is 2. Is there a higher level in the table?
+  - Tariq has level 1. DESC sorts from the highest level down.
+  wrongAnswerFeedback: 

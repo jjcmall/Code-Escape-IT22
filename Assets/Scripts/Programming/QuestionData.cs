@@ -64,8 +64,14 @@ namespace CodeEscape.Programming
         bool caseSensitive = true;
 
         [Header("Feedback")]
-        [SerializeField, TextArea(2, 6)] string explanation;
+        [SerializeField, TextArea(2, 6), Tooltip("Shown after a correct answer: why the answer is right.")]
+        string explanation;
         [SerializeField, TextArea(1, 4)] string hint;
+        [SerializeField, TextArea(1, 4), Tooltip("Choices format: why each wrong choice is wrong, in the same order as the choices (the correct one is left empty). " +
+            "Shown after a wrong answer instead of the explanation, so the answer isn't given away.")]
+        string[] wrongChoiceFeedback = new string[0];
+        [SerializeField, TextArea(1, 4), Tooltip("Shown after a wrong answer when there is no feedback for that choice (always used for typed answers).")]
+        string wrongAnswerFeedback;
 
         public string Id => id;
         public ProgrammingLanguage Language => language;
@@ -81,6 +87,18 @@ namespace CodeEscape.Programming
         public string Explanation => explanation;
         public string Hint => hint;
         public bool HasHint => !string.IsNullOrWhiteSpace(hint);
+
+        /// <summary>
+        /// Feedback for a wrong answer: what the chosen answer gets wrong, without revealing the right one.
+        /// <paramref name="choiceIndex"/> is -1 for a typed answer. Empty when none has been written.
+        /// </summary>
+        public string GetWrongAnswerFeedback(int choiceIndex)
+        {
+            if (choiceIndex >= 0 && wrongChoiceFeedback != null && choiceIndex < wrongChoiceFeedback.Length
+                && !string.IsNullOrWhiteSpace(wrongChoiceFeedback[choiceIndex]))
+                return wrongChoiceFeedback[choiceIndex];
+            return wrongAnswerFeedback ?? string.Empty;
+        }
 
         public string GetChoice(int index)
         {

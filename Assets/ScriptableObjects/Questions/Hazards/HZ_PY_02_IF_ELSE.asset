@@ -32,3 +32,9 @@ MonoBehaviour:
   explanation: alarm is True, so the if block runs and prints Hide!. The else block
     only runs when the condition is False.
   hint: Is the condition True or False?
+  wrongChoiceFeedback:
+  - 
+  - The else block only runs when the condition is False. Is alarm True or False?
+  - 'Only one of the two blocks runs: either the if block or the else block.'
+  - When there is an else, one of the two blocks always runs.
+  wrongAnswerFeedback: 

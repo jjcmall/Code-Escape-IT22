@@ -51,3 +51,6 @@ MonoBehaviour:
   explanation: New rows are added with  INSERT INTO table (columns) VALUES (values); 
     The values must be in the same order as the column list.
   hint: 'INSERT ____ clues: the missing word means "inside".'
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: 'That isn''t the missing word. Look at the lesson''s example
+    again: which word always comes straight after INSERT?'

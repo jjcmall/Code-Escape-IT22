@@ -55,3 +55,9 @@ MonoBehaviour:
   explanation: 'SELECT location picks just the location column, and with no WHERE
     clause every row is returned: Park, Library, Bus Stop, Arcade.'
   hint: SELECT chooses columns. Without WHERE, are any rows left out?
+  wrongChoiceFeedback:
+  - 
+  - Those are the witness names. SELECT location chooses a different column.
+  - Those are the id values. SELECT returns only the column named after it.
+  - Without a WHERE clause, SELECT returns every row, not just the first one.
+  wrongAnswerFeedback: 

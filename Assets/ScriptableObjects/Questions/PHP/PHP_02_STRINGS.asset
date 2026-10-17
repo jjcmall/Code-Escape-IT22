@@ -41,3 +41,10 @@ MonoBehaviour:
   explanation: The dot (.) joins strings together in PHP. "Code" . " " . "Escape"
     becomes "Code Escape", with the space in the middle.
   hint: The . operator glues strings together, including the " " in the middle.
+  wrongChoiceFeedback:
+  - 'Look again at the middle piece: " " is a space, and it is joined between the
+    two words.'
+  - 
+  - The dots are operators that join the strings - they are not printed themselves.
+  - echo outputs the values stored in the variables, not the variable names.
+  wrongAnswerFeedback: 

@@ -40,3 +40,9 @@ MonoBehaviour:
   explanation: $lasers starts at 3. The right side, $lasers + 2, is worked out first
     (5) and stored back in $lasers, so echo shows 5.
   hint: Work out the right side of the = first, then store it in the variable.
+  wrongChoiceFeedback:
+  - 3 is the starting value, but the next line stores a new value in $lasers.
+  - 
+  - $lasers holds a number, so + adds. In PHP, joining text uses the dot (.).
+  - echo outputs the value stored in the variable, not its name.
+  wrongAnswerFeedback: 

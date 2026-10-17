@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42a7ef911f4c60e408989a759d2b9b18, type: 3}
+  m_Name: SQL_UPDATE
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.LessonData
+  id: SQL_UPDATE
+  language: 3
+  conceptTitle: 'UPDATE: Changing Data'
+  symbol: UPDATE
+  relatedQuestionIds:
+  - SQL_06_UPDATE
+  topics:
+  - UPDATE
+  definition: UPDATE changes values in rows that are already in a table.
+  howItWorks: 'Write UPDATE and the table''s name, then SET column = new value. Add
+    WHERE with a condition to choose which rows change. Be careful: without WHERE,
+    UPDATE changes every row in the table.'
+  exampleCode: "Table: pets\n id | name  | animal | age\n  1 | Bolt  | Dog    |  
+    4\n  2 | Misty | Cat    |   2\n\nUPDATE pets\nSET age = 3\nWHERE name = 'Misty';"
+  exampleExplanation: Only Misty's row matches WHERE name = 'Misty', so only her
+    age changes, from 2 to 3. Bolt's row is not touched.
+  tip: 'Before you run an UPDATE, read the WHERE line: it decides which rows change.'

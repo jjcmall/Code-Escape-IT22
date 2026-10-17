@@ -9,8 +9,9 @@ using CodeEscape.UI;
 namespace CodeEscape.Programming
 {
     /// <summary>
-    /// Runs programming challenges: picks the obstacle's question for the selected language, pauses the
-    /// game, drives ChallengeUI, checks answers against the stored solution, keeps score and unlocks
+    /// Runs programming challenges: picks the obstacle's question for the selected language and the lesson
+    /// (learning card) that teaches it, pauses the game, drives ChallengeUI (card first, then the question),
+    /// checks answers against the stored solution, keeps score and unlocks
     /// the obstacle. Hazards that catch Alex open a mandatory challenge through the same path: it can't
     /// be closed until answered correctly, gives no points and doesn't count as a solved obstacle.
     /// Lives on the persistent GameSystems object, so score carries across scenes.
@@ -19,6 +20,7 @@ namespace CodeEscape.Programming
     {
         public const int PointsPerCorrectAnswer = 100;
         public const int HintPenalty = 25;
+        const string WrongAnswerFallback = "Not quite. Go through the code one step at a time, or review the concept and try again.";
 
         public static ProgrammingChallengeManager Instance { get; private set; }
 
@@ -51,6 +53,7 @@ namespace CodeEscape.Programming
         IChallengeSource activeSource;
         QuestionData activeQuestion;
         bool activeSolved;
+        LessonData activeLesson;
 
         public int Score => score;
         public int HintsUsed => hintsUsed;
@@ -58,6 +61,8 @@ namespace CodeEscape.Programming
         public bool IsActiveChallengeSolved => activeSolved;
         public QuestionData ActiveQuestion => activeQuestion;
         public IChallengeSource ActiveSource => activeSource;
+        /// <summary>The lesson shown before the open challenge's question (null when it has none).</summary>
+        public LessonData ActiveLesson => activeLesson;
         /// <summary>True while a hazard's challenge is open: it can only end with a correct answer.</summary>
         public bool IsActiveChallengeMandatory => activeSource != null && activeSource.IsMandatory;
         public QuestionDatabase Database => questionDatabase;
@@ -181,14 +186,15 @@ namespace CodeEscape.Programming
             activeSource = obstacle;
             activeQuestion = question;
             activeSolved = false;
+            activeLesson = questionDatabase != null ? questionDatabase.FindLesson(question) : null;
 
             Time.timeScale = 0f;
             if (GameManager.Instance != null)
                 GameManager.Instance.SetState(GameState.Challenge);
 
-            challengeUI.Show(question, obstacle.DisplayName, hintedQuestionIds.Contains(question.Id), obstacle.IsMandatory);
+            challengeUI.Show(question, obstacle.DisplayName, hintedQuestionIds.Contains(question.Id), obstacle.IsMandatory, activeLesson);
             challengeUI.SetScore(score, hintsUsed);
-            Debug.Log($"[Challenge] Opened {question.Id} ({language.ToDisplayName()}) at '{obstacle.DisplayName}'{(obstacle.IsMandatory ? " - caught" : string.Empty)}");
+            Debug.Log($"[Challenge] Opened {question.Id} ({language.ToDisplayName()}) at '{obstacle.DisplayName}'{(obstacle.IsMandatory ? " - caught" : string.Empty)}, lesson {(activeLesson != null ? activeLesson.Id : "none")}");
             ChallengeOpened?.Invoke(question);
             if (obstacle.IsMandatory)
                 HazardCaught?.Invoke(obstacle.ObstacleId);
@@ -198,13 +204,13 @@ namespace CodeEscape.Programming
         public void SubmitChoice(int choiceIndex)
         {
             if (CanAnswer())
-                Evaluate(activeQuestion.IsCorrectChoice(choiceIndex));
+                Evaluate(activeQuestion.IsCorrectChoice(choiceIndex), choiceIndex);
         }
 
         public void SubmitTypedAnswer(string answer)
         {
             if (CanAnswer())
-                Evaluate(activeQuestion.IsCorrectTypedAnswer(answer));
+                Evaluate(activeQuestion.IsCorrectTypedAnswer(answer), -1);
         }
 
         /// <summary>Shows the hint. The penalty applies the first time each question's hint is used.</summary>
@@ -297,7 +303,8 @@ namespace CodeEscape.Programming
             ScoreChanged?.Invoke(score, hintsUsed);
         }
 
-        void Evaluate(bool correct)
+        // choiceIndex is the picked choice, or -1 for a typed answer.
+        void Evaluate(bool correct, int choiceIndex)
         {
             int pointsAwarded = 0;
             if (correct)
@@ -314,8 +321,14 @@ namespace CodeEscape.Programming
                 }
             }
 
+            // A correct answer explains why it is right. A wrong one explains the mistake in the chosen
+            // answer instead, so the right answer isn't given away and the player can try again.
+            string feedback = correct ? activeQuestion.Explanation : activeQuestion.GetWrongAnswerFeedback(choiceIndex);
+            if (!correct && string.IsNullOrWhiteSpace(feedback))
+                feedback = WrongAnswerFallback;
+
             Debug.Log($"[Challenge] {activeQuestion.Id} answered {(correct ? "correctly" : "incorrectly")}. Score {score}");
-            challengeUI.ShowResult(correct, activeQuestion.Explanation, pointsAwarded, correct ? activeSource.ClueRewardText : null, activeSource.IsMandatory);
+            challengeUI.ShowResult(correct, feedback, pointsAwarded, correct ? activeSource.ClueRewardText : null, activeSource.IsMandatory);
             AnswerChecked?.Invoke(correct);
         }
 
@@ -332,6 +345,7 @@ namespace CodeEscape.Programming
             activeSource = null;
             activeQuestion = null;
             activeSolved = false;
+            activeLesson = null;
             if (challengeUI != null)
                 challengeUI.Hide();
 
@@ -351,7 +365,8 @@ namespace CodeEscape.Programming
 
         bool CanAnswer()
         {
-            return IsChallengeOpen && !activeSolved;
+            // Answers only count once the learning card has been closed and the question is on screen.
+            return IsChallengeOpen && !activeSolved && (challengeUI == null || !challengeUI.IsLessonOpen);
         }
 
         void HandleSceneLoaded(Scene scene, LoadSceneMode mode)

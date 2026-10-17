@@ -29,3 +29,6 @@ MonoBehaviour:
   explanation: In PHP a function is declared with the keyword function, then its
     name and parameters. double(4) returns 8.
   hint: The keyword is the same word as the thing you are creating.
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: 'That isn''t the keyword that creates a function in PHP. Look
+    at the lesson''s example: which word starts the definition?'

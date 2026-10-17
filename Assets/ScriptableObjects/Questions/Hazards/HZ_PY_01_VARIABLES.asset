@@ -36,3 +36,9 @@ MonoBehaviour:
   explanation: lasers starts at 3. The right side, lasers + 2, is worked out first
     (5) and stored back in lasers, so print shows 5.
   hint: Work out the right side of the = first, then store it in the variable.
+  wrongChoiceFeedback:
+  - 3 is the starting value, but the second line stores a new value in lasers.
+  - 
+  - lasers holds a number, so + adds the numbers - it doesn't join them like text.
+  - Without quotes, lasers + 2 is worked out as maths, not printed as words.
+  wrongAnswerFeedback: 

@@ -61,3 +61,12 @@ MonoBehaviour:
   explanation: 'SQL clauses go in this order: SELECT, FROM, WHERE, GROUP BY, ORDER
     BY. WHERE filters the rows first; ORDER BY then sorts what is left.'
   hint: Filtering (WHERE) always comes before sorting (ORDER BY).
+  wrongChoiceFeedback:
+  - 
+  - FROM belongs straight after SELECT. The problem is that two other clauses have
+    swapped places.
+  - The query wants the rows sorted by time, so ORDER BY is the right clause. The
+    problem is where it is placed.
+  - The columns in SELECT are fine. The problem is the order of the clauses below
+    them.
+  wrongAnswerFeedback: 

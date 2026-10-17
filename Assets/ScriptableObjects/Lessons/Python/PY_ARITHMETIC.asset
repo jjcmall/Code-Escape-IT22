@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42a7ef911f4c60e408989a759d2b9b18, type: 3}
+  m_Name: PY_ARITHMETIC
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.LessonData
+  id: PY_ARITHMETIC
+  language: 1
+  conceptTitle: Arithmetic Operators
+  symbol: + - * /
+  relatedQuestionIds:
+  - PY_03_ARITHMETIC
+  topics:
+  - Arithmetic
+  definition: Arithmetic operators are symbols that let a program do maths with numbers.
+  howItWorks: '+ adds, - subtracts and * multiplies. Python has three kinds of division:
+    / gives the exact answer with a decimal, // keeps only the whole-number part
+    (floor division), and % gives the remainder that is left over.'
+  exampleCode: 'cookies = 9
+
+    print(cookies / 2)
+
+    print(cookies // 2)
+
+    print(cookies
+    % 2)'
+  exampleExplanation: '9 / 2 is 4.5. 9 // 2 keeps only the whole part, 4. 9 % 2 is
+    the remainder: 9 shared into two equal piles is 4 each, with 1 left over, so
+    it prints 1.'
+  tip: 'Python follows maths rules: * and / are worked out before + and -.'

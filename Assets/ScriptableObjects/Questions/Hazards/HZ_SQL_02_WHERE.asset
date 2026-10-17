@@ -57,3 +57,10 @@ MonoBehaviour:
   explanation: 'WHERE keeps only the rows whose department is Security: Rosa (row
     1) and Kim (row 3).'
   hint: Look down the department column for Security.
+  wrongChoiceFeedback:
+  - 
+  - Omar works in Lab and Tariq in Archive. Look for the rows where department is
+    Security.
+  - Check every row - someone else also works in Security.
+  - WHERE filters the rows, so only the matching ones are returned.
+  wrongAnswerFeedback: 

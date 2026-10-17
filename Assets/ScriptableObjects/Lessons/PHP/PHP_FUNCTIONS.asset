@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42a7ef911f4c60e408989a759d2b9b18, type: 3}
+  m_Name: PHP_FUNCTIONS
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.LessonData
+  id: PHP_FUNCTIONS
+  language: 2
+  conceptTitle: Functions
+  symbol: f( )
+  relatedQuestionIds:
+  - PHP_08_FUNCTIONS
+  - HZ_PHP_06_FUNCTIONS
+  topics:
+  - Functions
+  definition: A function is a named, reusable block of code that does one job. You
+    write it once and call it whenever you need it.
+  howItWorks: Create one with the keyword function, a name, round brackets with any
+    parameters (inputs) and curly braces around the code. return sends a value back.
+    When you call a function, give it one value (an argument) for each parameter.
+  exampleCode: "<?php\nfunction addBonus($points) {\n    return $points + 5;\n}\necho
+    addBonus(10);\n?>"
+  exampleExplanation: addBonus(10) calls the function and gives the parameter $points
+    the value 10. The function returns 10 + 5, so echo outputs 15.
+  tip: A parameter is the name in the definition ($points). An argument is the value
+    you pass in the call (10).

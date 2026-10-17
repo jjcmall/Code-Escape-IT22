@@ -34,3 +34,11 @@ MonoBehaviour:
     Python uses in and JavaScript uses of, but PHP uses as.'
   hint: 'PHP doesn''t use Python''s in here. Read it as: for each of the places,
     treat it ___ $place.'
+  wrongChoiceFeedback:
+  - 
+  - in is what Python uses. PHP's foreach uses a different word between the array
+    and the item.
+  - of is used in JavaScript loops, not in PHP's foreach.
+  - => is used when you want both the key and the value. Here only the value $place
+    is needed, which uses a different keyword.
+  wrongAnswerFeedback: 

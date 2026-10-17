@@ -34,3 +34,12 @@ MonoBehaviour:
   explanation: List positions (indexes) start at 0. places[0] is "park" and places[1]
     is "library".
   hint: Python starts counting list positions at 0, not 1.
+  wrongChoiceFeedback:
+  - park is the first item, but places[1] doesn't mean "first". Check where Python
+    starts counting list positions.
+  - 
+  - arcade is further along the list. Count the positions again - Python doesn't
+    start counting at 1.
+  - An IndexError only happens when the index is too big for the list. This list
+    has three items, so index 1 exists.
+  wrongAnswerFeedback: 

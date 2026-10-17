@@ -38,3 +38,11 @@ MonoBehaviour:
   explanation: Every PHP variable starts with a dollar sign. name = "Alex"; is not
     valid PHP, but  $name = "Alex";  is, and then echo $name outputs Alex.
   hint: Compare how the variable is written on the two lines.
+  wrongChoiceFeedback:
+  - 
+  - echo works fine in PHP. The error comes from how the variable is written on the
+    first line.
+  - PHP accepts both double and single quotes for strings, so the quotes are not
+    the problem.
+  - PHP statements need their semicolons. Removing them would cause even more errors.
+  wrongAnswerFeedback: 

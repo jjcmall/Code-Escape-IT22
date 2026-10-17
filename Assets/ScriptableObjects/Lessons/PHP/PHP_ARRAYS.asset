@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42a7ef911f4c60e408989a759d2b9b18, type: 3}
+  m_Name: PHP_ARRAYS
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.LessonData
+  id: PHP_ARRAYS
+  language: 2
+  conceptTitle: Arrays
+  symbol: '[ ]'
+  relatedQuestionIds:
+  - PHP_09_ARRAYS
+  - HZ_PHP_05_ARRAYS
+  topics:
+  - Arrays
+  definition: An array stores several values, in order, inside one variable.
+  howItWorks: 'Create an array with square brackets and commas: $list = ["a", "b"];
+    (array("a", "b") also works). Each item has an index that starts at 0, so $list[0]
+    is the first item. count($list) gives the number of items.'
+  exampleCode: '<?php
+
+    $snacks = ["apple", "chips", "grapes", "nuts"];
+
+    echo
+    $snacks[1];
+
+    echo count($snacks);
+
+    ?>'
+  exampleExplanation: '$snacks[1] is the second item, chips, because counting starts
+    at 0. count($snacks) returns how many items there are: 4.'
+  tip: Like every PHP variable, an array's name starts with $.

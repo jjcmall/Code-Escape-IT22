@@ -36,3 +36,12 @@ MonoBehaviour:
   explanation: A variable only remembers its latest value. name is set to "Sam" and
     then reassigned to "Alex", so print(name) shows Alex.
   hint: If a variable is given a new value, what happens to the old one?
+  wrongChoiceFeedback:
+  - Sam was stored first, but the next line gives name a new value. A variable keeps
+    only its latest value.
+  - 
+  - print(name) has no quotes around name, so Python prints the value stored in the
+    variable, not the word "name".
+  - A variable holds one value at a time. Storing a new value replaces the old one
+    - it isn't added to it.
+  wrongAnswerFeedback: 

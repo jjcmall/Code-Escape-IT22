@@ -36,3 +36,10 @@ MonoBehaviour:
   explanation: not door_open turns False into True. Then has_badge and True is True
     and True, which is True.
   hint: Do the not first, then the and.
+  wrongChoiceFeedback:
+  - 
+  - door_open is False, and not flips it. Work out not door_open first, then the
+    and.
+  - and and not always give True or False, never None.
+  - This is valid Python - and and not can be combined in one line.
+  wrongAnswerFeedback: 

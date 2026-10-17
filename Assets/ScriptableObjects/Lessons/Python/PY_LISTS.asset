@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42a7ef911f4c60e408989a759d2b9b18, type: 3}
+  m_Name: PY_LISTS
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.LessonData
+  id: PY_LISTS
+  language: 1
+  conceptTitle: Lists and Indexes
+  symbol: '[ ]'
+  relatedQuestionIds:
+  - PY_09_LISTS
+  - HZ_PY_05_LISTS
+  topics:
+  - Lists
+  definition: A list stores several values, in order, inside one variable.
+  howItWorks: Write a list with square brackets and commas between the items. Each
+    item has a position number called an index. Indexes start at 0, so the first
+    item is list[0], the second is list[1], and so on.
+  exampleCode: 'snacks = ["apple", "chips", "grapes", "nuts"]
+
+    print(snacks[0])
+
+    print(snacks[3])'
+  exampleExplanation: snacks[0] is the first item, apple. snacks[3] is the fourth
+    item, nuts, because counting starts at 0. Asking for snacks[4] would cause an
+    IndexError, because there is no fifth item.
+  tip: len(snacks) tells you how many items a list has - here it is 4.

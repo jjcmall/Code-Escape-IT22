@@ -51,3 +51,10 @@ MonoBehaviour:
   explanation: WHERE filters rows and comes after FROM. Text values go in single
     quotes. SQL has no IF clause, and SELECT Leo would look for a column named Leo.
   hint: The filtering keyword goes after FROM table_name.
+  wrongChoiceFeedback:
+  - 
+  - SQL has no IF clause for filtering rows. A different keyword filters rows.
+  - SELECT Leo would look for a column called Leo, but Leo is a value in the witness
+    column.
+  - 'The filter is right, but it''s in the wrong place: it must come after FROM sightings.'
+  wrongAnswerFeedback: 

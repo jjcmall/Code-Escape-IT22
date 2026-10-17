@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42a7ef911f4c60e408989a759d2b9b18, type: 3}
+  m_Name: SQL_CLAUSE_ORDER
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.LessonData
+  id: SQL_CLAUSE_ORDER
+  language: 3
+  conceptTitle: The Order of SQL Clauses
+  symbol: 1-2-3
+  relatedQuestionIds:
+  - SQL_10_MIXED
+  topics:
+  - Mixed
+  definition: A query is built from clauses - parts that each start with a keyword.
+    SQL needs the clauses in a fixed order, or the query does not work.
+  howItWorks: 'The order is: SELECT (which columns), FROM (which table), WHERE (which
+    rows), GROUP BY (how to group) and ORDER BY (how to sort). You can leave out
+    clauses you don''t need, but the ones you use must stay in this order.'
+  exampleCode: 'SELECT name, age
+
+    FROM pets
+
+    WHERE animal = ''Dog''
+
+    ORDER
+    BY age DESC;'
+  exampleExplanation: The query reads the pets table, keeps only the dogs (WHERE),
+    then sorts them from oldest to youngest (ORDER BY ... DESC). With the pets used
+    in these lessons, the result is Rex (7), then Bolt (4).
+  tip: 'Think of it as: choose columns, pick the table, filter the rows, group them,
+    then sort.'

@@ -34,3 +34,11 @@ MonoBehaviour:
     inside an if. Python has no === operator, and "less than or equal" is written
     <=, not =<.
   hint: One equals sign stores a value. Which operator compares?
+  wrongChoiceFeedback:
+  - A single = stores a value. Inside an if it causes a SyntaxError, because an if
+    needs a comparison.
+  - 
+  - Some other languages use ===, but Python does not have this operator.
+  - =< is not a Python operator, and "less than or equal" is not the same as "equal"
+    anyway.
+  wrongAnswerFeedback: 

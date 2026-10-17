@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42a7ef911f4c60e408989a759d2b9b18, type: 3}
+  m_Name: SQL_SELECT
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.LessonData
+  id: SQL_SELECT
+  language: 3
+  conceptTitle: 'SELECT: Reading Data from a Table'
+  symbol: SELECT
+  relatedQuestionIds:
+  - SQL_01_SELECT
+  - HZ_SQL_01_SELECT
+  topics:
+  - SELECT
+  definition: SQL is a language for working with data in a database. Data is stored
+    in tables made of columns (headings) and rows (records). SELECT reads data from
+    a table.
+  howItWorks: Write SELECT, the column or columns you want, then FROM and the table's
+    name, and end with a semicolon. SELECT * means "all columns". Without a WHERE
+    filter, every row is returned.
+  exampleCode: "Table: pets\n id | name  | animal | age\n  1 | Bolt  | Dog    |  
+    4\n  2 | Misty | Cat    |   2\n  3 | Nemo  | Fish   |   1\n\nSELECT animal FROM
+    pets;"
+  exampleExplanation: SELECT animal picks only the animal column, and FROM pets says
+    which table to read. No rows are filtered out, so the result is Dog, Cat, Fish.
+  tip: The tables in this game are made-up examples - no real database is used.

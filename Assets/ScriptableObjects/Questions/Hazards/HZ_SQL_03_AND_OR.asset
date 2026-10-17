@@ -57,3 +57,9 @@ MonoBehaviour:
   explanation: AND needs both conditions to be true. Rosa is in Security with level
     3. Kim is in Security but her level is 2, so she is left out.
   hint: A row must match both the department and the level.
+  wrongChoiceFeedback:
+  - 
+  - Both work in Security, but AND also needs level >= 3. Check Kim's level.
+  - Kim's level is 2, which is not >= 3.
+  - Check each Security row against level >= 3 - one of them matches.
+  wrongAnswerFeedback: 

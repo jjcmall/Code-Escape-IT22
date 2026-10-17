@@ -33,3 +33,9 @@ MonoBehaviour:
   explanation: 15 > 20 is false, so the if block is skipped and the else block echoes
     Recharge.
   hint: Is 15 greater than 20?
+  wrongChoiceFeedback:
+  - The if block only runs when the condition is true. Is 15 greater than 20?
+  - 
+  - 'Only one block runs: either the if block or the else block.'
+  - Neither block echoes $battery - they both echo text.
+  wrongAnswerFeedback: 

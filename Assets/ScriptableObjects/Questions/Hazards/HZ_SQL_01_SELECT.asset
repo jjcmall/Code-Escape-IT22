@@ -51,3 +51,10 @@ MonoBehaviour:
   explanation: 'SELECT is followed by the column you want and FROM by the table:
     SELECT name FROM badges; returns Rosa, Omar, Kim and Tariq.'
   hint: The pattern is SELECT column FROM table.
+  wrongChoiceFeedback:
+  - 
+  - name is a column, not a table. FROM must be followed by the table's name.
+  - SQL has no GET command. Reading data uses a different keyword.
+  - The column and the table are swapped. The column comes after SELECT and the table
+    after FROM.
+  wrongAnswerFeedback: 

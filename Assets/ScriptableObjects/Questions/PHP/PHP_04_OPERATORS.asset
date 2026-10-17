@@ -43,3 +43,11 @@ MonoBehaviour:
   explanation: '$steps += 5 adds 5, so $steps becomes 15. % gives the remainder of
     a division: 15 divided by 4 is 3 remainder 3, so 15 % 4 is 3.'
   hint: First add 5, then find the remainder when dividing by 4.
+  wrongChoiceFeedback:
+  - 
+  - 15 is the value after += 5, but the next line changes $steps again. Don't forget
+    the % line.
+  - 3.75 is 15 divided by 4. % doesn't divide - it gives the remainder.
+  - 'Check the first step again: $steps += 5 adds 5 to 10. Then find the remainder
+    when that result is divided by 4.'
+  wrongAnswerFeedback: 

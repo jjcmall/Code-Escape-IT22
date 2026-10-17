@@ -29,3 +29,7 @@ MonoBehaviour:
   explanation: 'for loops over each value in a sequence. range(3) produces 0, 1 and
     2, so  for i in range(3):  runs three times and prints each number.'
   hint: It's a three-letter keyword that starts a loop over a sequence.
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: That keyword doesn't start this loop. Which keyword goes through
+    each value of a sequence like range(3), one by one? Review the concept if you're
+    unsure.

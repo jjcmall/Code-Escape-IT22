@@ -38,3 +38,9 @@ MonoBehaviour:
   explanation: Text inside quotation marks is a string. b = "42" stores the text
     "42", not the number. a is an int, c is a float and d is a bool.
   hint: Look for the value written inside quotation marks.
+  wrongChoiceFeedback:
+  - a = 42 has no quotation marks, so it is a whole number (an int), not text.
+  - 
+  - c = 4.2 is a number with a decimal point - a float, not text.
+  - True without quotes is a bool (True or False), not text.
+  wrongAnswerFeedback: 

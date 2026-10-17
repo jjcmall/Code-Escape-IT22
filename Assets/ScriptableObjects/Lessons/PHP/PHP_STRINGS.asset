@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42a7ef911f4c60e408989a759d2b9b18, type: 3}
+  m_Name: PHP_STRINGS
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.LessonData
+  id: PHP_STRINGS
+  language: 2
+  conceptTitle: Strings and Joining Text
+  symbol: '"a"."b"'
+  relatedQuestionIds:
+  - PHP_02_STRINGS
+  - HZ_PHP_02_STRINGS
+  topics:
+  - Strings
+  definition: A string is text written inside quotation marks, like "Hello".
+  howItWorks: In PHP the dot (.) joins strings together. This is called concatenation.
+    The pieces are joined exactly as they are - PHP does not add spaces for you -
+    so a space must be inside the quotes, or added as its own piece " ".
+  exampleCode: '<?php
+
+    $city = "River";
+
+    $place = "side";
+
+    echo $city
+    . $place;
+
+    echo "Hi" . "!";
+
+    ?>'
+  exampleExplanation: $city . $place joins River and side with no gap, giving Riverside.
+    "Hi" . "!" joins Hi and ! into Hi!. A variable outside the quotes is replaced
+    by the value it holds.
+  tip: In PHP, + is only for adding numbers. Use . to join text.

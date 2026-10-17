@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42a7ef911f4c60e408989a759d2b9b18, type: 3}
+  m_Name: SQL_ORDER_BY
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.LessonData
+  id: SQL_ORDER_BY
+  language: 3
+  conceptTitle: 'ORDER BY: Sorting Results'
+  symbol: ORDER
+  relatedQuestionIds:
+  - SQL_03_ORDER_BY
+  - HZ_SQL_04_ORDER_BY
+  topics:
+  - ORDER BY
+  definition: ORDER BY sorts the rows of a result by one column.
+  howItWorks: Add ORDER BY and a column name at the end of the query. ASC (ascending)
+    sorts from smallest to biggest, A to Z, or earliest to latest - it is used when
+    you write nothing. DESC (descending) sorts the other way.
+  exampleCode: "Table: pets\n id | name  | animal | age\n  1 | Bolt  | Dog    |  
+    4\n  2 | Misty | Cat    |   2\n  3 | Rex   | Dog    |   7\n\nSELECT name FROM
+    pets\nORDER BY age;"
+  exampleExplanation: ORDER BY age sorts by the age column. With no ASC or DESC it
+    sorts smallest first, so the result is Misty (2), Bolt (4), Rex (7). Adding DESC
+    would reverse the order.
+  tip: ORDER BY comes at the end of a query, after WHERE.

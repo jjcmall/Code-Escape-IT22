@@ -38,3 +38,9 @@ MonoBehaviour:
   explanation: count() returns how many items an array holds. There are three rooms,
     so it outputs 3.
   hint: count() counts the items, it doesn't return one of them.
+  wrongChoiceFeedback:
+  - count() counts every item. Indexes start at 0, but the number of items doesn't.
+  - 
+  - Count the items in the array again.
+  - count() returns a number, not one of the items.
+  wrongAnswerFeedback: 

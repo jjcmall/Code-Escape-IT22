@@ -32,3 +32,9 @@ MonoBehaviour:
   explanation: range(4) gives 0, 1, 2 and 3 - four values - so the loop body runs
     four times and count ends at 4.
   hint: range(4) stops before 4. How many numbers is that?
+  wrongChoiceFeedback:
+  - range(4) stops before 4, but it starts at 0. Count the values it makes again.
+  - 
+  - range(4) doesn't include 4 itself, so the loop runs fewer than 5 times.
+  - The loop adds 1 to count every time it runs, so count doesn't stay at 0.
+  wrongAnswerFeedback: 

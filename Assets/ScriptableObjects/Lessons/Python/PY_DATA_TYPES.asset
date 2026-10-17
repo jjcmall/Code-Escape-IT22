@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42a7ef911f4c60e408989a759d2b9b18, type: 3}
+  m_Name: PY_DATA_TYPES
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.LessonData
+  id: PY_DATA_TYPES
+  language: 1
+  conceptTitle: Data Types
+  symbol: int str
+  relatedQuestionIds:
+  - PY_02_DATA_TYPES
+  topics:
+  - Data Types
+  definition: A data type tells Python what kind of value something is. The type
+    decides what you can do with the value.
+  howItWorks: 'The four basic types are: int - whole numbers like 7; float - numbers
+    with a decimal point like 2.5; str (string) - text inside quotation marks like
+    "hello"; bool - True or False. Quotation marks always make a string, even when
+    the text looks like a number.'
+  exampleCode: 'age = 12
+
+    height = 1.5
+
+    nickname = "Ace"
+
+    lucky = "7"
+
+    ready
+    = False'
+  exampleExplanation: 'age is an int and height is a float. nickname is a str. lucky
+    is also a str, because "7" is inside quotes: it is the text 7, not the number
+    7. ready is a bool.'
+  tip: type(age) tells you a value's type - for age it shows <class 'int'>.

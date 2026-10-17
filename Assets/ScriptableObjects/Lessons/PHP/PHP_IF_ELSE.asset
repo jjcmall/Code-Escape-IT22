@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42a7ef911f4c60e408989a759d2b9b18, type: 3}
+  m_Name: PHP_IF_ELSE
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.LessonData
+  id: PHP_IF_ELSE
+  language: 2
+  conceptTitle: 'Conditions: if and else'
+  symbol: if ( )
+  relatedQuestionIds:
+  - PHP_05_IF_ELSE
+  - HZ_PHP_03_IF_ELSE
+  topics:
+  - If / Else
+  definition: 'An if statement makes a decision: it runs some code only when a condition
+    is true.'
+  howItWorks: In PHP the condition goes inside round brackets ( ) and the code to
+    run goes inside curly braces { }. An else { } block runs when the condition is
+    false. Use == to compare two values; a single = stores a value instead.
+  exampleCode: "<?php\n$temperature = 30;\nif ($temperature > 25) {\n    echo \"Wear
+    a hat\";\n} else {\n    echo \"Bring a jacket\";\n}\n?>"
+  exampleExplanation: 30 > 25 is true, so the code inside the first { } runs and
+    outputs Wear a hat. The else block is skipped. If $temperature were 18, the output
+    would be Bring a jacket.
+  tip: 'PHP comparison operators: == (equal), != (not equal), <, >, <= and >=.'

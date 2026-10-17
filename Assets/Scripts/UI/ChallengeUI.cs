@@ -7,10 +7,12 @@ using CodeEscape.Programming;
 namespace CodeEscape.UI
 {
     /// <summary>
-    /// Window for programming challenges: question, code, choices or typed answer, hint and result.
-    /// It only displays things - every button forwards to ProgrammingChallengeManager, which owns the logic.
-    /// When a hazard has caught Alex it shows the CAUGHT banner and hides Close (Esc does nothing): only
-    /// a correct answer ends it.
+    /// Window for programming challenges. When the question has a lesson, a learning card (concept,
+    /// definition, how it works, an example and what it does) is shown first; Continue opens the question,
+    /// and Review Concept brings the card back at any time without resetting the challenge. Then: question,
+    /// code, choices or typed answer, hint and result. It only displays things - every button forwards to
+    /// ProgrammingChallengeManager, which owns the logic. When a hazard has caught Alex it shows the CAUGHT
+    /// banner and hides Close (Esc does nothing): only a correct answer ends it.
     /// </summary>
     public class ChallengeUI : MonoBehaviour
     {
@@ -57,6 +59,25 @@ namespace CodeEscape.UI
         [SerializeField] TMP_Text continueLabel;
         [SerializeField, Tooltip("Hidden while Alex is caught: the challenge must be solved.")]
         Button closeButton;
+        [SerializeField, Tooltip("On the question screen: shows the learning card again without resetting the challenge.")]
+        Button reviewButton;
+
+        [Header("Learning card (shown before the question)")]
+        [SerializeField, Tooltip("Covers the question while the lesson is on screen.")]
+        GameObject lessonPanel;
+        [SerializeField] TMP_Text lessonBadgeText;
+        [SerializeField] TMP_Text lessonSymbolText;
+        [SerializeField] TMP_Text lessonTitleText;
+        [SerializeField] TMP_Text lessonDefinitionText;
+        [SerializeField] TMP_Text lessonHowText;
+        [SerializeField, Tooltip("Example heading, code panel and explanation; hidden when the lesson has no example.")]
+        GameObject lessonExampleRoot;
+        [SerializeField] TMP_Text lessonCodeText;
+        [SerializeField] TMP_Text lessonExampleText;
+        [SerializeField] GameObject lessonTipRoot;
+        [SerializeField] TMP_Text lessonTipText;
+        [SerializeField] Button lessonContinueButton;
+        [SerializeField] TMP_Text lessonContinueLabel;
 
         [Header("Caught by a hazard")]
         [SerializeField, Tooltip("\"CAUGHT! SOLVE THE CODE TO ESCAPE!\" - shown only for hazard challenges.")]
@@ -74,11 +95,14 @@ namespace CodeEscape.UI
         [SerializeField] Color incorrectColor = new Color(0.97f, 0.44f, 0.44f);
 
         const string CaughtMessage = "CAUGHT!  SOLVE THE CODE TO ESCAPE!";
+        const string ReviewReminder = "\n<size=85%><color=#8B98A5>Need a reminder? Press REVIEW CONCEPT to read the lesson again.</color></size>";
 
         QuestionData question;
+        LessonData lesson;
         int selectedChoice = -1;
         bool hintShown;
         bool caught;
+        bool questionShown;
         string continueDefault;
         Color borderDefault;
         Color glowDefault;
@@ -86,6 +110,9 @@ namespace CodeEscape.UI
         public bool IsOpen => overlay != null && overlay.activeSelf;
         public int SelectedChoice => selectedChoice;
         public bool IsCaught => IsOpen && caught;
+        /// <summary>True while the learning card is on screen (before the question, or while reviewing).</summary>
+        public bool IsLessonOpen => IsOpen && lessonPanel != null && lessonPanel.activeSelf;
+        public LessonData Lesson => lesson;
 
         ProgrammingChallengeManager Manager => manager != null ? manager : ProgrammingChallengeManager.Instance;
         bool IsTyped => question != null && question.AnswerFormat == AnswerFormat.TypedAnswer;
@@ -112,10 +139,12 @@ namespace CodeEscape.UI
 
         // ---------- Called by ProgrammingChallengeManager ----------
 
-        public void Show(QuestionData data, string obstacleName, bool hintAlreadyUnlocked, bool caughtByHazard = false)
+        public void Show(QuestionData data, string obstacleName, bool hintAlreadyUnlocked, bool caughtByHazard = false, LessonData lessonData = null)
         {
             question = data;
+            lesson = lessonData;
             hintShown = false;
+            questionShown = false;
             caught = caughtByHazard;
             if (closeButton != null)
                 closeButton.gameObject.SetActive(!caught);
@@ -153,7 +182,11 @@ namespace CodeEscape.UI
                 ShowHint(data.Hint);
 
             overlay.SetActive(true);
-            ShowAnswerInput();
+            // Learn first: the lesson's card comes before the question it teaches.
+            if (lesson != null && lessonPanel != null)
+                ShowLesson(false);
+            else
+                BeginQuestion();
         }
 
         /// <summary>Shows the answer controls (first attempt and every retry).</summary>
@@ -171,6 +204,7 @@ namespace CodeEscape.UI
             continueButton.gameObject.SetActive(false);
             hintButton.gameObject.SetActive(question.HasHint);
             hintButton.interactable = !hintShown;
+            SetActive(reviewButton, lesson != null);
             UpdateSubmitState();
 
             UIFocus.Clear();
@@ -178,20 +212,26 @@ namespace CodeEscape.UI
                 answerInput.ActivateInputField();
         }
 
-        public void ShowResult(bool correct, string explanation, int pointsAwarded, string clueReward, bool caughtByHazard = false)
+        /// <summary>
+        /// Shows the result. <paramref name="feedback"/> explains why a correct answer is right, or what is
+        /// wrong with a wrong one (without giving the right answer away).
+        /// </summary>
+        public void ShowResult(bool correct, string feedback, int pointsAwarded, string clueReward, bool caughtByHazard = false)
         {
             choicesRoot.SetActive(false);
             typedAnswerRoot.SetActive(false);
             resultRoot.SetActive(true);
 
             if (caughtByHazard)
-                resultTitleText.text = correct ? "CORRECT!  YOU'RE FREE - CAREFUL THIS TIME!" : "INCORRECT - STILL CAUGHT. READ THE EXPLANATION AND TRY AGAIN";
+                resultTitleText.text = correct ? "CORRECT!  YOU'RE FREE - CAREFUL THIS TIME!" : "NOT QUITE - STILL CAUGHT. READ THE FEEDBACK AND TRY AGAIN";
             else
                 resultTitleText.text = correct
                     ? (pointsAwarded > 0 ? $"CORRECT!  +{pointsAwarded} POINTS" : "CORRECT!")
-                    : "INCORRECT - READ THE EXPLANATION, THEN TRY AGAIN";
+                    : "NOT QUITE - READ THE FEEDBACK, THEN TRY AGAIN";
             resultTitleText.color = correct ? correctColor : incorrectColor;
-            explanationText.text = explanation;
+            explanationText.text = correct
+                ? feedback
+                : $"<noparse>{feedback}</noparse>" + (lesson != null ? ReviewReminder : string.Empty);
 
             bool hasClue = correct && !string.IsNullOrWhiteSpace(clueReward);
             clueRewardText.gameObject.SetActive(hasClue);
@@ -201,6 +241,7 @@ namespace CodeEscape.UI
             retryButton.gameObject.SetActive(!correct);
             continueButton.gameObject.SetActive(correct);
             hintButton.gameObject.SetActive(!correct && question.HasHint);
+            SetActive(reviewButton, !correct && lesson != null);
             UIFocus.Clear();
         }
 
@@ -222,7 +263,10 @@ namespace CodeEscape.UI
         {
             if (overlay != null)
                 overlay.SetActive(false);
+            SetActive(lessonPanel, false);
             question = null;
+            lesson = null;
+            questionShown = false;
             selectedChoice = -1;
             caught = false;
             if (caughtBanner != null)
@@ -234,9 +278,34 @@ namespace CodeEscape.UI
 
         // ---------- Button / input callbacks (wired in the Inspector) ----------
 
+        /// <summary>Continue on the learning card: opens the question, or returns to it after a review.</summary>
+        public void OnLessonContinueClicked()
+        {
+            if (!IsLessonOpen)
+                return;
+            if (!questionShown)
+            {
+                BeginQuestion();
+                return;
+            }
+            // Back from a review: the question, the chosen answer and any result are exactly as they were.
+            lessonPanel.SetActive(false);
+            if (IsTyped && typedAnswerRoot.activeSelf)
+                answerInput.ActivateInputField();
+            else
+                UIFocus.Clear();
+        }
+
+        /// <summary>Review Concept: shows the learning card again without resetting the challenge.</summary>
+        public void OnReviewConceptClicked()
+        {
+            if (IsOpen && !IsLessonOpen && lesson != null)
+                ShowLesson(true);
+        }
+
         public void OnChoiceClicked(int index)
         {
-            if (question == null || index < 0 || index >= question.ChoiceCount)
+            if (question == null || IsLessonOpen || index < 0 || index >= question.ChoiceCount)
                 return;
             selectedChoice = index;
             RefreshChoiceColours();
@@ -256,7 +325,7 @@ namespace CodeEscape.UI
 
         public void OnSubmitClicked()
         {
-            if (question == null || !submitButton.gameObject.activeInHierarchy || Manager == null)
+            if (question == null || IsLessonOpen || !submitButton.gameObject.activeInHierarchy || Manager == null)
                 return;
 
             if (IsTyped)
@@ -270,21 +339,23 @@ namespace CodeEscape.UI
             }
         }
 
+        // Hint, Retry and Continue sit behind the learning card while it is open; ignore them then
+        // (e.g. when reached with the keyboard), so reading the card never uses a hint or changes the challenge.
         public void OnHintClicked()
         {
-            if (Manager != null)
+            if (Manager != null && !IsLessonOpen)
                 Manager.UseHint();
         }
 
         public void OnRetryClicked()
         {
-            if (Manager != null)
+            if (Manager != null && !IsLessonOpen)
                 Manager.Retry();
         }
 
         public void OnContinueClicked()
         {
-            if (Manager != null)
+            if (Manager != null && !IsLessonOpen)
                 Manager.Continue();
         }
 
@@ -295,6 +366,50 @@ namespace CodeEscape.UI
         }
 
         // ---------- Helpers ----------
+
+        void BeginQuestion()
+        {
+            questionShown = true;
+            SetActive(lessonPanel, false);
+            ShowAnswerInput();
+        }
+
+        void ShowLesson(bool reviewing)
+        {
+            if (lesson == null || lessonPanel == null)
+                return;
+
+            if (lessonBadgeText != null)
+                lessonBadgeText.text = $"{lesson.Language.ToDisplayName().ToUpperInvariant()} LESSON";
+            SetText(lessonSymbolText, lesson.Symbol);
+            SetText(lessonTitleText, lesson.ConceptTitle);
+            SetText(lessonDefinitionText, lesson.Definition);
+            SetText(lessonHowText, lesson.HowItWorks);
+            SetActive(lessonExampleRoot, lesson.HasExample);
+            if (lessonCodeText != null)
+                lessonCodeText.text = lesson.HasExample ? string.Format(CodeFormat, lesson.ExampleCode) : string.Empty;
+            SetText(lessonExampleText, lesson.ExampleExplanation);
+            SetActive(lessonTipRoot, lesson.HasTip);
+            if (lessonTipText != null)
+                lessonTipText.text = lesson.HasTip ? $"<b>TIP:</b>  <noparse>{lesson.Tip}</noparse>" : string.Empty;
+            if (lessonContinueLabel != null)
+                lessonContinueLabel.text = reviewing ? "BACK TO CHALLENGE" : "CONTINUE TO CHALLENGE";
+
+            if (!reviewing)
+            {
+                // Before the question has been shown, none of its controls are usable.
+                choicesRoot.SetActive(false);
+                typedAnswerRoot.SetActive(false);
+                resultRoot.SetActive(false);
+                submitButton.gameObject.SetActive(false);
+                retryButton.gameObject.SetActive(false);
+                continueButton.gameObject.SetActive(false);
+                hintButton.gameObject.SetActive(false);
+                SetActive(reviewButton, false);
+            }
+            lessonPanel.SetActive(true);
+            UIFocus.Select(lessonContinueButton);
+        }
 
         void RefreshChoiceColours()
         {
@@ -310,6 +425,24 @@ namespace CodeEscape.UI
             if (question == null)
                 return;
             submitButton.interactable = IsTyped ? !string.IsNullOrWhiteSpace(answerInput.text) : selectedChoice >= 0;
+        }
+
+        static void SetText(TMP_Text label, string text)
+        {
+            if (label != null)
+                label.text = string.IsNullOrEmpty(text) ? string.Empty : $"<noparse>{text}</noparse>";
+        }
+
+        static void SetActive(Component target, bool active)
+        {
+            if (target != null && target.gameObject.activeSelf != active)
+                target.gameObject.SetActive(active);
+        }
+
+        static void SetActive(GameObject target, bool active)
+        {
+            if (target != null && target.activeSelf != active)
+                target.SetActive(active);
         }
 
         static string FormatChoice(int index, string text, bool monospace)

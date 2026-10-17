@@ -33,3 +33,12 @@ MonoBehaviour:
   explanation: greet() expects one argument, $name, but it was called with none.
     echo greet("Alex"); passes a name and outputs Hi, Alex.
   hint: Compare the function definition with the line that calls it.
+  wrongChoiceFeedback:
+  - 
+  - Without return the function would give back nothing. The error happens earlier
+    - on the line that calls the function.
+  - In PHP the dot is the right way to join strings. The error comes from the line
+    that calls the function.
+  - The name isn't the problem - PHP treats greet and Greet as the same function.
+    Compare the definition with the call.
+  wrongAnswerFeedback: 

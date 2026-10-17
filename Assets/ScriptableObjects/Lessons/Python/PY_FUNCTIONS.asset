@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42a7ef911f4c60e408989a759d2b9b18, type: 3}
+  m_Name: PY_FUNCTIONS
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.LessonData
+  id: PY_FUNCTIONS
+  language: 1
+  conceptTitle: Functions and return
+  symbol: def
+  relatedQuestionIds:
+  - PY_08_FUNCTIONS
+  - HZ_PY_06_FUNCTIONS
+  topics:
+  - Functions
+  definition: A function is a named, reusable block of code that does one job. You
+    write it once and use (call) it whenever you need it.
+  howItWorks: Create a function with def, a name, brackets for any inputs (parameters)
+    and a colon. The indented lines are the function's body. The return keyword sends
+    a value back to the code that called the function. A function with no return
+    gives back None.
+  exampleCode: "def add_bonus(points):\n    total = points + 5\n    return total\n\nprint(add_bonus(10))"
+  exampleExplanation: add_bonus(10) calls the function with points set to 10. It
+    works out total = 15, and return sends 15 back, so print shows 15.
+  tip: print only shows a value on the screen. return hands the value back to the
+    code that called the function.

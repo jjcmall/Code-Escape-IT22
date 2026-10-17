@@ -225,6 +225,15 @@ namespace CodeEscape.Obstacles
                 }
                 if (candidates.Count == 0)
                     candidates.AddRange(database.GetQuestions(language));
+
+                // Gradual difficulty: in the first half of the game hazards only ask Easy questions (when
+                // there are any); later levels mix in the harder ones as well.
+                if (difficulty == HazardDifficulty.Any && candidates.Count > 1 && IsEarlyLevel())
+                {
+                    List<QuestionData> easy = candidates.FindAll(q => q.Difficulty == QuestionDifficulty.Easy);
+                    if (easy.Count > 0)
+                        candidates = easy;
+                }
             }
             if (candidates.Count == 0)
                 return null;
@@ -237,6 +246,16 @@ namespace CodeEscape.Obstacles
                 index = StableHash(hazardId);
             NextQuestion[key] = index + 1;
             return candidates[index % candidates.Count];
+        }
+
+        // Levels 1 to 3 of 6 (the first half of the game) count as early.
+        static bool IsEarlyLevel()
+        {
+            LevelManager levels = LevelManager.Instance;
+            LevelInfo current = levels != null ? levels.CurrentLevelInfo : null;
+            if (current == null || levels.LevelCount == 0)
+                return false;
+            return levels.IndexOf(current) < (levels.LevelCount + 1) / 2;
         }
 
         static int StableHash(string text)
