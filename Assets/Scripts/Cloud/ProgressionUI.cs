@@ -34,7 +34,8 @@ namespace CodeEscape.Cloud
         GameObject panelBody;
         Text panelToggleLabel;
         bool dirty = true;
-        bool panelCollapsed;
+        // Starts collapsed so it doesn't cover the menu artwork; one click opens it.
+        bool panelCollapsed = true;
         float savedShownUntil;
         CloudSaveStatus lastStatus = CloudSaveStatus.Synced;
 
@@ -158,6 +159,8 @@ namespace CodeEscape.Cloud
             bool visible = service.State == CloudState.Ready && service.Record != null
                            && (scene == SceneNames.MainMenu || scene == SceneNames.LevelMap);
             panel.SetActive(visible);
+            if (visible)
+                PlacePanel(scene == SceneNames.MainMenu);
             panelBody.SetActive(visible && !panelCollapsed);
             panelToggleLabel.text = panelCollapsed ? "CLOUD PROGRESS  +" : "CLOUD PROGRESS  -";
             if (!visible || panelCollapsed)
@@ -299,6 +302,17 @@ namespace CodeEscape.Cloud
             tr.pivot = new Vector2(0.5f, 1f);
             tr.anchoredPosition = Vector2.zero;
             panelToggleLabel = toggle.GetComponentInChildren<Text>();
+            // Quieter than the other buttons: a dark translucent bar with cyan text.
+            toggle.GetComponent<Image>().color = new Color(0.07f, 0.16f, 0.26f, 0.88f);
+            ColorBlock toggleColors = toggle.colors;
+            toggleColors.colorMultiplier = 2f;
+            toggleColors.normalColor = new Color(0.5f, 0.5f, 0.5f, 1f);
+            toggleColors.highlightedColor = Color.white;
+            toggleColors.selectedColor = Color.white;
+            toggleColors.pressedColor = new Color(0.8f, 0.8f, 0.8f, 1f);
+            toggle.colors = toggleColors;
+            panelToggleLabel.color = new Color(0.55f, 0.85f, 1f);
+            panelToggleLabel.fontSize = 20;
             panelBody = new GameObject("Body", typeof(RectTransform));
             panelBody.transform.SetParent(panel.transform, false);
             Stretch(panelBody.GetComponent<RectTransform>(), 16, 12, 16, 62);
@@ -313,6 +327,15 @@ namespace CodeEscape.Cloud
         {
             var rt = panel.GetComponent<RectTransform>();
             rt.sizeDelta = new Vector2(620, panelCollapsed ? 54 : 600);
+        }
+
+        // Main menu: bottom right above the footer, clear of the menu column. Elsewhere: bottom left.
+        void PlacePanel(bool bottomRight)
+        {
+            var rt = panel.GetComponent<RectTransform>();
+            Vector2 corner = bottomRight ? new Vector2(1f, 0f) : Vector2.zero;
+            rt.anchorMin = rt.anchorMax = rt.pivot = corner;
+            rt.anchoredPosition = bottomRight ? new Vector2(-24, 64) : new Vector2(24, 24);
         }
 
         GameObject NewImage(string name, RectTransform parent, Color color)
