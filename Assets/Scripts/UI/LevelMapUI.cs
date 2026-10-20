@@ -87,12 +87,14 @@ namespace CodeEscape.UI
         void Start()
         {
             progress = LevelProgressManager.Instance;
+            // The game is Python only: opened without it selected, select it (a new Python playthrough).
+            if (!LanguageManager.Current.IsPlayable())
+                LanguageManager.EnsurePlayableLanguage();
             language = LanguageManager.Current;
-            if (progress == null || LevelManager.Instance == null || !language.IsValid())
+            if (progress == null || LevelManager.Instance == null || !language.IsPlayable())
             {
-                // Opened without a chosen language (or without GameSystems): pick a language first.
-                Debug.Log("[LevelMap] No language selected - returning to language select.");
-                busy = SceneTransitionManager.Load(SceneNames.LanguageSelect);
+                Debug.LogWarning("[LevelMap] GameSystems or the language is missing - returning to the main menu.");
+                busy = SceneTransitionManager.Load(SceneNames.MainMenu);
                 return;
             }
 
@@ -371,12 +373,12 @@ namespace CodeEscape.UI
                 Begin(next, progress.CanResume(language, next.levelId));
         }
 
-        /// <summary>Back button: returns to the language select screen.</summary>
+        /// <summary>Back button: returns to the main menu (there is no language screen; the game is Python only).</summary>
         public void OnBackClicked()
         {
             if (busy)
                 return;
-            busy = SceneTransitionManager.Load(SceneNames.LanguageSelect);
+            busy = SceneTransitionManager.Load(SceneNames.MainMenu);
         }
 
         void Begin(LevelInfo level, bool resume)

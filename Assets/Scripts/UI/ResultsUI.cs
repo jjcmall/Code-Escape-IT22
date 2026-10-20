@@ -68,7 +68,10 @@ namespace CodeEscape.UI
             if (manager != null)
                 manager.PlayAgain();
             else
-                SceneTransitionManager.Load(SceneNames.LanguageSelect);
+            {
+                LanguageManager.EnsurePlayableLanguage();
+                SceneTransitionManager.Load(SceneNames.LevelMap);
+            }
         }
     }
 }

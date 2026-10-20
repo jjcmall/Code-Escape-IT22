@@ -22,6 +22,16 @@ namespace CodeEscape.Programming
                 || language == ProgrammingLanguage.SQL;
         }
 
+        /// <summary>
+        /// True for a language the game currently offers. Only Python is playable: every Python challenge is
+        /// checked by running code in the game's interpreter. PHP and SQL content stays in the project
+        /// (planned for future versions) but is never offered.
+        /// </summary>
+        public static bool IsPlayable(this ProgrammingLanguage language)
+        {
+            return language == ProgrammingLanguage.Python;
+        }
+
         /// <summary>Stable ID used in save keys ("python", "php", "sql"). Never change these.</summary>
         public static string ToId(this ProgrammingLanguage language)
         {

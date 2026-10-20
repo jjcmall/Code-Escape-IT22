@@ -87,10 +87,11 @@ namespace CodeEscape.Game
             SceneTransitionManager.Load(SceneNames.MainMenu);
         }
 
-        /// <summary>Play Again button: choosing a language starts a new playthrough.</summary>
+        /// <summary>Play Again button: back to the Python level map, where any level can be replayed.</summary>
         public void PlayAgain()
         {
-            SceneTransitionManager.Load(SceneNames.LanguageSelect);
+            LanguageManager.EnsurePlayableLanguage();
+            SceneTransitionManager.Load(SceneNames.LevelMap);
         }
     }
 }

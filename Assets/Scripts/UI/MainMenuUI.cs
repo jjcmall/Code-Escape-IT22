@@ -111,10 +111,11 @@ namespace CodeEscape.UI
             }
         }
 
-        /// <summary>Select Level: language select, then that language's level map.</summary>
+        /// <summary>Select Level: the Python level map (the game is Python only, so there is no language screen).</summary>
         public void StartNewGame()
         {
-            SceneTransitionManager.Load(SceneNames.LanguageSelect);
+            LanguageManager.EnsurePlayableLanguage();
+            SceneTransitionManager.Load(SceneNames.LevelMap);
         }
 
         static bool HasSavedLevel()

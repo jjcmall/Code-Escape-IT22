@@ -7757,13 +7757,13 @@ MonoBehaviour:
     Education</color>.
 
 
-    Players build beginner programming skills in Python,
-    PHP or SQL by solving puzzles: variables, conditions, loops, functions and data
-    queries, with instant feedback and explanations.
+    Players build beginner programming skills in Python
+    by solving puzzles: variables, conditions, loops, lists and functions, with instant
+    feedback and explanations.
 
 
-    This links to SDG target
-    4.4: more young people with the technical skills they need for future work.'
+    This links to SDG target 4.4: more young people
+    with the technical skills they need for future work.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7943b7691221e8f4a927ad6e611f6537, type: 2}
   m_sharedMaterial: {fileID: 690533681109134686, guid: 7943b7691221e8f4a927ad6e611f6537, type: 2}

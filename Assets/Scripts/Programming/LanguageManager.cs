@@ -40,7 +40,10 @@ namespace CodeEscape.Programming
                 return;
             }
             Instance = this;
-            selectedLanguage = SaveManager.LoadLanguage();
+            // A PHP or SQL playthrough saved by an older version isn't playable any more: treat it as none,
+            // so Continue doesn't resume it and starting a game picks Python.
+            ProgrammingLanguage saved = SaveManager.LoadLanguage();
+            selectedLanguage = saved.IsPlayable() ? saved : ProgrammingLanguage.None;
         }
 
         void OnDestroy()
@@ -55,16 +58,31 @@ namespace CodeEscape.Programming
         /// </summary>
         public void RestoreLanguage(ProgrammingLanguage language)
         {
-            selectedLanguage = language.IsValid() ? language : ProgrammingLanguage.None;
+            selectedLanguage = language.IsPlayable() ? language : ProgrammingLanguage.None;
             if (selectedLanguage.IsValid())
                 SaveManager.SaveLanguage(selectedLanguage);
         }
 
+        /// <summary>
+        /// Makes sure the playable language (Python) is selected. Selecting it when another (or no) language
+        /// is stored starts a new playthrough, exactly as choosing a language did on the old language screen.
+        /// </summary>
+        public static void EnsurePlayableLanguage()
+        {
+            if (Instance == null)
+            {
+                Debug.LogError("[LanguageManager] LanguageManager is missing, so Python cannot be selected.");
+                return;
+            }
+            if (!Instance.selectedLanguage.IsPlayable())
+                Instance.SelectLanguage(ProgrammingLanguage.Python);
+        }
+
         public void SelectLanguage(ProgrammingLanguage language)
         {
-            if (!language.IsValid())
+            if (!language.IsPlayable())
             {
-                Debug.LogWarning($"[LanguageManager] Ignored invalid language '{language}'.");
+                Debug.LogWarning($"[LanguageManager] Ignored '{language}': only Python is playable.");
                 return;
             }
 

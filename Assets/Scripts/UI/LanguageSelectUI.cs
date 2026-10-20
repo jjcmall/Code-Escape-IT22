@@ -8,8 +8,9 @@ using CodeEscape.Programming;
 namespace CodeEscape.UI
 {
     /// <summary>
-    /// Lets the player choose Python, PHP or SQL, then opens that language's level map. Each language
-    /// keeps its own level progress; choosing a different language than before starts a new playthrough.
+    /// The old language select screen. The game is now Python only, so nothing opens this scene any more;
+    /// if it is opened anyway it selects Python and goes straight on to the level map. PHP and SQL are
+    /// planned for future versions (their buttons only lead to Python).
     /// </summary>
     public class LanguageSelectUI : MonoBehaviour
     {
@@ -22,9 +23,8 @@ namespace CodeEscape.UI
 
         void Start()
         {
-            ProgrammingLanguage previous = LanguageManager.Current;
-            SetStatus(previous.IsValid() ? $"Last choice: {previous.ToDisplayName()}" : "Pick a language to begin.");
             UIFocus.Select(firstSelected);
+            Choose(ProgrammingLanguage.Python);
         }
 
         void Update()
@@ -41,12 +41,12 @@ namespace CodeEscape.UI
 
         public void SelectPHP()
         {
-            Choose(ProgrammingLanguage.PHP);
+            Choose(ProgrammingLanguage.Python);
         }
 
         public void SelectSQL()
         {
-            Choose(ProgrammingLanguage.SQL);
+            Choose(ProgrammingLanguage.Python);
         }
 
         public void BackToMainMenu()
