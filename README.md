@@ -21,6 +21,8 @@ Group number: **IT22**
 - **Six levels:** Home, Maple Street, Warehouse 7, Riverside Tech Facility, Old Station and the Sentinel Control Room, played from a level map. Cleared levels can be replayed.
 - **Challenges:** 29 Python challenges, all checked by executing code. **Run Code** (21, every door): the player types the missing code, presses RUN to see the output, and CHECK to submit; the output is compared with several hidden test cases. **Predict the Output** (8, used by hazards): the player types what the code prints; the game runs the code and compares, then shows the real output.
 - **Sandboxed interpreter:** code runs only in a small Python interpreter written for this game (`Assets/Scripts/Execution`). It supports beginner syntax only, has no file, network, import or reflection access, and is limited in steps, time, output, recursion and memory. Typed text is never passed to a real Python, the operating system or a database. Automated tests are in `Assets/Tests/EditMode` (Unity Test Runner).
+- **Learn before you answer:** each challenge opens with a learning card (concept, definition, how it works, example). A wrong answer gets feedback that explains the mistake without giving the answer, and **Review Concept** reopens the card without losing progress. There are 10 Python lessons.
+- **Gradual difficulty:** hazards in the first half of the game ask only Easy questions; Medium ones are mixed in later.
 - **Hints and scoring:** +100 points per solved challenge, -25 for the first hint on a question, with a rank on the results screen.
 - **Story systems:** cutscenes, dialogue, objectives, collectible clues with a journal, settings, and an SDG 4 information panel.
 - **Progress saving:** a local save (PlayerPrefs) plus a **Unity Cloud Save** copy that loads on start. See [Documentation/CloudSave.md](Documentation/CloudSave.md).
@@ -39,6 +41,16 @@ Menus can be used with the mouse or keyboard (Esc closes panels).
 - An **internet connection** to play, because progression is loaded from and saved to Unity Cloud Save before gameplay starts
 - A Unity account with this project linked to a Unity Dashboard project (Cloud Save enabled): see the setup section in [Documentation/CloudSave.md](Documentation/CloudSave.md)
 
+## How to run
+1. Clone the repository and open the folder in Unity Hub with **Unity 6000.5.10f1** (the first import takes a few minutes).
+2. Open the scene `Assets/Scenes/00_MainMenu.unity` and press **Play**. Always start from the main menu, because the persistent game systems are created there.
+3. Choose **Select Level** to open the Python level map, then **Play** (or click an unlocked level). There is no language screen: the game is Python only.
+4. In a level, walk to a door and press **E** to open its challenge. For Run Code challenges type the missing code, press **RUN** to try it, then **CHECK** to submit.
+5. If the cloud screen asks you to connect, check the internet connection and press **Retry** (see Requirements and the Cloud Save setup below).
+
+## Running the automated tests
+Open **Window > General > Test Runner**, choose **EditMode**, and press **Run All**. The tests in `Assets/Tests/EditMode` cover the Python interpreter (language features, error messages, safety limits such as infinite loops and huge output, random-input fuzzing, answer judging) and the typed-answer matching.
+
 
 ## Project structure
 | Path | Contents |
@@ -52,7 +64,9 @@ Menus can be used with the mouse or keyboard (Esc closes panels).
 | `Assets/Scripts/Cloud` | Unity Cloud Save integration and its on-screen status UI |
 | `Assets/Scripts/UI`, `Story`, `Clues`, `Dialogue`, `Cutscenes`, `Audio` | Menus and HUD, story flow, clues, dialogue, cutscenes, audio |
 | `Assets/ScriptableObjects/Questions` | The question assets (Python and hazards in use; PHP and SQL kept for future versions) |
-| `Documentation` | Cloud Save notes and the capstone technical alignment report |
+| `Assets/Scripts/Execution` | The sandboxed Python interpreter (`MiniPython.cs`, `CodeRunner`) and typed-code matching |
+| `Assets/Tests/EditMode` | Automated tests for the interpreter and answer matching |
+| `Documentation` | Cloud Save notes, the capstone technical alignment report, the storyboard and the pre-final defense script |
 
 ## Database and data
 - **Storage used:** Unity Cloud Save (player data, key-value) through Unity Authentication anonymous sign-in, plus a local save in PlayerPrefs. No credentials are stored in the project; the Unity project is linked to a Unity Dashboard project.
@@ -100,10 +114,17 @@ Follow the official documentation for current menu names (they change between Un
 | 6 | After restart, the level map reflects cloud data | Passed (state read through `LevelProgressManager.GetState`): Home Completed, Neighborhood Available, Warehouse Locked, scene reloaded to the level map |
 | 7 | Project compiles with the packages and changes | Passed: no C# compile errors in the Editor log |
 
-My test data was deleted from Cloud Save afterwards, and the local playthrough and selected language were reset (so you may need to pick a language again). The simulated level clear used the Editor's anonymous test player only.
+My test data was deleted from Cloud Save afterwards, and the local playthrough was reset. The simulated level clear used the Editor's anonymous test player only.
+
+### Code execution tests (Python)
+- 117 automated EditMode tests (interpreter, safety limits, answer matching) pass. They were run outside the Unity Test Runner with a small console runner, because the Test Runner could not be started through the Editor automation used here; run them from the Test Runner window to confirm in your own Editor.
+- In Play Mode, every challenge in all six levels was checked in code (calling the same methods the buttons call): the learning card opens first, a wrong answer is rejected, the correct answer is accepted and gives +100 once, hazard challenges can't be closed until solved, and a hazard's predicted output is verified by running its code. Real mouse and keyboard typing was not part of that check.
 
 
 ## Known limitations
+- Python only. PHP and SQL lessons and questions are kept in the project for future versions but are not offered.
+- The interpreter runs a beginner subset of Python (variables, arithmetic, comparisons, if/elif/else, for and while loops, lists, functions, print and a few built-ins). Unsupported syntax gives a friendly error. There is no free-form multi-line code editor: players type the missing part of a short program.
+- Content has not yet been reviewed by a teacher or checked against an official curriculum, and no classroom playtest has been done yet.
 - Anonymous identity only; no recovery or cross-device sync (see above).
 - Online-only. Unsaved changes are kept in the existing local save (PlayerPrefs) and retried, but they are never reported as saved.
 - Total score is computed from distinct solved and hinted IDs, so replaying a level does not add points, and a hint already penalised once is not penalised again on a replay.
