@@ -1,6 +1,6 @@
 # Code Escape
 
-Code Escape is a 2.5D PC educational game. The player (Alex) moves through six locations, and each locked obstacle or hazard opens a beginner programming question (Python, PHP or SQL). Solving questions unlocks the way forward, earns points and clears levels on a level map.
+Code Escape is a 2.5D PC educational game. The player (Alex) moves through six locations, and each locked obstacle or hazard opens a beginner Python challenge that is checked by running code. Solving questions unlocks the way forward, earns points and clears levels on a level map.
 
 
 ## Group members
@@ -17,9 +17,10 @@ Group number: **IT22**
 - Unity PlayerPrefs for the local save
 - Git and GitHub (GitHub Desktop)
 ## Features
-- **Three languages:** Python, PHP and SQL. One is chosen per playthrough, with its own level-map progress.
+- **Python only:** every challenge is Python and is checked by running code. PHP and SQL content stays in the project for future versions but is not offered (the old language-select screen forwards straight to the Python level map).
 - **Six levels:** Home, Maple Street, Warehouse 7, Riverside Tech Facility, Old Station and the Sentinel Control Room, played from a level map. Cleared levels can be replayed.
-- **Questions:** 48 predefined questions (10 obstacle questions per language, plus 18 hazard-challenge questions). Types include multiple choice, predict the output, fill the missing code, fix the incorrect code and choose the correct code. Answers are compared with stored solutions; player code is never executed.
+- **Challenges:** 29 Python challenges, all checked by executing code. **Run Code** (21, every door): the player types the missing code, presses RUN to see the output, and CHECK to submit; the output is compared with several hidden test cases. **Predict the Output** (8, used by hazards): the player types what the code prints; the game runs the code and compares, then shows the real output.
+- **Sandboxed interpreter:** code runs only in a small Python interpreter written for this game (`Assets/Scripts/Execution`). It supports beginner syntax only, has no file, network, import or reflection access, and is limited in steps, time, output, recursion and memory. Typed text is never passed to a real Python, the operating system or a database. Automated tests are in `Assets/Tests/EditMode` (Unity Test Runner).
 - **Hints and scoring:** +100 points per solved challenge, -25 for the first hint on a question, with a rank on the results screen.
 - **Story systems:** cutscenes, dialogue, objectives, collectible clues with a journal, settings, and an SDG 4 information panel.
 - **Progress saving:** a local save (PlayerPrefs) plus a **Unity Cloud Save** copy that loads on start. See [Documentation/CloudSave.md](Documentation/CloudSave.md).
@@ -42,15 +43,15 @@ Menus can be used with the mouse or keyboard (Esc closes panels).
 ## Project structure
 | Path | Contents |
 |---|---|
-| `Assets/Scenes` | Main menu, language select, level map, intro, six level scenes, ending, results |
-| `Assets/Scripts/Programming` | Challenge manager, question data and database, language selection |
+| `Assets/Scenes` | Main menu, (unused) language select, level map, intro, six level scenes, ending, results |
+| `Assets/Scripts/Programming` | Challenge manager, question data and database, language (Python) |
 | `Assets/Scripts/Obstacles` | Programming obstacles, catch hazards and their movement |
 | `Assets/Scripts/Player` | Player controller and cameras |
 | `Assets/Scripts/Game` | Game state, level and level-map progress, scene transitions, results, pause |
 | `Assets/Scripts/SaveSystem` | Local save (SaveManager, ProgressSaveService, save data classes) |
 | `Assets/Scripts/Cloud` | Unity Cloud Save integration and its on-screen status UI |
 | `Assets/Scripts/UI`, `Story`, `Clues`, `Dialogue`, `Cutscenes`, `Audio` | Menus and HUD, story flow, clues, dialogue, cutscenes, audio |
-| `Assets/ScriptableObjects/Questions` | The question assets (Python, PHP, SQL, hazards) |
+| `Assets/ScriptableObjects/Questions` | The question assets (Python and hazards in use; PHP and SQL kept for future versions) |
 | `Documentation` | Cloud Save notes and the capstone technical alignment report |
 
 ## Database and data
