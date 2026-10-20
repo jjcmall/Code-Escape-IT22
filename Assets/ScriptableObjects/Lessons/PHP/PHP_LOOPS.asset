@@ -19,6 +19,7 @@ MonoBehaviour:
   relatedQuestionIds:
   - PHP_07_LOOPS
   - HZ_PHP_04_LOOPS
+  - PHP_TYPE_07_LOOPS
   topics:
   - Loops
   definition: A loop repeats a block of code while a condition stays true.

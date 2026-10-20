@@ -19,6 +19,7 @@ MonoBehaviour:
   relatedQuestionIds:
   - SQL_02_WHERE
   - HZ_SQL_02_WHERE
+  - SQL_TYPE_02_WHERE
   topics:
   - WHERE
   definition: WHERE filters a query, so only the rows that match a condition are

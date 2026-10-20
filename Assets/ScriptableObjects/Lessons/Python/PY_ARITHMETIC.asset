@@ -18,6 +18,7 @@ MonoBehaviour:
   symbol: + - * /
   relatedQuestionIds:
   - PY_03_ARITHMETIC
+  - PY_RUN_02_ARITHMETIC
   topics:
   - Arithmetic
   definition: Arithmetic operators are symbols that let a program do maths with numbers.

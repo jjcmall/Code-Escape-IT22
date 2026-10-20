@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1833b97b4e8284e489c3555d5dace838, type: 3}
+  m_Name: PY_RUN_05_LISTS
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.QuestionData
+  id: PY_RUN_05_LISTS
+  language: 1
+  topic: Lists
+  difficulty: 0
+  questionType: 2
+  questionText: The list items holds the things Alex has collected. Fill in the blank
+    so the program prints how many items are in the list.
+  code: print(____)
+  answerFormat: 2
+  choices: []
+  correctChoiceIndex: 0
+  monospaceChoices: 0
+  acceptedAnswers: []
+  caseSensitive: 1
+  referenceFill: len(items)
+  runTests:
+  - setup: 'items = ["key", "map", "torch"]'
+    expectedOutput: 3
+  - setup: 'items = ["coin"]'
+    expectedOutput: 1
+  - setup: 'items = []'
+    expectedOutput: 0
+  explanation: len() returns how many items a list holds. len(items) counts the whole
+    list, so it gives the right answer however long the list is.
+  hint: Python has a built-in function that returns the length of a list.
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: Use a built-in function on the list items, and make sure it
+    counts the items rather than printing them.

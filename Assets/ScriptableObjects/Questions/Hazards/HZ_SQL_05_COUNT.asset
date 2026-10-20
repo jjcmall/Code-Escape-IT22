@@ -17,7 +17,7 @@ MonoBehaviour:
   topic: COUNT
   difficulty: 0
   questionType: 1
-  questionText: What number does this query return?
+  questionText: What number does this query return? Type it.
   code: 'Table: badges
 
     +----+-------+------------+-------+
@@ -44,22 +44,17 @@ MonoBehaviour:
     COUNT(*) FROM badges
 
     WHERE level = 1;'
-  answerFormat: 0
-  choices:
-  - 1
+  answerFormat: 1
+  choices: []
+  correctChoiceIndex: 0
+  monospaceChoices: 0
+  acceptedAnswers:
   - 2
-  - 3
-  - 4
-  correctChoiceIndex: 1
-  monospaceChoices: 1
-  acceptedAnswers: []
   caseSensitive: 1
+  referenceFill: 
+  runTests: []
   explanation: COUNT(*) counts the rows that match WHERE. Omar and Tariq both have
     level 1, so the result is 2.
   hint: Count the rows with level 1.
-  wrongChoiceFeedback:
-  - Check the level column again - more than one row has level 1.
-  - 
-  - Only count the rows where level is exactly 1.
-  - 4 is the total number of rows. WHERE level = 1 counts only some of them.
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: Count the rows with level 1.

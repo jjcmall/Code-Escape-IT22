@@ -18,6 +18,7 @@ MonoBehaviour:
   symbol: int str
   relatedQuestionIds:
   - PY_02_DATA_TYPES
+  - PY_RUN_08_DATA_TYPES
   topics:
   - Data Types
   definition: A data type tells Python what kind of value something is. The type

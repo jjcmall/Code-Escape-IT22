@@ -43554,9 +43554,9 @@ MonoBehaviour:
   obstacleId: warehouse_security
   displayName: Security Door
   questions:
-  - {fileID: 11400000, guid: 6d384a49b49fc2748bbbe7f8f802b262, type: 2}
-  - {fileID: 11400000, guid: 041c1fc7a10eccb4dbcc5c1cd4405e52, type: 2}
-  - {fileID: 11400000, guid: dc5b260a57715c146b9029e675ff2543, type: 2}
+  - {fileID: 11400000, guid: d89eb6b3c85aaec4f8499fd781c0bb49, type: 2}
+  - {fileID: 11400000, guid: bf69730e3356249418984c9e270a6aa2, type: 2}
+  - {fileID: 11400000, guid: 3f690791d0b0e97499088f35f903bac0, type: 2}
   fallbackTopic: 
   clueReward: {fileID: 0}
   completeStoryEvent: 

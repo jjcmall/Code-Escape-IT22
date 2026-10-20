@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1833b97b4e8284e489c3555d5dace838, type: 3}
+  m_Name: PHP_TYPE_04_OPERATORS
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.QuestionData
+  id: PHP_TYPE_04_OPERATORS
+  language: 2
+  topic: Operators
+  difficulty: 1
+  questionType: 2
+  questionText: Type the operator that gives the remainder after dividing, so the
+    program prints 2.
+  code: '<?php
+
+    echo 17 ____ 5;'
+  answerFormat: 1
+  choices: []
+  correctChoiceIndex: 0
+  monospaceChoices: 0
+  acceptedAnswers:
+  - '%'
+  caseSensitive: 1
+  referenceFill: 
+  runTests: []
+  explanation: '% is the modulo operator and returns the remainder. 17 divided by
+    5 is 3 with a remainder of 2, so it prints 2.'
+  hint: 17 = 5 x 3 + 2. Which operator gives the 2?
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: The division sign / gives the whole result, not the remainder.
+    Look for a different single-character operator.

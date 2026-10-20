@@ -19,6 +19,8 @@ MonoBehaviour:
   relatedQuestionIds:
   - PY_07_LOOPS
   - HZ_PY_04_LOOPS
+  - PY_RUN_04_LOOPS
+  - PY_RUN_11_LOOPS_SUM
   topics:
   - Loops
   definition: A loop repeats a block of code, so you don't have to write the same

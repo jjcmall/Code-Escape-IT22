@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1833b97b4e8284e489c3555d5dace838, type: 3}
+  m_Name: PY_RUN_11_LOOPS_SUM
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.QuestionData
+  id: PY_RUN_11_LOOPS_SUM
+  language: 1
+  topic: Loops
+  difficulty: 1
+  questionType: 2
+  questionText: This loop should add up the numbers from 1 to n. Fill in the line
+    that adds i to total on every turn.
+  code: "total = 0\nfor i in range(1, n + 1):\n    ____\nprint(total)"
+  answerFormat: 2
+  choices: []
+  correctChoiceIndex: 0
+  monospaceChoices: 0
+  acceptedAnswers: []
+  caseSensitive: 1
+  referenceFill: total = total + i
+  runTests:
+  - setup: n = 3
+    expectedOutput: 6
+  - setup: n = 5
+    expectedOutput: 15
+  - setup: n = 1
+    expectedOutput: 1
+  explanation: Each turn of the loop gives i the next number. total = total + i adds
+    it to the running total, so n = 3 gives 1 + 2 + 3 = 6.
+  hint: total must remember its old value and add i to it.
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: The line must change total using total itself and i. Make
+    sure it is inside the loop (it is already indented for you).

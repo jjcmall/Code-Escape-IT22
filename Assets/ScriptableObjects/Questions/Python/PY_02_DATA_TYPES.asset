@@ -16,31 +16,26 @@ MonoBehaviour:
   language: 1
   topic: Data Types
   difficulty: 0
-  questionType: 0
-  questionText: Which variable holds a string (str)?
-  code: 'a = 42
+  questionType: 2
+  questionText: Fill in a value so b holds the text 42 (a string, not a number).
+    The program then adds "!" to it.
+  code: 'b = ____
 
-    b = "42"
-
-    c = 4.2
-
-    d = True'
-  answerFormat: 0
-  choices:
-  - a
-  - b
-  - c
-  - d
-  correctChoiceIndex: 1
-  monospaceChoices: 1
+    print(b + "!")'
+  answerFormat: 2
+  choices: []
+  correctChoiceIndex: 0
+  monospaceChoices: 0
   acceptedAnswers: []
   caseSensitive: 1
+  referenceFill: '"42"'
+  runTests:
+  - setup: 
+    expectedOutput: 42!
   explanation: Text inside quotation marks is a string. b = "42" stores the text
-    "42", not the number. a is an int, c is a float and d is a bool.
+    42, so b + "!" joins two strings and prints 42!. Without quotes, 42 would be
+    a number, and adding a number to text causes an error.
   hint: Look for the value written inside quotation marks.
-  wrongChoiceFeedback:
-  - a = 42 has no quotation marks, so it is a whole number (an int), not text.
-  - 
-  - c = 4.2 is a number with a decimal point - a float, not text.
-  - True without quotes is a bool (True or False), not text.
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: Text can only be joined to text. Check that the value you
+    typed is a string, which means it needs quotation marks.

@@ -17,7 +17,8 @@ MonoBehaviour:
   topic: Numbers
   difficulty: 0
   questionType: 0
-  questionText: Which variable holds a float (a number with a decimal point)?
+  questionText: Type the name of the variable that holds a float (a number with a
+    decimal point).
   code: '<?php
 
     $a = 12;
@@ -29,22 +30,19 @@ MonoBehaviour:
     $d = true;
 
     ?>'
-  answerFormat: 0
-  choices:
-  - $a
-  - $b
+  answerFormat: 1
+  choices: []
+  correctChoiceIndex: 0
+  monospaceChoices: 0
+  acceptedAnswers:
   - $c
-  - $d
-  correctChoiceIndex: 2
-  monospaceChoices: 1
-  acceptedAnswers: []
-  caseSensitive: 1
+  - c
+  caseSensitive: 0
+  referenceFill: 
+  runTests: []
   explanation: $c = 12.5 has a decimal point, so it is a float. $a is an integer,
     $b is a string (it's in quotes) and $d is a boolean.
   hint: Look for a number with a decimal point and no quotes.
-  wrongChoiceFeedback:
-  - 12 is a whole number, so $a is an integer, not a float.
-  - '"12" is inside quotes, so $b is a string (text), not a number.'
-  - 
-  - true is a boolean value (true or false), not a number.
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: Look for a number that has a decimal point and no quotes around
+    it.

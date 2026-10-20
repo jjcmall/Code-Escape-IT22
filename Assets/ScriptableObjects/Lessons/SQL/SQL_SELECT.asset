@@ -19,6 +19,7 @@ MonoBehaviour:
   relatedQuestionIds:
   - SQL_01_SELECT
   - HZ_SQL_01_SELECT
+  - SQL_TYPE_01_SELECT
   topics:
   - SELECT
   definition: SQL is a language for working with data in a database. Data is stored

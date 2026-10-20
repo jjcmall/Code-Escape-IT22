@@ -19,6 +19,7 @@ MonoBehaviour:
   relatedQuestionIds:
   - PHP_05_IF_ELSE
   - HZ_PHP_03_IF_ELSE
+  - PHP_TYPE_05_IF_ELSE
   topics:
   - If / Else
   definition: 'An if statement makes a decision: it runs some code only when a condition

@@ -17,7 +17,7 @@ MonoBehaviour:
   topic: SELECT
   difficulty: 0
   questionType: 4
-  questionText: Which query lists only the name of every badge holder?
+  questionText: Type the query that lists only the name of every badge holder.
   code: 'Table: badges
 
     +----+-------+------------+-------+
@@ -38,23 +38,17 @@ MonoBehaviour:
     |  4 | Tariq | Archive    |     1 |
 
     +----+-------+------------+-------+'
-  answerFormat: 0
-  choices:
-  - SELECT name FROM badges;
-  - SELECT * FROM name;
-  - GET name FROM badges;
-  - SELECT badges FROM name;
+  answerFormat: 1
+  choices: []
   correctChoiceIndex: 0
-  monospaceChoices: 1
-  acceptedAnswers: []
-  caseSensitive: 1
+  monospaceChoices: 0
+  acceptedAnswers:
+  - SELECT name FROM badges;
+  caseSensitive: 0
+  referenceFill: 
+  runTests: []
   explanation: 'SELECT is followed by the column you want and FROM by the table:
     SELECT name FROM badges; returns Rosa, Omar, Kim and Tariq.'
   hint: The pattern is SELECT column FROM table.
-  wrongChoiceFeedback:
-  - 
-  - name is a column, not a table. FROM must be followed by the table's name.
-  - SQL has no GET command. Reading data uses a different keyword.
-  - The column and the table are swapped. The column comes after SELECT and the table
-    after FROM.
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: The pattern is SELECT column FROM table.

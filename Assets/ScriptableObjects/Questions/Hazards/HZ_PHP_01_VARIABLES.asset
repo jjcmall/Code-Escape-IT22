@@ -17,7 +17,8 @@ MonoBehaviour:
   topic: Variables
   difficulty: 0
   questionType: 1
-  questionText: The laser grid's counter changes. What does this code output?
+  questionText: The laser grid's counter changes. What does this code output? Type
+    it.
   code: '<?php
 
     $lasers = 3;
@@ -27,22 +28,18 @@ MonoBehaviour:
     echo $lasers;
 
     ?>'
-  answerFormat: 0
-  choices:
-  - 3
+  answerFormat: 1
+  choices: []
+  correctChoiceIndex: 0
+  monospaceChoices: 0
+  acceptedAnswers:
   - 5
-  - 32
-  - $lasers
-  correctChoiceIndex: 1
-  monospaceChoices: 1
-  acceptedAnswers: []
   caseSensitive: 1
+  referenceFill: 
+  runTests: []
   explanation: $lasers starts at 3. The right side, $lasers + 2, is worked out first
     (5) and stored back in $lasers, so echo shows 5.
   hint: Work out the right side of the = first, then store it in the variable.
-  wrongChoiceFeedback:
-  - 3 is the starting value, but the next line stores a new value in $lasers.
-  - 
-  - $lasers holds a number, so + adds. In PHP, joining text uses the dot (.).
-  - echo outputs the value stored in the variable, not its name.
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: Work out the right side of the = first, then that value is
+    stored in $lasers.

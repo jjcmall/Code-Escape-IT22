@@ -18,6 +18,7 @@ MonoBehaviour:
   symbol: for+if
   relatedQuestionIds:
   - PY_10_MIXED
+  - PY_RUN_07_MIXED
   topics:
   - Mixed
   definition: Real programs often combine ideas. Putting an if inside a loop lets

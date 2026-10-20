@@ -16,26 +16,25 @@ MonoBehaviour:
   language: 2
   topic: Arrays
   difficulty: 0
-  questionType: 4
-  questionText: Which line correctly creates an array of three places?
+  questionType: 2
+  questionText: Type the line that creates the array $places holding "park", "library"
+    and "arcade".
   code: 
-  answerFormat: 0
-  choices:
-  - $places = ["park", "library", "arcade"];
-  - $places = "park", "library", "arcade";
-  - $places = {"park", "library", "arcade"};
-  - places = ["park", "library", "arcade"];
+  answerFormat: 1
+  choices: []
   correctChoiceIndex: 0
-  monospaceChoices: 1
-  acceptedAnswers: []
+  monospaceChoices: 0
+  acceptedAnswers:
+  - $places = ["park", "library", "arcade"];
+  - $places = ['park', 'library', 'arcade'];
+  - $places = array("park", "library", "arcade");
+  - $places = array('park', 'library', 'arcade');
   caseSensitive: 1
-  explanation: PHP arrays are written with square brackets [ ] (or array(...)). Option
-    B is not an array, curly braces { } don't create arrays, and option D is missing
-    the $ in front of the variable name.
+  referenceFill: 
+  runTests: []
+  explanation: PHP arrays are written with square brackets [ ] (or array(...)), with
+    the values in quotes and separated by commas. Variables always start with $.
   hint: Arrays use square brackets, and variables always need a $.
-  wrongChoiceFeedback:
-  - 
-  - Without brackets this is not an array - PHP can't store three values like that.
-  - Curly braces { } don't create arrays in PHP.
-  - Every PHP variable needs a $ in front of its name.
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: Start with the variable (it needs a $), then = and the three
+    places in square brackets, each in quotes and separated by commas.

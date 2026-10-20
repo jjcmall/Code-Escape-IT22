@@ -18,6 +18,7 @@ MonoBehaviour:
   symbol: DELETE
   relatedQuestionIds:
   - SQL_07_DELETE
+  - SQL_TYPE_09_DELETE
   topics:
   - DELETE
   definition: DELETE removes rows from a table.

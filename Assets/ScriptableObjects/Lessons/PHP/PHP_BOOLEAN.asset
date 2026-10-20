@@ -18,6 +18,7 @@ MonoBehaviour:
   symbol: '&&'
   relatedQuestionIds:
   - PHP_06_BOOLEAN
+  - PHP_TYPE_06_BOOLEAN
   topics:
   - Boolean Logic
   definition: Boolean logic works with the values true and false. It lets a program

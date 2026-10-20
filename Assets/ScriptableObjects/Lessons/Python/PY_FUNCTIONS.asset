@@ -19,6 +19,8 @@ MonoBehaviour:
   relatedQuestionIds:
   - PY_08_FUNCTIONS
   - HZ_PY_06_FUNCTIONS
+  - PY_RUN_06_FUNCTIONS
+  - PY_RUN_13_FUNCTIONS_GREET
   topics:
   - Functions
   definition: A function is a named, reusable block of code that does one job. You

@@ -18,6 +18,7 @@ MonoBehaviour:
   symbol: INSERT
   relatedQuestionIds:
   - SQL_05_INSERT
+  - SQL_TYPE_07_INSERT
   topics:
   - INSERT
   definition: INSERT adds a new row to a table.

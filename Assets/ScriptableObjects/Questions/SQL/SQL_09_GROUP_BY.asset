@@ -17,7 +17,8 @@ MonoBehaviour:
   topic: GROUP BY
   difficulty: 1
   questionType: 2
-  questionText: Which clause fills the blank to count the sightings for each witness?
+  questionText: Type the clause that fills the blank to count the sightings for each
+    witness.
   code: 'Table: sightings
 
     +----+----------+-------+---------+
@@ -46,22 +47,17 @@ MonoBehaviour:
     FROM sightings
 
     ___ witness;'
-  answerFormat: 0
-  choices:
-  - GROUP BY
-  - ORDER BY
-  - WHERE
-  - COUNT BY
+  answerFormat: 1
+  choices: []
   correctChoiceIndex: 0
-  monospaceChoices: 1
-  acceptedAnswers: []
-  caseSensitive: 1
+  monospaceChoices: 0
+  acceptedAnswers:
+  - GROUP BY
+  caseSensitive: 0
+  referenceFill: 
+  runTests: []
   explanation: 'GROUP BY witness puts rows with the same witness together, so COUNT(*)
     is worked out per witness: Mia 1, Leo 2, Ana 1. COUNT BY does not exist in SQL.'
   hint: You want one result row per witness.
-  wrongChoiceFeedback:
-  - 
-  - ORDER BY sorts rows, but it doesn't make one count per witness.
-  - WHERE filters rows by a condition. It doesn't put the rows into groups.
-  - COUNT BY does not exist in SQL.
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: You want one result row per witness. The clause is two words.

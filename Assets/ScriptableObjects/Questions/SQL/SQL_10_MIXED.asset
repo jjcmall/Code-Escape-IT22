@@ -17,7 +17,8 @@ MonoBehaviour:
   topic: Mixed
   difficulty: 1
   questionType: 3
-  questionText: This query has its clauses in the wrong order. What is the fix?
+  questionText: This query has its clauses in the wrong order. Type the clause that
+    must come straight after FROM sightings.
   code: 'Table: sightings
 
     +----+----------+-------+---------+
@@ -48,25 +49,19 @@ MonoBehaviour:
     ORDER BY time
 
     WHERE witness = ''Leo'';'
-  answerFormat: 0
-  choices:
-  - Move  WHERE witness = 'Leo'  above  ORDER BY time
-  - Move  FROM sightings  to the end
-  - Replace ORDER BY with GROUP BY
-  - Remove time from the SELECT line
+  answerFormat: 1
+  choices: []
   correctChoiceIndex: 0
   monospaceChoices: 0
-  acceptedAnswers: []
-  caseSensitive: 1
+  acceptedAnswers:
+  - WHERE witness = 'Leo'
+  - WHERE witness = "Leo"
+  caseSensitive: 0
+  referenceFill: 
+  runTests: []
   explanation: 'SQL clauses go in this order: SELECT, FROM, WHERE, GROUP BY, ORDER
     BY. WHERE filters the rows first; ORDER BY then sorts what is left.'
   hint: Filtering (WHERE) always comes before sorting (ORDER BY).
-  wrongChoiceFeedback:
-  - 
-  - FROM belongs straight after SELECT. The problem is that two other clauses have
-    swapped places.
-  - The query wants the rows sorted by time, so ORDER BY is the right clause. The
-    problem is where it is placed.
-  - The columns in SELECT are fine. The problem is the order of the clauses below
-    them.
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: Rows are filtered before they are sorted. Type the whole filtering
+    clause, including its condition.

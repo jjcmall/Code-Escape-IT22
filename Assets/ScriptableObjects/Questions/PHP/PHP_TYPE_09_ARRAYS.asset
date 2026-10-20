@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1833b97b4e8284e489c3555d5dace838, type: 3}
+  m_Name: PHP_TYPE_09_ARRAYS
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.QuestionData
+  id: PHP_TYPE_09_ARRAYS
+  language: 2
+  topic: Arrays
+  difficulty: 0
+  questionType: 2
+  questionText: Type the code that prints how many items are in the array.
+  code: '<?php
+
+    $items = ["key", "map", "torch"];
+
+    echo ____;'
+  answerFormat: 1
+  choices: []
+  correctChoiceIndex: 0
+  monospaceChoices: 0
+  acceptedAnswers:
+  - count($items)
+  - sizeof($items)
+  caseSensitive: 1
+  referenceFill: 
+  runTests: []
+  explanation: count() returns the number of items in an array. count($items) gives
+    3 here, and echo prints it.
+  hint: A built-in function counts the items. Put the array name in its brackets.
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: Use the built-in function that counts items, with the array
+    $items inside the brackets.

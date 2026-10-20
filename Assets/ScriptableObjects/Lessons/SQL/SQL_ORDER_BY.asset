@@ -19,6 +19,7 @@ MonoBehaviour:
   relatedQuestionIds:
   - SQL_03_ORDER_BY
   - HZ_SQL_04_ORDER_BY
+  - SQL_TYPE_03_ORDER_BY
   topics:
   - ORDER BY
   definition: ORDER BY sorts the rows of a result by one column.

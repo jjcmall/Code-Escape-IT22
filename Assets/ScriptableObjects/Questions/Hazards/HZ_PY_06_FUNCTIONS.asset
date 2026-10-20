@@ -18,14 +18,19 @@ MonoBehaviour:
   difficulty: 1
   questionType: 2
   questionText: Type the missing keyword so the function sends the code back to print.
-  code: "def get_code():\n    ___ 4321\n\nprint(get_code())"
-  answerFormat: 1
+  code: "def get_code():\n    ____ code\n\nprint(get_code())"
+  answerFormat: 2
   choices: []
   correctChoiceIndex: 0
   monospaceChoices: 0
-  acceptedAnswers:
-  - return
+  acceptedAnswers: []
   caseSensitive: 1
+  referenceFill: return
+  runTests:
+  - setup: code = 4321
+    expectedOutput: 4321
+  - setup: code = 7
+    expectedOutput: 7
   explanation: return sends a value back to the place that called the function, so
     print(get_code()) prints 4321.
   hint: It's the keyword that hands a value back from a function.

@@ -16,31 +16,28 @@ MonoBehaviour:
   language: 1
   topic: Boolean Logic
   difficulty: 1
-  questionType: 0
-  questionText: What is the value of can_enter?
+  questionType: 1
+  questionText: What does this code print? Type the exact output.
   code: 'has_key = True
 
     door_locked = True
 
     can_enter = has_key and not
-    door_locked'
-  answerFormat: 0
-  choices:
-  - True
-  - False
-  - None
-  - It causes an error
-  correctChoiceIndex: 1
+    door_locked
+
+    print(can_enter)'
+  answerFormat: 1
+  choices: []
+  correctChoiceIndex: 0
   monospaceChoices: 0
-  acceptedAnswers: []
+  acceptedAnswers:
+  - False
   caseSensitive: 1
+  referenceFill: 
+  runTests: []
   explanation: not door_locked is not True, which is False. True and False is False,
     because and needs both sides to be True.
   hint: Work out not door_locked first, then combine it with and.
-  wrongChoiceFeedback:
-  - has_key is True, but and needs both sides to be True. Work out not door_locked
-    first - what does not do to True?
-  - 
-  - and and not always give True or False, never None.
-  - This is valid Python - and and not can be combined in one line.
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: 'Work it out in steps: first not door_locked, then combine
+    it with has_key using and. Type the value exactly as Python prints it.'

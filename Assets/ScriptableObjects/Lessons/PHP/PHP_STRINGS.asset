@@ -19,6 +19,7 @@ MonoBehaviour:
   relatedQuestionIds:
   - PHP_02_STRINGS
   - HZ_PHP_02_STRINGS
+  - PHP_TYPE_02_STRINGS
   topics:
   - Strings
   definition: A string is text written inside quotation marks, like "Hello".

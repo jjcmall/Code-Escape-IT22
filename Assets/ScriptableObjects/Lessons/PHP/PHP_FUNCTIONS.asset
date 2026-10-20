@@ -19,6 +19,7 @@ MonoBehaviour:
   relatedQuestionIds:
   - PHP_08_FUNCTIONS
   - HZ_PHP_06_FUNCTIONS
+  - PHP_TYPE_08_FUNCTIONS
   topics:
   - Functions
   definition: A function is a named, reusable block of code that does one job. You

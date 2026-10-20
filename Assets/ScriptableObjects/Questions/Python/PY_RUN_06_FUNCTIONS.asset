@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1833b97b4e8284e489c3555d5dace838, type: 3}
+  m_Name: PY_RUN_06_FUNCTIONS
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.QuestionData
+  id: PY_RUN_06_FUNCTIONS
+  language: 1
+  topic: Functions
+  difficulty: 1
+  questionType: 2
+  questionText: Fill in the blank so the function double returns its input multiplied
+    by 2.
+  code: "def double(n):\n    return ____\n\nprint(double(num))"
+  answerFormat: 2
+  choices: []
+  correctChoiceIndex: 0
+  monospaceChoices: 0
+  acceptedAnswers: []
+  caseSensitive: 1
+  referenceFill: n * 2
+  runTests:
+  - setup: num = 4
+    expectedOutput: 8
+  - setup: num = 10
+    expectedOutput: 20
+  - setup: num = 0
+    expectedOutput: 0
+  explanation: A function sends a value back with return. n * 2 uses the parameter
+    n, so double(4) gives 8 and double(10) gives 20.
+  hint: Inside the function, the value given to it is called n. What do you do with
+    n to double it?
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: Use the parameter n inside the function (not a fixed number),
+    and remember return sends the value back for print to show.

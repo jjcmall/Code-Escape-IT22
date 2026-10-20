@@ -16,27 +16,30 @@ MonoBehaviour:
   language: 1
   topic: Mixed
   difficulty: 1
-  questionType: 4
-  questionText: Which code prints only the even numbers in nums?
-  code: 'nums = [3, 4, 7, 10]'
-  answerFormat: 0
-  choices:
-  - "for n in nums:\n    if n % 2 == 0:\n        print(n)"
-  - "for n in nums:\n    if n / 2 == 0:\n        print(n)"
-  - "for n in nums:\n    if n % 2 == 1:\n        print(n)"
-  - "for n in nums\n    if n % 2 == 0:\n        print(n)"
+  questionType: 2
+  questionText: Fill in the condition so the loop prints only the even numbers in
+    nums.
+  code: "for n in nums:\n    if ____:\n        print(n)"
+  answerFormat: 2
+  choices: []
   correctChoiceIndex: 0
-  monospaceChoices: 1
+  monospaceChoices: 0
   acceptedAnswers: []
   caseSensitive: 1
-  explanation: n % 2 is the remainder after dividing by 2, and even numbers have
-    remainder 0, so option A prints 4 and 10. B divides instead, C picks the odd
-    numbers, and D is missing the colon after the for line.
+  referenceFill: n % 2 == 0
+  runTests:
+  - setup: 'nums = [3, 4, 7, 10]'
+    expectedOutput: '4
+
+      10'
+  - setup: 'nums = [2, 5]'
+    expectedOutput: 2
+  - setup: 'nums = [1, 3]'
+    expectedOutput: 
+  explanation: n % 2 is the remainder after dividing by 2. Even numbers have remainder
+    0, so n % 2 == 0 prints 4 and 10 for [3, 4, 7, 10]. n / 2 would divide instead,
+    and n % 2 == 1 would pick the odd numbers.
   hint: The % operator gives the remainder of a division.
-  wrongChoiceFeedback:
-  - 
-  - n / 2 divides the number, and that is only 0 when n is 0. You need the remainder,
-    which uses a different operator.
-  - A remainder of 1 means the number is odd. Which remainder do even numbers have?
-  - This for line is missing its colon, so the code would stop with a SyntaxError.
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: Even numbers leave no remainder when divided by 2. Use the
+    remainder operator and compare with ==.

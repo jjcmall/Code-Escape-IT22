@@ -19,6 +19,7 @@ MonoBehaviour:
   relatedQuestionIds:
   - PY_01_VARIABLES
   - HZ_PY_01_VARIABLES
+  - PY_RUN_01_VARIABLES
   topics:
   - Variables
   definition: A variable is a name that stores a value, like a labelled box. Later,

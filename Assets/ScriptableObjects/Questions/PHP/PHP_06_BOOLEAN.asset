@@ -17,7 +17,7 @@ MonoBehaviour:
   topic: Boolean Logic
   difficulty: 1
   questionType: 0
-  questionText: What is the value of $safe?
+  questionText: What is the value of $safe? Type true or false.
   code: '<?php
 
     $hasMap = true;
@@ -28,22 +28,18 @@ MonoBehaviour:
     !$isDark;
 
     ?>'
-  answerFormat: 0
-  choices:
-  - true
-  - false
-  - null
-  - It causes an error
+  answerFormat: 1
+  choices: []
   correctChoiceIndex: 0
   monospaceChoices: 0
-  acceptedAnswers: []
-  caseSensitive: 1
+  acceptedAnswers:
+  - true
+  caseSensitive: 0
+  referenceFill: 
+  runTests: []
   explanation: '|| means OR: the result is true if at least one side is true. $hasMap
     is true, so $safe is true, even though !$isDark is false.'
   hint: With OR (||), how many sides need to be true?
-  wrongChoiceFeedback:
-  - 
-  - '!$isDark is false, but || (OR) only needs one side to be true. Check $hasMap.'
-  - '|| and ! always give true or false, never null.'
-  - This is valid PHP - || and ! can be combined in one line.
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: With || (OR), check how many sides need to be true. Work out
+    !$isDark first.

@@ -19,6 +19,7 @@ MonoBehaviour:
   relatedQuestionIds:
   - PHP_01_VARIABLES
   - HZ_PHP_01_VARIABLES
+  - PHP_TYPE_01_VARIABLES
   topics:
   - Variables
   definition: A variable is a name that stores a value. In PHP every variable name

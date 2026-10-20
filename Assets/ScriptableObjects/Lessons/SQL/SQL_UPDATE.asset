@@ -18,6 +18,7 @@ MonoBehaviour:
   symbol: UPDATE
   relatedQuestionIds:
   - SQL_06_UPDATE
+  - SQL_TYPE_08_UPDATE
   topics:
   - UPDATE
   definition: UPDATE changes values in rows that are already in a table.

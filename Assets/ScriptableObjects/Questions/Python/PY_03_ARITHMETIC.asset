@@ -17,31 +17,29 @@ MonoBehaviour:
   topic: Arithmetic
   difficulty: 0
   questionType: 2
-  questionText: Alex splits 7 clues into 2 equal piles and ignores the leftover.
-    Which operator fills the blank so the code prints 3?
-  code: 'clues = 7
+  questionText: Alex splits the clues into 2 equal piles and ignores the leftover.
+    Fill in the operator so the program prints how many clues go in each pile.
+  code: 'piles = clues ____ 2
 
-    piles = clues ___ 2
-
-    print(piles)   # should print 3'
-  answerFormat: 0
-  choices:
-  - /
-  - //
-  - '%'
-  - '*'
-  correctChoiceIndex: 1
-  monospaceChoices: 1
+    print(piles)'
+  answerFormat: 2
+  choices: []
+  correctChoiceIndex: 0
+  monospaceChoices: 0
   acceptedAnswers: []
   caseSensitive: 1
+  referenceFill: //
+  runTests:
+  - setup: clues = 7
+    expectedOutput: 3
+  - setup: clues = 10
+    expectedOutput: 5
+  - setup: clues = 1
+    expectedOutput: 0
   explanation: '// is floor division: it divides and keeps only the whole number,
     so 7 // 2 is 3. / would give 3.5, % gives the remainder (1) and * multiplies
     (14).'
   hint: You need a division that drops the decimal part.
-  wrongChoiceFeedback:
-  - / gives the exact answer with a decimal, so 7 / 2 would print 3.5, not 3.
-  - 
-  - '% gives the remainder of the division, which here is 1 - not the size of each
-    pile.'
-  - '* multiplies: 7 * 2 is 14. You need an operator that divides.'
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: 'Look at the printed result: it must be a whole number with
+    the leftover dropped. Run it with your operator and compare.'

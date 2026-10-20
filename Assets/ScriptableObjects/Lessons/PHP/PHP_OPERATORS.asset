@@ -18,6 +18,7 @@ MonoBehaviour:
   symbol: += %
   relatedQuestionIds:
   - PHP_04_OPERATORS
+  - PHP_TYPE_04_OPERATORS
   topics:
   - Operators
   definition: Operators are symbols that do something with values, such as adding

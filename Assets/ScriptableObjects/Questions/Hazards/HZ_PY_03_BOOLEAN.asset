@@ -17,29 +17,24 @@ MonoBehaviour:
   topic: Boolean Logic
   difficulty: 1
   questionType: 1
-  questionText: Can Alex get through? What does this print?
+  questionText: Can Alex get through? What does this print? Type the output.
   code: 'has_badge = True
 
     door_open = False
 
     print(has_badge and not door_open)'
-  answerFormat: 0
-  choices:
-  - True
-  - False
-  - None
-  - An error
+  answerFormat: 1
+  choices: []
   correctChoiceIndex: 0
-  monospaceChoices: 1
-  acceptedAnswers: []
+  monospaceChoices: 0
+  acceptedAnswers:
+  - True
   caseSensitive: 1
+  referenceFill: 
+  runTests: []
   explanation: not door_open turns False into True. Then has_badge and True is True
     and True, which is True.
   hint: Do the not first, then the and.
-  wrongChoiceFeedback:
-  - 
-  - door_open is False, and not flips it. Work out not door_open first, then the
-    and.
-  - and and not always give True or False, never None.
-  - This is valid Python - and and not can be combined in one line.
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: Do the not first, then the and. Type the value exactly as
+    Python prints it.

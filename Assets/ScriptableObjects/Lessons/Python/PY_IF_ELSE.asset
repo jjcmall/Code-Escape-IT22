@@ -19,6 +19,7 @@ MonoBehaviour:
   relatedQuestionIds:
   - PY_05_IF_ELSE
   - HZ_PY_02_IF_ELSE
+  - PY_RUN_03_IF_ELSE
   topics:
   - If / Else
   definition: 'An if statement lets a program make a decision: it runs some code

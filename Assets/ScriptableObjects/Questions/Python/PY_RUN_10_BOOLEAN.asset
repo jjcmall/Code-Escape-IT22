@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1833b97b4e8284e489c3555d5dace838, type: 3}
+  m_Name: PY_RUN_10_BOOLEAN
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.QuestionData
+  id: PY_RUN_10_BOOLEAN
+  language: 1
+  topic: Boolean Logic
+  difficulty: 1
+  questionType: 2
+  questionText: A player may enter only if they are at least 13 and have a ticket.
+    Fill in the word that makes both conditions necessary.
+  code: print(age >= 13 ____ has_ticket)
+  answerFormat: 2
+  choices: []
+  correctChoiceIndex: 0
+  monospaceChoices: 0
+  acceptedAnswers: []
+  caseSensitive: 1
+  referenceFill: and
+  runTests:
+  - setup: 'age = 15
+
+      has_ticket = True'
+    expectedOutput: True
+  - setup: 'age = 15
+
+      has_ticket = False'
+    expectedOutput: False
+  - setup: 'age = 10
+
+      has_ticket = True'
+    expectedOutput: False
+  explanation: and is True only when both sides are True. A player who is old enough
+    but has no ticket, or has a ticket but is too young, gets False.
+  hint: Which word means both sides must be true?
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: Use the word for 'both must be true'. The word 'or' would
+    only need one of them.

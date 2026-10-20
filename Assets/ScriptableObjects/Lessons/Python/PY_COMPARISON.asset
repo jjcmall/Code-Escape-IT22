@@ -18,6 +18,7 @@ MonoBehaviour:
   symbol: ==
   relatedQuestionIds:
   - PY_04_COMPARISON
+  - PY_RUN_09_COMPARISON
   topics:
   - Comparison
   definition: A comparison checks how two values relate to each other. The answer

@@ -17,29 +17,22 @@ MonoBehaviour:
   topic: Lists
   difficulty: 0
   questionType: 1
-  questionText: What does this code print?
+  questionText: What does this code print? Type the exact output.
   code: 'places = ["park", "library", "arcade"]
 
     print(places[1])'
-  answerFormat: 0
-  choices:
-  - park
+  answerFormat: 1
+  choices: []
+  correctChoiceIndex: 0
+  monospaceChoices: 0
+  acceptedAnswers:
   - library
-  - arcade
-  - IndexError
-  correctChoiceIndex: 1
-  monospaceChoices: 1
-  acceptedAnswers: []
   caseSensitive: 1
+  referenceFill: 
+  runTests: []
   explanation: List positions (indexes) start at 0. places[0] is "park" and places[1]
     is "library".
   hint: Python starts counting list positions at 0, not 1.
-  wrongChoiceFeedback:
-  - park is the first item, but places[1] doesn't mean "first". Check where Python
-    starts counting list positions.
-  - 
-  - arcade is further along the list. Count the positions again - Python doesn't
-    start counting at 1.
-  - An IndexError only happens when the index is too big for the list. This list
-    has three items, so index 1 exists.
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: Count the list positions starting from 0, then check which
+    item is at position 1.

@@ -16,26 +16,32 @@ MonoBehaviour:
   language: 2
   topic: If / Else
   difficulty: 0
-  questionType: 4
-  questionText: Which line outputs "Door open" when $code is 42?
-  code: 
-  answerFormat: 0
-  choices:
-  - if ($code == 42) { echo "Door open"; }
-  - if $code == 42 { echo "Door open"; }
-  - 'if ($code == 42) [ echo "Door open"; ]'
-  - if ($code => 42) { echo "Door open"; }
+  questionType: 2
+  questionText: Type the condition so the code outputs "Door open" when $code is
+    42.
+  code: '<?php
+
+    $code = 42;
+
+    if (____) { echo "Door open"; }
+
+    ?>'
+  answerFormat: 1
+  choices: []
   correctChoiceIndex: 0
-  monospaceChoices: 1
-  acceptedAnswers: []
+  monospaceChoices: 0
+  acceptedAnswers:
+  - $code == 42
+  - $code === 42
+  - 42 == $code
+  - 42 === $code
   caseSensitive: 1
-  explanation: PHP puts the condition in round brackets ( ) and the code to run in
-    curly braces { }. == compares values; => is used for array keys, not for comparing.
+  referenceFill: 
+  runTests: []
+  explanation: The condition goes inside the round brackets. $code == 42 compares
+    the variable with 42, so the code in the curly braces runs and outputs Door open.
+    A single = would assign instead of compare.
   hint: Round brackets around the condition, curly braces around the code.
-  wrongChoiceFeedback:
-  - 
-  - In PHP the condition must be inside round brackets ( ).
-  - Square brackets [ ] are for arrays. The code to run belongs in curly braces {
-    }.
-  - => is used for array keys, not for comparing values.
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: Compare the variable $code with 42. One = stores a value;
+    comparing needs a different operator.

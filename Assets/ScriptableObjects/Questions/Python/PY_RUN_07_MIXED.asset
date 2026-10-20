@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1833b97b4e8284e489c3555d5dace838, type: 3}
+  m_Name: PY_RUN_07_MIXED
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.QuestionData
+  id: PY_RUN_07_MIXED
+  language: 1
+  topic: Mixed
+  difficulty: 1
+  questionType: 2
+  questionText: This program adds up the even numbers from 1 to limit. Fill in the
+    condition that is True only for even numbers.
+  code: "total = 0\nfor n in range(1, limit + 1):\n    if ____:\n        total =
+    total + n\nprint(total)"
+  answerFormat: 2
+  choices: []
+  correctChoiceIndex: 0
+  monospaceChoices: 0
+  acceptedAnswers: []
+  caseSensitive: 1
+  referenceFill: n % 2 == 0
+  runTests:
+  - setup: limit = 6
+    expectedOutput: 12
+  - setup: limit = 5
+    expectedOutput: 6
+  - setup: limit = 1
+    expectedOutput: 0
+  explanation: n % 2 is the remainder after dividing by 2. It is 0 only for even
+    numbers, so n % 2 == 0 lets the loop add just the even values to total.
+  hint: The % operator gives a remainder. What is the remainder when an even number
+    is divided by 2?
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: Use % to get the remainder of n divided by 2, and compare
+    it with == (two equals signs) to the remainder an even number leaves.

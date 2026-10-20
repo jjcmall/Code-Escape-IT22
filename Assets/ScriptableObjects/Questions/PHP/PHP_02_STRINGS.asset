@@ -17,7 +17,7 @@ MonoBehaviour:
   topic: Strings
   difficulty: 0
   questionType: 1
-  questionText: What does this code output?
+  questionText: What does this code output? Type the exact output.
   code: '<?php
 
     $first = "Code";
@@ -28,23 +28,18 @@ MonoBehaviour:
     " " . $second;
 
     ?>'
-  answerFormat: 0
-  choices:
-  - CodeEscape
+  answerFormat: 1
+  choices: []
+  correctChoiceIndex: 0
+  monospaceChoices: 0
+  acceptedAnswers:
   - Code Escape
-  - Code . Escape
-  - $first $second
-  correctChoiceIndex: 1
-  monospaceChoices: 1
-  acceptedAnswers: []
   caseSensitive: 1
+  referenceFill: 
+  runTests: []
   explanation: The dot (.) joins strings together in PHP. "Code" . " " . "Escape"
     becomes "Code Escape", with the space in the middle.
   hint: The . operator glues strings together, including the " " in the middle.
-  wrongChoiceFeedback:
-  - 'Look again at the middle piece: " " is a space, and it is joined between the
-    two words.'
-  - 
-  - The dots are operators that join the strings - they are not printed themselves.
-  - echo outputs the values stored in the variables, not the variable names.
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: The dot joins the pieces exactly as they are, including the
+    " " between them.

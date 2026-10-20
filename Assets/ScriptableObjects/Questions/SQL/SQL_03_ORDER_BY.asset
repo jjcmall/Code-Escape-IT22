@@ -17,7 +17,7 @@ MonoBehaviour:
   topic: ORDER BY
   difficulty: 1
   questionType: 1
-  questionText: Which location is returned FIRST?
+  questionText: Which location is returned FIRST? Type it.
   code: 'Table: sightings
 
     +----+----------+-------+---------+
@@ -44,24 +44,18 @@ MonoBehaviour:
     location FROM sightings
 
     ORDER BY time DESC;'
-  answerFormat: 0
-  choices:
-  - Bus Stop
-  - Park
-  - Library
-  - Arcade
+  answerFormat: 1
+  choices: []
   correctChoiceIndex: 0
   monospaceChoices: 0
-  acceptedAnswers: []
-  caseSensitive: 1
+  acceptedAnswers:
+  - Bus Stop
+  caseSensitive: 0
+  referenceFill: 
+  runTests: []
   explanation: DESC sorts from the highest value to the lowest, so the latest time
     (16:05, Bus Stop) comes first. ASC, the default, would start with Park at 15:10.
   hint: 'DESC means descending: the biggest (latest) value comes first.'
-  wrongChoiceFeedback:
-  - 
-  - Park has the earliest time. DESC sorts from the biggest (latest) value to the
-    smallest.
-  - Library is in the middle. Sort the times from latest to earliest and look at
-    the top.
-  - Arcade doesn't have the latest time. With DESC, the latest time comes first.
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: DESC puts the largest value first. Find the latest time in
+    the table.

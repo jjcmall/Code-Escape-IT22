@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1833b97b4e8284e489c3555d5dace838, type: 3}
+  m_Name: PY_RUN_03_IF_ELSE
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.QuestionData
+  id: PY_RUN_03_IF_ELSE
+  language: 1
+  topic: If / Else
+  difficulty: 0
+  questionType: 2
+  questionText: Only players aged 13 or older may enter. Fill in the condition so
+    the program prints Allowed for 13 and older, and Too young otherwise.
+  code: "if ____:\n    print(\"Allowed\")\nelse:\n    print(\"Too young\")"
+  answerFormat: 2
+  choices: []
+  correctChoiceIndex: 0
+  monospaceChoices: 0
+  acceptedAnswers: []
+  caseSensitive: 1
+  referenceFill: age >= 13
+  runTests:
+  - setup: age = 15
+    expectedOutput: Allowed
+  - setup: age = 9
+    expectedOutput: Too young
+  - setup: age = 13
+    expectedOutput: Allowed
+  - setup: age = 12
+    expectedOutput: Too young
+  explanation: The if branch runs only when its condition is True. age >= 13 is True
+    for 13 and for every older age, so those players see Allowed, and everyone else
+    goes to else.
+  hint: Which comparison operator means 'greater than or equal to'? Think about what
+    happens at exactly 13.
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: 'Check the edge: a player who is exactly 13 must be Allowed,
+    and 12 must not be.'

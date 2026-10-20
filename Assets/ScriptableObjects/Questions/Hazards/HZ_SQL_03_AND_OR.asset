@@ -17,7 +17,7 @@ MonoBehaviour:
   topic: AND / OR
   difficulty: 1
   questionType: 1
-  questionText: Who has access? Which names does this query return?
+  questionText: Who has access? Type the name(s) this query returns.
   code: 'Table: badges
 
     +----+-------+------------+-------+
@@ -44,22 +44,18 @@ MonoBehaviour:
     name FROM badges
 
     WHERE department = ''Security'' AND level >= 3;'
-  answerFormat: 0
-  choices:
-  - Rosa
-  - Rosa and Kim
-  - Kim
-  - No rows
+  answerFormat: 1
+  choices: []
   correctChoiceIndex: 0
-  monospaceChoices: 1
-  acceptedAnswers: []
-  caseSensitive: 1
+  monospaceChoices: 0
+  acceptedAnswers:
+  - Rosa
+  caseSensitive: 0
+  referenceFill: 
+  runTests: []
   explanation: AND needs both conditions to be true. Rosa is in Security with level
     3. Kim is in Security but her level is 2, so she is left out.
   hint: A row must match both the department and the level.
-  wrongChoiceFeedback:
-  - 
-  - Both work in Security, but AND also needs level >= 3. Check Kim's level.
-  - Kim's level is 2, which is not >= 3.
-  - Check each Security row against level >= 3 - one of them matches.
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: A row must match both the department and the level. Check
+    each Security row's level.

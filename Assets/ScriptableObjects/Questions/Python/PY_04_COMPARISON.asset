@@ -16,29 +16,28 @@ MonoBehaviour:
   language: 1
   topic: Comparison
   difficulty: 0
-  questionType: 4
-  questionText: Alex wants to check whether the door code equals 1234. Which line
-    is correct Python?
-  code: 
-  answerFormat: 0
-  choices:
-  - 'if code = 1234:'
-  - 'if code == 1234:'
-  - 'if code === 1234:'
-  - 'if code =< 1234:'
-  correctChoiceIndex: 1
-  monospaceChoices: 1
+  questionType: 2
+  questionText: The door opens only when code equals 1234. Fill in the comparison
+    operator.
+  code: "if code ____ 1234:\n    print(\"Open\")\nelse:\n    print(\"Locked\")"
+  answerFormat: 2
+  choices: []
+  correctChoiceIndex: 0
+  monospaceChoices: 0
   acceptedAnswers: []
   caseSensitive: 1
+  referenceFill: ==
+  runTests:
+  - setup: code = 1234
+    expectedOutput: Open
+  - setup: code = 1000
+    expectedOutput: Locked
+  - setup: code = 1300
+    expectedOutput: Locked
   explanation: == compares two values. A single = assigns a value and is a SyntaxError
     inside an if. Python has no === operator, and "less than or equal" is written
     <=, not =<.
   hint: One equals sign stores a value. Which operator compares?
-  wrongChoiceFeedback:
-  - A single = stores a value. Inside an if it causes a SyntaxError, because an if
-    needs a comparison.
-  - 
-  - Some other languages use ===, but Python does not have this operator.
-  - =< is not a Python operator, and "less than or equal" is not the same as "equal"
-    anyway.
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: The door must open for 1234 only, not for bigger or smaller
+    codes. One equals sign stores a value; a different operator compares.

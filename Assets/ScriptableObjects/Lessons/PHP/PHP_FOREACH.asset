@@ -18,6 +18,7 @@ MonoBehaviour:
   symbol: foreach
   relatedQuestionIds:
   - PHP_10_MIXED
+  - PHP_TYPE_10_FOREACH
   topics:
   - Mixed
   definition: 'foreach is a loop made for arrays: it runs its code once for every

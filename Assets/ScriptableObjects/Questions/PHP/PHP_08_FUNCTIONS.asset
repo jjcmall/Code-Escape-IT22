@@ -17,28 +17,22 @@ MonoBehaviour:
   topic: Functions
   difficulty: 1
   questionType: 3
-  questionText: This code stops with a "Too few arguments" error. How do you fix
-    it?
+  questionText: This code stops with a "Too few arguments" error. Type the corrected
+    echo line so it greets Alex.
   code: "<?php\nfunction greet($name) {\n    return \"Hi, \" . $name;\n}\necho greet();\n?>"
-  answerFormat: 0
-  choices:
-  - 'Pass a name when calling it:  echo greet("Alex");'
-  - Remove the return keyword
-  - Change the . to a +
-  - Rename the function to Greet
+  answerFormat: 1
+  choices: []
   correctChoiceIndex: 0
   monospaceChoices: 0
-  acceptedAnswers: []
+  acceptedAnswers:
+  - echo greet("Alex");
+  - echo greet('Alex');
   caseSensitive: 1
+  referenceFill: 
+  runTests: []
   explanation: greet() expects one argument, $name, but it was called with none.
     echo greet("Alex"); passes a name and outputs Hi, Alex.
   hint: Compare the function definition with the line that calls it.
-  wrongChoiceFeedback:
-  - 
-  - Without return the function would give back nothing. The error happens earlier
-    - on the line that calls the function.
-  - In PHP the dot is the right way to join strings. The error comes from the line
-    that calls the function.
-  - The name isn't the problem - PHP treats greet and Greet as the same function.
-    Compare the definition with the call.
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: Compare the function definition with the line that calls it.
+    The function needs a name between the brackets.

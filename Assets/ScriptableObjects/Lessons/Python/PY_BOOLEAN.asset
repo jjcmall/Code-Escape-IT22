@@ -19,6 +19,7 @@ MonoBehaviour:
   relatedQuestionIds:
   - PY_06_BOOLEAN
   - HZ_PY_03_BOOLEAN
+  - PY_RUN_10_BOOLEAN
   topics:
   - Boolean Logic
   definition: Boolean logic works with the values True and False. It lets a program

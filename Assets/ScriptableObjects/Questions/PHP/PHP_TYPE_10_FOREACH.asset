@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1833b97b4e8284e489c3555d5dace838, type: 3}
+  m_Name: PHP_TYPE_10_FOREACH
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.QuestionData
+  id: PHP_TYPE_10_FOREACH
+  language: 2
+  topic: Mixed
+  difficulty: 1
+  questionType: 2
+  questionText: Type the keyword that connects the array to the loop variable.
+  code: "<?php\n$items = [\"key\", \"map\"];\nforeach ($items ____ $item) {\n   
+    echo $item;\n}"
+  answerFormat: 1
+  choices: []
+  correctChoiceIndex: 0
+  monospaceChoices: 0
+  acceptedAnswers:
+  - as
+  caseSensitive: 0
+  referenceFill: 
+  runTests: []
+  explanation: foreach ($array as $item) goes through the array one value at a time
+    and puts each value into $item.
+  hint: 'Read it aloud: for each item in the list, ... the keyword has two letters.'
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: A short two-letter keyword sits between the array and the
+    loop variable.

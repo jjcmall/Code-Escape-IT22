@@ -17,8 +17,8 @@ MonoBehaviour:
   topic: DELETE
   difficulty: 0
   questionType: 4
-  questionText: The Note (id 2) turned out to be a shopping list. Which query removes
-    only that row?
+  questionText: The Note (id 2) turned out to be a shopping list. Type the full query
+    that removes only that row.
   code: 'Table: clues
 
     +----+----------+--------+
@@ -36,23 +36,20 @@ MonoBehaviour:
     |  3 | Map      | Hall   |
 
     +----+----------+--------+'
-  answerFormat: 0
-  choices:
-  - DELETE FROM clues WHERE id = 2;
-  - DELETE FROM clues;
-  - DELETE id = 2 FROM clues;
-  - REMOVE FROM clues WHERE id = 2;
+  answerFormat: 1
+  choices: []
   correctChoiceIndex: 0
-  monospaceChoices: 1
-  acceptedAnswers: []
-  caseSensitive: 1
+  monospaceChoices: 0
+  acceptedAnswers:
+  - DELETE FROM clues WHERE id = 2;
+  - DELETE FROM clues WHERE item = 'Note';
+  - DELETE FROM clues WHERE item = "Note";
+  caseSensitive: 0
+  referenceFill: 
+  runTests: []
   explanation: DELETE FROM table WHERE condition; removes only the matching rows.
     Without WHERE, DELETE FROM clues; would erase every clue! SQL has no REMOVE command.
   hint: Always pair DELETE with a WHERE clause.
-  wrongChoiceFeedback:
-  - 
-  - Without WHERE, this deletes every row in the table, not just the Note.
-  - The parts are in the wrong order. The condition belongs in a WHERE clause after
-    FROM clues.
-  - SQL has no REMOVE command.
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: The pattern is DELETE FROM table WHERE condition. Never leave
+    out WHERE, or every row is deleted.

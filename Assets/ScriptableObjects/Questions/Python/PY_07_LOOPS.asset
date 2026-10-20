@@ -17,19 +17,39 @@ MonoBehaviour:
   topic: Loops
   difficulty: 0
   questionType: 2
-  questionText: Type the missing keyword so the loop prints 0, 1 and 2.
-  code: "___ i in range(3):\n    print(i)"
-  answerFormat: 1
+  questionText: Type the missing keyword so the loop prints the numbers from 0 up
+    to n - 1, one per line.
+  code: "____ i in range(n):\n    print(i)"
+  answerFormat: 2
   choices: []
   correctChoiceIndex: 0
   monospaceChoices: 0
-  acceptedAnswers:
-  - for
+  acceptedAnswers: []
   caseSensitive: 1
+  referenceFill: for
+  runTests:
+  - setup: n = 3
+    expectedOutput: '0
+
+      1
+
+      2'
+  - setup: n = 1
+    expectedOutput: 0
+  - setup: n = 5
+    expectedOutput: '0
+
+      1
+
+      2
+
+      3
+
+      4'
   explanation: 'for loops over each value in a sequence. range(3) produces 0, 1 and
     2, so  for i in range(3):  runs three times and prints each number.'
   hint: It's a three-letter keyword that starts a loop over a sequence.
   wrongChoiceFeedback: []
   wrongAnswerFeedback: That keyword doesn't start this loop. Which keyword goes through
-    each value of a sequence like range(3), one by one? Review the concept if you're
-    unsure.
+    each value of a sequence like range(n), one by one? Press RUN to see what your
+    line does.

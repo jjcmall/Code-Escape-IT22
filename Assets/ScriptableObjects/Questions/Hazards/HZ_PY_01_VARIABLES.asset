@@ -17,28 +17,25 @@ MonoBehaviour:
   topic: Variables
   difficulty: 0
   questionType: 1
-  questionText: The laser grid's counter changes. What does this code print?
+  questionText: The laser grid's counter changes. What does this code print? Type
+    the output.
   code: 'lasers = 3
 
     lasers = lasers + 2
 
     print(lasers)'
-  answerFormat: 0
-  choices:
-  - 3
+  answerFormat: 1
+  choices: []
+  correctChoiceIndex: 0
+  monospaceChoices: 0
+  acceptedAnswers:
   - 5
-  - 32
-  - lasers + 2
-  correctChoiceIndex: 1
-  monospaceChoices: 1
-  acceptedAnswers: []
   caseSensitive: 1
+  referenceFill: 
+  runTests: []
   explanation: lasers starts at 3. The right side, lasers + 2, is worked out first
     (5) and stored back in lasers, so print shows 5.
   hint: Work out the right side of the = first, then store it in the variable.
-  wrongChoiceFeedback:
-  - 3 is the starting value, but the second line stores a new value in lasers.
-  - 
-  - lasers holds a number, so + adds the numbers - it doesn't join them like text.
-  - Without quotes, lasers + 2 is worked out as maths, not printed as words.
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: Work out the right side of the = first, then that value is
+    stored in lasers.

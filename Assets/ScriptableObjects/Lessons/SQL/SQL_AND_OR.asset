@@ -19,6 +19,7 @@ MonoBehaviour:
   relatedQuestionIds:
   - SQL_04_AND_OR
   - HZ_SQL_03_AND_OR
+  - SQL_TYPE_04_AND_OR
   topics:
   - AND / OR
   definition: AND and OR join two conditions inside a WHERE clause.

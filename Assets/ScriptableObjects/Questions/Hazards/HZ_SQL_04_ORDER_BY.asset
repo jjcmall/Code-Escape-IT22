@@ -17,7 +17,7 @@ MonoBehaviour:
   topic: ORDER BY
   difficulty: 1
   questionType: 1
-  questionText: Which name comes first in the result?
+  questionText: Which name comes first in the result? Type it.
   code: 'Table: badges
 
     +----+-------+------------+-------+
@@ -44,22 +44,17 @@ MonoBehaviour:
     name FROM badges
 
     ORDER BY level DESC;'
-  answerFormat: 0
-  choices:
-  - Rosa
-  - Omar
-  - Kim
-  - Tariq
+  answerFormat: 1
+  choices: []
   correctChoiceIndex: 0
-  monospaceChoices: 1
-  acceptedAnswers: []
-  caseSensitive: 1
+  monospaceChoices: 0
+  acceptedAnswers:
+  - Rosa
+  caseSensitive: 0
+  referenceFill: 
+  runTests: []
   explanation: DESC sorts from the highest value to the lowest. Rosa has the highest
     level (3), so she comes first.
   hint: DESC means highest first.
-  wrongChoiceFeedback:
-  - 
-  - Omar has level 1, one of the lowest. DESC puts the highest value first.
-  - Kim's level is 2. Is there a higher level in the table?
-  - Tariq has level 1. DESC sorts from the highest level down.
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: DESC means highest first. Find the highest level.

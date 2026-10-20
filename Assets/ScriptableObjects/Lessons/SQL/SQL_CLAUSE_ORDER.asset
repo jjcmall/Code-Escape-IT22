@@ -18,6 +18,7 @@ MonoBehaviour:
   symbol: 1-2-3
   relatedQuestionIds:
   - SQL_10_MIXED
+  - SQL_TYPE_10_MIXED
   topics:
   - Mixed
   definition: A query is built from clauses - parts that each start with a keyword.

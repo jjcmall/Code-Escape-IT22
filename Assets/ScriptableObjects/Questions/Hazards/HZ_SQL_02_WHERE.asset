@@ -17,7 +17,7 @@ MonoBehaviour:
   topic: WHERE
   difficulty: 0
   questionType: 1
-  questionText: Which names does this query return?
+  questionText: Which names does this query return? Type them, separated by commas.
   code: 'Table: badges
 
     +----+-------+------------+-------+
@@ -44,23 +44,22 @@ MonoBehaviour:
     name FROM badges
 
     WHERE department = ''Security'';'
-  answerFormat: 0
-  choices:
-  - Rosa and Kim
-  - Omar and Tariq
-  - Rosa only
-  - All four names
+  answerFormat: 1
+  choices: []
   correctChoiceIndex: 0
-  monospaceChoices: 1
-  acceptedAnswers: []
-  caseSensitive: 1
+  monospaceChoices: 0
+  acceptedAnswers:
+  - Rosa, Kim
+  - Rosa and Kim
+  - Rosa Kim
+  - Kim, Rosa
+  - Kim and Rosa
+  caseSensitive: 0
+  referenceFill: 
+  runTests: []
   explanation: 'WHERE keeps only the rows whose department is Security: Rosa (row
     1) and Kim (row 3).'
   hint: Look down the department column for Security.
-  wrongChoiceFeedback:
-  - 
-  - Omar works in Lab and Tariq in Archive. Look for the rows where department is
-    Security.
-  - Check every row - someone else also works in Security.
-  - WHERE filters the rows, so only the matching ones are returned.
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: Look down the department column for Security and type every
+    matching name.

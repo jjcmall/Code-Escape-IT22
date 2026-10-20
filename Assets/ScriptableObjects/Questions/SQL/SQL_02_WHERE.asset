@@ -17,7 +17,8 @@ MonoBehaviour:
   topic: WHERE
   difficulty: 0
   questionType: 4
-  questionText: Which query finds the sightings reported by Leo?
+  questionText: Type the full query that returns all columns of the sightings reported
+    by Leo.
   code: 'Table: sightings
 
     +----+----------+-------+---------+
@@ -38,23 +39,19 @@ MonoBehaviour:
     |  4 | Arcade   | 15:25 | Leo     |
 
     +----+----------+-------+---------+'
-  answerFormat: 0
-  choices:
-  - SELECT * FROM sightings WHERE witness = 'Leo';
-  - SELECT * FROM sightings IF witness = 'Leo';
-  - SELECT Leo FROM sightings;
-  - SELECT * WHERE witness = 'Leo' FROM sightings;
+  answerFormat: 1
+  choices: []
   correctChoiceIndex: 0
-  monospaceChoices: 1
-  acceptedAnswers: []
-  caseSensitive: 1
+  monospaceChoices: 0
+  acceptedAnswers:
+  - SELECT * FROM sightings WHERE witness = 'Leo';
+  - SELECT * FROM sightings WHERE witness = "Leo";
+  caseSensitive: 0
+  referenceFill: 
+  runTests: []
   explanation: WHERE filters rows and comes after FROM. Text values go in single
     quotes. SQL has no IF clause, and SELECT Leo would look for a column named Leo.
   hint: The filtering keyword goes after FROM table_name.
-  wrongChoiceFeedback:
-  - 
-  - SQL has no IF clause for filtering rows. A different keyword filters rows.
-  - SELECT Leo would look for a column called Leo, but Leo is a value in the witness
-    column.
-  - 'The filter is right, but it''s in the wrong place: it must come after FROM sightings.'
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: The pattern is SELECT columns FROM table WHERE condition.
+    Text values go in single quotes.

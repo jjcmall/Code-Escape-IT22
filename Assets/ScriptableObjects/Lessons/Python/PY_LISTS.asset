@@ -19,6 +19,8 @@ MonoBehaviour:
   relatedQuestionIds:
   - PY_09_LISTS
   - HZ_PY_05_LISTS
+  - PY_RUN_05_LISTS
+  - PY_RUN_12_LISTS_APPEND
   topics:
   - Lists
   definition: A list stores several values, in order, inside one variable.

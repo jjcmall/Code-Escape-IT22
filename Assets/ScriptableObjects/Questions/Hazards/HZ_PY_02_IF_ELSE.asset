@@ -17,24 +17,20 @@ MonoBehaviour:
   topic: If / Else
   difficulty: 0
   questionType: 1
-  questionText: What does Alex's escape plan print?
+  questionText: What does Alex's escape plan print? Type the output.
   code: "alarm = True\nif alarm:\n    print(\"Hide!\")\nelse:\n    print(\"Run!\")"
-  answerFormat: 0
-  choices:
-  - Hide!
-  - Run!
-  - Hide! Run!
-  - Nothing is printed
+  answerFormat: 1
+  choices: []
   correctChoiceIndex: 0
-  monospaceChoices: 1
-  acceptedAnswers: []
+  monospaceChoices: 0
+  acceptedAnswers:
+  - Hide!
   caseSensitive: 1
+  referenceFill: 
+  runTests: []
   explanation: alarm is True, so the if block runs and prints Hide!. The else block
     only runs when the condition is False.
   hint: Is the condition True or False?
-  wrongChoiceFeedback:
-  - 
-  - The else block only runs when the condition is False. Is alarm True or False?
-  - 'Only one of the two blocks runs: either the if block or the else block.'
-  - When there is an else, one of the two blocks always runs.
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: Check whether alarm is True or False, then follow only that
+    branch. Type the output exactly, including punctuation.

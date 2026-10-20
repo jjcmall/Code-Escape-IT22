@@ -4572,9 +4572,9 @@ MonoBehaviour:
   obstacleId: neighborhood_gate
   displayName: Old Gate
   questions:
-  - {fileID: 11400000, guid: c64cafe5a7d338545ac10fa40625a467, type: 2}
-  - {fileID: 11400000, guid: e5adcdab494479840ae0719251f2633a, type: 2}
-  - {fileID: 11400000, guid: 0a3c8ec8cfcefea43833f11d98fc3ca1, type: 2}
+  - {fileID: 11400000, guid: e3b5ee894e2cff74b8b2fc40d9b40184, type: 2}
+  - {fileID: 11400000, guid: ffe2b942df68382438341aac67062684, type: 2}
+  - {fileID: 11400000, guid: 7ca14773bbf2686408a32556bce33063, type: 2}
   fallbackTopic: 
   clueReward: {fileID: 11400000, guid: a034742311c60a8439905a5b20565005, type: 2}
   completeStoryEvent: 

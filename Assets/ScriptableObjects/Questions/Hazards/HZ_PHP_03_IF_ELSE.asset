@@ -17,25 +17,20 @@ MonoBehaviour:
   topic: If / Else
   difficulty: 0
   questionType: 1
-  questionText: What does the robot's battery check output?
+  questionText: What does the robot's battery check output? Type it.
   code: "<?php\n$battery = 15;\nif ($battery > 20) {\n    echo \"Go\";\n} else {\n   
     echo \"Recharge\";\n}\n?>"
-  answerFormat: 0
-  choices:
-  - Go
+  answerFormat: 1
+  choices: []
+  correctChoiceIndex: 0
+  monospaceChoices: 0
+  acceptedAnswers:
   - Recharge
-  - GoRecharge
-  - 15
-  correctChoiceIndex: 1
-  monospaceChoices: 1
-  acceptedAnswers: []
   caseSensitive: 1
+  referenceFill: 
+  runTests: []
   explanation: 15 > 20 is false, so the if block is skipped and the else block echoes
     Recharge.
   hint: Is 15 greater than 20?
-  wrongChoiceFeedback:
-  - The if block only runs when the condition is true. Is 15 greater than 20?
-  - 
-  - 'Only one block runs: either the if block or the else block.'
-  - Neither block echoes $battery - they both echo text.
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: Is 15 greater than 20? Follow only the branch that runs.

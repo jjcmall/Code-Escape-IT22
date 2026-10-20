@@ -17,7 +17,7 @@ MonoBehaviour:
   topic: Strings
   difficulty: 0
   questionType: 1
-  questionText: What message appears on the security screen?
+  questionText: What message appears on the security screen? Type it exactly.
   code: '<?php
 
     $name = "Sam";
@@ -25,22 +25,18 @@ MonoBehaviour:
     echo "Find " . $name . "!";
 
     ?>'
-  answerFormat: 0
-  choices:
-  - Find Sam!
-  - Find . Sam . !
-  - Find $name!
-  - FindSam!
+  answerFormat: 1
+  choices: []
   correctChoiceIndex: 0
-  monospaceChoices: 1
-  acceptedAnswers: []
+  monospaceChoices: 0
+  acceptedAnswers:
+  - Find Sam!
   caseSensitive: 1
+  referenceFill: 
+  runTests: []
   explanation: The dot (.) joins strings. "Find " . "Sam" . "!" becomes Find Sam!
     - the space was already inside "Find ".
   hint: The . operator glues the pieces together exactly as they are.
-  wrongChoiceFeedback:
-  - 
-  - The dots join the strings - they are not part of the output.
-  - $name is outside the quotes, so PHP uses its value, not the text $name.
-  - 'Look closely at "Find ": the space is inside the quotes, so it is kept.'
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: The dot joins the pieces exactly as they are. Check the spaces
+    and the punctuation.

@@ -17,8 +17,8 @@ MonoBehaviour:
   topic: UPDATE
   difficulty: 1
   questionType: 3
-  questionText: Alex wants to move ONLY the Map to the Garage, but this query changes
-    every row. What is the fix?
+  questionText: This query changes every row, but Alex wants to move ONLY the Map.
+    Type the clause to add before the semicolon.
   code: 'Table: clues
 
     +----+----------+--------+
@@ -42,23 +42,20 @@ MonoBehaviour:
     clues
 
     SET room = ''Garage'';'
-  answerFormat: 0
-  choices:
-  - Add  WHERE item = 'Map'  before the semicolon
-  - Replace UPDATE with INSERT
-  - Remove the quotes around 'Garage'
-  - Add  ORDER BY item  at the end
+  answerFormat: 1
+  choices: []
   correctChoiceIndex: 0
   monospaceChoices: 0
-  acceptedAnswers: []
-  caseSensitive: 1
+  acceptedAnswers:
+  - WHERE item = 'Map'
+  - WHERE item = "Map"
+  - WHERE id = 3
+  caseSensitive: 0
+  referenceFill: 
+  runTests: []
   explanation: Without WHERE, UPDATE changes every row in the table. UPDATE clues
     SET room = 'Garage' WHERE item = 'Map'; changes only the Map row.
   hint: Which clause limits a query to certain rows?
-  wrongChoiceFeedback:
-  - 
-  - INSERT adds new rows. You still want to change an existing row - just not all
-    of them.
-  - Text values like 'Garage' need single quotes. The quotes are not the problem.
-  - ORDER BY only sorts results. It doesn't choose which rows UPDATE changes.
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: One clause limits a query to certain rows. Use it to pick
+    the row whose item is Map.

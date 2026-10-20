@@ -18,6 +18,7 @@ MonoBehaviour:
   symbol: int
   relatedQuestionIds:
   - PHP_03_NUMBERS
+  - PHP_TYPE_03_NUMBERS
   topics:
   - Numbers
   definition: A data type is the kind of value a variable holds. PHP works out the

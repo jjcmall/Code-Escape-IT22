@@ -17,28 +17,22 @@ MonoBehaviour:
   topic: Mixed
   difficulty: 1
   questionType: 2
-  questionText: Which keyword fills the blank so the loop outputs every place?
+  questionText: Type the keyword that fills the blank so the loop outputs every place.
   code: "<?php\n$places = [\"park\", \"library\", \"arcade\"];\nforeach ($places
     ___ $place) {\n    echo $place . \"\\n\";\n}\n?>"
-  answerFormat: 0
-  choices:
-  - as
-  - in
-  - of
-  - =>
+  answerFormat: 1
+  choices: []
   correctChoiceIndex: 0
-  monospaceChoices: 1
-  acceptedAnswers: []
-  caseSensitive: 1
+  monospaceChoices: 0
+  acceptedAnswers:
+  - as
+  caseSensitive: 0
+  referenceFill: 
+  runTests: []
   explanation: 'PHP''s foreach reads like a sentence: foreach ($places as $place).
     Python uses in and JavaScript uses of, but PHP uses as.'
   hint: 'PHP doesn''t use Python''s in here. Read it as: for each of the places,
     treat it ___ $place.'
-  wrongChoiceFeedback:
-  - 
-  - in is what Python uses. PHP's foreach uses a different word between the array
-    and the item.
-  - of is used in JavaScript loops, not in PHP's foreach.
-  - => is used when you want both the key and the value. Here only the value $place
-    is needed, which uses a different keyword.
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: 'PHP''s foreach reads like a sentence: for each of the places,
+    treat it ___ $place. It is not Python''s in.'

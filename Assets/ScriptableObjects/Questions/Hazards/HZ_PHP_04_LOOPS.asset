@@ -17,24 +17,20 @@ MonoBehaviour:
   topic: Loops
   difficulty: 0
   questionType: 1
-  questionText: What does this loop output?
+  questionText: What does this loop output? Type it exactly.
   code: "<?php\nfor ($i = 1; $i <= 3; $i++) {\n    echo $i;\n}\n?>"
-  answerFormat: 0
-  choices:
-  - 123
-  - 0123
-  - 1234
-  - 3
+  answerFormat: 1
+  choices: []
   correctChoiceIndex: 0
-  monospaceChoices: 1
-  acceptedAnswers: []
+  monospaceChoices: 0
+  acceptedAnswers:
+  - 123
   caseSensitive: 1
+  referenceFill: 
+  runTests: []
   explanation: '$i starts at 1 and the loop runs while $i <= 3, echoing 1, 2 and
     3 with no spaces between them: 123.'
   hint: Check the starting value and the <= condition.
-  wrongChoiceFeedback:
-  - 
-  - $i starts at 1, not 0.
-  - The condition is $i <= 3, so the loop stops after 3.
-  - echo runs every time the loop repeats, not only at the end.
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: Check the starting value and the <= condition. echo adds no
+    spaces between the numbers.

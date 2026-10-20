@@ -16,8 +16,9 @@ MonoBehaviour:
   language: 3
   topic: AND / OR
   difficulty: 1
-  questionType: 0
-  questionText: Which location(s) does this query return?
+  questionType: 1
+  questionText: Which location(s) does this query return? Type them, separated by
+    commas.
   code: 'Table: sightings
 
     +----+----------+-------+---------+
@@ -44,26 +45,19 @@ MonoBehaviour:
     location FROM sightings
 
     WHERE witness = ''Leo'' AND time > ''15:30'';'
-  answerFormat: 0
-  choices:
-  - Library
-  - Arcade
-  - Library and Arcade
-  - Library, Bus Stop and Arcade
+  answerFormat: 1
+  choices: []
   correctChoiceIndex: 0
   monospaceChoices: 0
-  acceptedAnswers: []
-  caseSensitive: 1
+  acceptedAnswers:
+  - Library
+  caseSensitive: 0
+  referenceFill: 
+  runTests: []
   explanation: AND keeps a row only when both conditions are true. Leo made two sightings,
     but only Library (15:40) is after 15:30. With OR instead, Library, Bus Stop and
     Arcade would all match.
   hint: With AND, a row needs both conditions to be true at the same time.
-  wrongChoiceFeedback:
-  - 
-  - Arcade was reported by Leo, but at 15:25 - that isn't after 15:30, so the AND
-    fails.
-  - Both rows are Leo's, but AND also needs the time to be after 15:30. Check each
-    time.
-  - That would be the result with OR. AND keeps only the rows where both conditions
-    are true.
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: With AND, a row must match both conditions at the same time.
+    Check each of Leo's rows against the time.

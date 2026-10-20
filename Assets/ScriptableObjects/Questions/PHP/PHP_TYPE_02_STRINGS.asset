@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1833b97b4e8284e489c3555d5dace838, type: 3}
+  m_Name: PHP_TYPE_02_STRINGS
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.QuestionData
+  id: PHP_TYPE_02_STRINGS
+  language: 2
+  topic: Strings
+  difficulty: 0
+  questionType: 2
+  questionText: Type the operator that joins two pieces of text together.
+  code: '<?php
+
+    echo "Hello" ____ " Alex";'
+  answerFormat: 1
+  choices: []
+  correctChoiceIndex: 0
+  monospaceChoices: 0
+  acceptedAnswers:
+  - .
+  caseSensitive: 1
+  referenceFill: 
+  runTests: []
+  explanation: In PHP the dot (.) joins strings together. This prints Hello Alex.
+    The + sign is for numbers.
+  hint: It is a single character, and not the + sign.
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: PHP uses a different single character from + to join text.
+    Look at the lesson's concatenation example.

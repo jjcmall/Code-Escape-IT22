@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1833b97b4e8284e489c3555d5dace838, type: 3}
+  m_Name: PY_RUN_04_LOOPS
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.QuestionData
+  id: PY_RUN_04_LOOPS
+  language: 1
+  topic: Loops
+  difficulty: 0
+  questionType: 2
+  questionText: Fill in the blank so the loop prints the numbers from 1 up to count,
+    one per line.
+  code: "for n in ____:\n    print(n)"
+  answerFormat: 2
+  choices: []
+  correctChoiceIndex: 0
+  monospaceChoices: 0
+  acceptedAnswers: []
+  caseSensitive: 1
+  referenceFill: range(1, count + 1)
+  runTests:
+  - setup: count = 3
+    expectedOutput: '1
+
+      2
+
+      3'
+  - setup: count = 5
+    expectedOutput: '1
+
+      2
+
+      3
+
+      4
+
+      5'
+  - setup: count = 1
+    expectedOutput: 1
+  explanation: range(1, count + 1) starts at 1 and stops just before count + 1, so
+    the last number printed is count. The stop value of range() is never included.
+  hint: range(start, stop) does not include stop. How can you make count the last
+    number?
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: range() stops before its second value. Check that the first
+    number is 1 and the last number printed is exactly count.

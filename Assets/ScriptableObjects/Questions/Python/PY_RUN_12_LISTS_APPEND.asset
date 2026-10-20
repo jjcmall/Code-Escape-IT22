@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1833b97b4e8284e489c3555d5dace838, type: 3}
+  m_Name: PY_RUN_12_LISTS_APPEND
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.QuestionData
+  id: PY_RUN_12_LISTS_APPEND
+  language: 1
+  topic: Lists
+  difficulty: 0
+  questionType: 2
+  questionText: Fill in the line that adds the text "map" to the end of the list
+    items.
+  code: '____
+
+    print(len(items))'
+  answerFormat: 2
+  choices: []
+  correctChoiceIndex: 0
+  monospaceChoices: 0
+  acceptedAnswers: []
+  caseSensitive: 1
+  referenceFill: items.append("map")
+  runTests:
+  - setup: 'items = ["key", "torch"]'
+    expectedOutput: 3
+  - setup: 'items = []'
+    expectedOutput: 1
+  - setup: 'items = ["a"]'
+    expectedOutput: 2
+  explanation: append() adds one value to the end of a list. The list then has one
+    more item, so len(items) goes up by 1.
+  hint: Lists have a method that adds a value to the end. Write the list name, a
+    dot, then the method.
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: Write list name, a dot, the method that adds to the end, then
+    the value in brackets (text needs quotes).

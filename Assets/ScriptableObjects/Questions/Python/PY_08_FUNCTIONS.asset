@@ -17,27 +17,26 @@ MonoBehaviour:
   topic: Functions
   difficulty: 1
   questionType: 3
-  questionText: double(4) should give 8, but this code prints None. What is the fix?
-  code: "def double(n):\n    result = n * 2\n\nprint(double(4))   # prints None"
-  answerFormat: 0
-  choices:
-  - Add  return result  as the last line inside the function
-  - Change  n * 2  to  n + 2
-  - Move  print(double(4))  inside the function
-  - Rename the function to Double
+  questionText: double(4) should give 8, but the function gives back nothing (None).
+    Type the missing last line of the function.
+  code: "def double(n):\n    result = n * 2\n    ____\n\nprint(double(num))"
+  answerFormat: 2
+  choices: []
   correctChoiceIndex: 0
   monospaceChoices: 0
   acceptedAnswers: []
   caseSensitive: 1
+  referenceFill: return result
+  runTests:
+  - setup: num = 4
+    expectedOutput: 8
+  - setup: num = 7
+    expectedOutput: 14
+  - setup: num = 0
+    expectedOutput: 0
   explanation: A function only sends a value back with return. Without it, Python
     returns None. Adding  return result  makes double(4) give 8.
   hint: Which keyword sends a value back out of a function?
-  wrongChoiceFeedback:
-  - 
-  - Changing * to + would give 6, not 8 - and the function would still print None,
-    because nothing is sent back.
-  - Moving print around doesn't change what double(4) gives back. The missing part
-    is inside the function's body.
-  - The function's name doesn't change what it gives back. The missing part is inside
-    the function's body.
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: The function works out result but never sends it back. Which
+    keyword sends a value out of a function?

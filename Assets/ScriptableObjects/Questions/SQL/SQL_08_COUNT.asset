@@ -16,8 +16,8 @@ MonoBehaviour:
   language: 3
   topic: COUNT
   difficulty: 0
-  questionType: 0
-  questionText: What number does this query return?
+  questionType: 1
+  questionText: What number does this query return? Type it.
   code: 'Table: sightings
 
     +----+----------+-------+---------+
@@ -44,22 +44,18 @@ MonoBehaviour:
     COUNT(*) FROM sightings
 
     WHERE witness = ''Leo'';'
-  answerFormat: 0
-  choices:
-  - 1
+  answerFormat: 1
+  choices: []
+  correctChoiceIndex: 0
+  monospaceChoices: 0
+  acceptedAnswers:
   - 2
-  - 4
-  - Leo
-  correctChoiceIndex: 1
-  monospaceChoices: 1
-  acceptedAnswers: []
   caseSensitive: 1
+  referenceFill: 
+  runTests: []
   explanation: COUNT(*) counts the rows that match the WHERE clause. Leo appears
     in two rows (Library and Arcade), so the result is 2.
   hint: Count the rows where the witness column is Leo.
-  wrongChoiceFeedback:
-  - Check the witness column again - Leo appears in more than one row.
-  - 
-  - 4 is the total number of rows. WHERE witness = 'Leo' counts only Leo's rows.
-  - COUNT(*) returns a number, not a name.
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: COUNT(*) counts only the rows that match WHERE. Count Leo's
+    rows.

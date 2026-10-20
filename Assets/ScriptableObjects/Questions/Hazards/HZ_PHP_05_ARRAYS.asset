@@ -17,7 +17,7 @@ MonoBehaviour:
   topic: Arrays
   difficulty: 0
   questionType: 1
-  questionText: How many rooms are in the array?
+  questionText: How many rooms are in the array? Type what is output.
   code: '<?php
 
     $rooms = ["hall", "lab", "vault"];
@@ -25,22 +25,17 @@ MonoBehaviour:
     echo count($rooms);
 
     ?>'
-  answerFormat: 0
-  choices:
-  - 2
+  answerFormat: 1
+  choices: []
+  correctChoiceIndex: 0
+  monospaceChoices: 0
+  acceptedAnswers:
   - 3
-  - 4
-  - vault
-  correctChoiceIndex: 1
-  monospaceChoices: 1
-  acceptedAnswers: []
   caseSensitive: 1
+  referenceFill: 
+  runTests: []
   explanation: count() returns how many items an array holds. There are three rooms,
     so it outputs 3.
   hint: count() counts the items, it doesn't return one of them.
-  wrongChoiceFeedback:
-  - count() counts every item. Indexes start at 0, but the number of items doesn't.
-  - 
-  - Count the items in the array again.
-  - count() returns a number, not one of the items.
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: count() counts the items; it doesn't return one of them.

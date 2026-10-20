@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1833b97b4e8284e489c3555d5dace838, type: 3}
+  m_Name: PHP_TYPE_06_BOOLEAN
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.QuestionData
+  id: PHP_TYPE_06_BOOLEAN
+  language: 2
+  topic: Boolean Logic
+  difficulty: 1
+  questionType: 2
+  questionText: Type the operator that makes both conditions have to be true.
+  code: "<?php\n$a = 3;\n$b = 4;\nif ($a > 1 ____ $b < 5) {\n    echo \"Both true\";\n}"
+  answerFormat: 1
+  choices: []
+  correctChoiceIndex: 0
+  monospaceChoices: 0
+  acceptedAnswers:
+  - '&&'
+  - and
+  caseSensitive: 0
+  referenceFill: 
+  runTests: []
+  explanation: '&& (or the word and) is true only when both sides are true. || would
+    be true if either side were true.'
+  hint: It is two characters long and means 'and'.
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: Use the logical operator for 'and', not the one for 'or'.

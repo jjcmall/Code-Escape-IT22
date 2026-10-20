@@ -7089,8 +7089,8 @@ MonoBehaviour:
   obstacleId: facility_door_b
   displayName: Lab Door B
   questions:
-  - {fileID: 11400000, guid: 7527262f17be1a24eb02ef88617cb7e8, type: 2}
-  - {fileID: 11400000, guid: c98f282730265184494c7d09d36dbcce, type: 2}
+  - {fileID: 11400000, guid: f1caf0f08dee996428f328d0aec8f970, type: 2}
+  - {fileID: 11400000, guid: 877c24b53b7cfaf4c94621375abbc0ae, type: 2}
   - {fileID: 11400000, guid: ce7fd3f0399393248b404379fa4533b8, type: 2}
   fallbackTopic: 
   clueReward: {fileID: 0}
@@ -21753,9 +21753,9 @@ MonoBehaviour:
   obstacleId: facility_door_a
   displayName: Lab Door A
   questions:
-  - {fileID: 11400000, guid: 856b21a40b913444dbb4df4d7b75a6fd, type: 2}
-  - {fileID: 11400000, guid: d59b8243de307014391e99b4769804b7, type: 2}
-  - {fileID: 11400000, guid: 53538f2833c5e3e4ba3f781f30afb2c2, type: 2}
+  - {fileID: 11400000, guid: fbf40a19d156cc449aa23dc37ccd4f51, type: 2}
+  - {fileID: 11400000, guid: 6a2be10b9dea4b846bdaab39a017acfd, type: 2}
+  - {fileID: 11400000, guid: 85abe2b2c224a414db636bd7885ae886, type: 2}
   fallbackTopic: 
   clueReward: {fileID: 0}
   completeStoryEvent: 

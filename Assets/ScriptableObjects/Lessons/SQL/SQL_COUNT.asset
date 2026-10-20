@@ -19,6 +19,7 @@ MonoBehaviour:
   relatedQuestionIds:
   - SQL_08_COUNT
   - HZ_SQL_05_COUNT
+  - SQL_TYPE_05_COUNT
   topics:
   - COUNT
   definition: COUNT(*) counts rows. It returns a number instead of the rows themselves.

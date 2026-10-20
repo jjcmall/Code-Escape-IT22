@@ -22790,9 +22790,9 @@ MonoBehaviour:
   obstacleId: station_lock
   displayName: Station Gate
   questions:
-  - {fileID: 11400000, guid: 24f1cfbd5d442a046be07eff429c5c90, type: 2}
-  - {fileID: 11400000, guid: c20300ecb4ca90c47aeac3274533c4a3, type: 2}
-  - {fileID: 11400000, guid: bad4d6e2b1e4d84499bacfd18a4e841f, type: 2}
+  - {fileID: 11400000, guid: 42c89ef758e288a42b73b32b201783ec, type: 2}
+  - {fileID: 11400000, guid: d110f68d10e6bc54d9619a207d47f596, type: 2}
+  - {fileID: 11400000, guid: 8f7a0f4e77d2f3c4983f3dc72b4d5261, type: 2}
   fallbackTopic: 
   clueReward: {fileID: 11400000, guid: 4f38d08aec9a0374580bde80c5ccc628, type: 2}
   completeStoryEvent: 

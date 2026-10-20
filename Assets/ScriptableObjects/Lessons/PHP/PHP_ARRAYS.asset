@@ -19,6 +19,7 @@ MonoBehaviour:
   relatedQuestionIds:
   - PHP_09_ARRAYS
   - HZ_PHP_05_ARRAYS
+  - PHP_TYPE_09_ARRAYS
   topics:
   - Arrays
   definition: An array stores several values, in order, inside one variable.

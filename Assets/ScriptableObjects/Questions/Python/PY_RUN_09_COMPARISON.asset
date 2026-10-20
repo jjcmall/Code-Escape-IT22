@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1833b97b4e8284e489c3555d5dace838, type: 3}
+  m_Name: PY_RUN_09_COMPARISON
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.QuestionData
+  id: PY_RUN_09_COMPARISON
+  language: 1
+  topic: Comparison
+  difficulty: 0
+  questionType: 2
+  questionText: Fill in the comparison operator so the program prints True only when
+    score is greater than 50.
+  code: print(score ____ 50)
+  answerFormat: 2
+  choices: []
+  correctChoiceIndex: 0
+  monospaceChoices: 0
+  acceptedAnswers: []
+  caseSensitive: 1
+  referenceFill: '>'
+  runTests:
+  - setup: score = 70
+    expectedOutput: True
+  - setup: score = 50
+    expectedOutput: False
+  - setup: score = 10
+    expectedOutput: False
+  explanation: '> checks that the left value is strictly greater than the right one.
+    A score of exactly 50 is not greater than 50, so it prints False.'
+  hint: Which operator means 'greater than'? Think about what should happen at exactly
+    50.
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: 'Check the edge: a score of exactly 50 must print False, and
+    a score below 50 must print False.'

@@ -10128,9 +10128,9 @@ MonoBehaviour:
   obstacleId: final_door
   displayName: SENTINEL Core Door
   questions:
-  - {fileID: 11400000, guid: a83f6fba727ed484c965fc7d4df6b1f1, type: 2}
-  - {fileID: 11400000, guid: 4a7a518d69dcca14cb669398de968b3a, type: 2}
-  - {fileID: 11400000, guid: f0c586d33b5b94e46aecb2b7f82ee26e, type: 2}
+  - {fileID: 11400000, guid: adfe0e4f16aa7ac4cbad252104e84c23, type: 2}
+  - {fileID: 11400000, guid: f0f96ce61aad82b43b05949681f47cc6, type: 2}
+  - {fileID: 11400000, guid: 6a3aedb96b39184418108355b6ea46fa, type: 2}
   fallbackTopic: 
   clueReward: {fileID: 0}
   completeStoryEvent: 
@@ -11224,9 +11224,9 @@ MonoBehaviour:
   obstacleId: final_lock_a
   displayName: Security Lock A
   questions:
-  - {fileID: 11400000, guid: fa26b0dbe02f612438f9e367bbe1b1cf, type: 2}
-  - {fileID: 11400000, guid: cc17c38183510d04880011f420dfe295, type: 2}
-  - {fileID: 11400000, guid: 7fda6a679bd055c43ae207350fb9aaaa, type: 2}
+  - {fileID: 11400000, guid: ee65daab43bc32e479d6d78ff64cd5b5, type: 2}
+  - {fileID: 11400000, guid: 8f3bec7a7ec55164c90da90ea3a982b7, type: 2}
+  - {fileID: 11400000, guid: 9f25c18c64632ca4fbe0473c2b2ec53b, type: 2}
   fallbackTopic: 
   clueReward: {fileID: 0}
   completeStoryEvent: 
@@ -21047,9 +21047,9 @@ MonoBehaviour:
   obstacleId: final_lock_b
   displayName: Security Lock B
   questions:
-  - {fileID: 11400000, guid: 319ef014ebcf5134cbaee525b73ff280, type: 2}
-  - {fileID: 11400000, guid: 0266971e821956c40a58e0ceb7cba035, type: 2}
-  - {fileID: 11400000, guid: 5a8a768a6696baf4eba6f8cf427d599c, type: 2}
+  - {fileID: 11400000, guid: 14dcc98bcd5037749bbc4cceb674fe18, type: 2}
+  - {fileID: 11400000, guid: 94b8938c028146e4fa523920e69c4132, type: 2}
+  - {fileID: 11400000, guid: b5b8f83431e0d5b4e9e23c91be290dea, type: 2}
   fallbackTopic: 
   clueReward: {fileID: 0}
   completeStoryEvent: 

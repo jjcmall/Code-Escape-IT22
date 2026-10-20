@@ -19,6 +19,7 @@ MonoBehaviour:
   relatedQuestionIds:
   - SQL_09_GROUP_BY
   - HZ_SQL_06_GROUP_BY
+  - SQL_TYPE_06_GROUP_BY
   topics:
   - GROUP BY
   definition: GROUP BY puts rows that have the same value in a column into groups,

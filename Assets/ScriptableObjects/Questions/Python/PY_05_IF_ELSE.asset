@@ -17,29 +17,27 @@ MonoBehaviour:
   topic: If / Else
   difficulty: 0
   questionType: 3
-  questionText: This code stops with a SyntaxError. How do you fix it?
-  code: "battery = 15\nif battery < 20\n    print(\"Low battery!\")\nelse:\n    print(\"Battery
-    okay\")"
-  answerFormat: 0
-  choices:
-  - Add a colon (:) to the end of the line  if battery < 20
-  - Change < to <=
-  - Put quotes around 15
-  - 'Delete the else: line'
+  questionText: The line  if battery < 20  causes a SyntaxError. Type the corrected
+    line.
+  code: "____\n    print(\"Low battery!\")\nelse:\n    print(\"Battery okay\")"
+  answerFormat: 2
+  choices: []
   correctChoiceIndex: 0
   monospaceChoices: 0
   acceptedAnswers: []
   caseSensitive: 1
+  referenceFill: 'if battery < 20:'
+  runTests:
+  - setup: battery = 15
+    expectedOutput: Low battery!
+  - setup: battery = 25
+    expectedOutput: Battery okay
+  - setup: battery = 20
+    expectedOutput: Battery okay
   explanation: 'In Python every if, elif and else line must end with a colon. The
     fixed line is  if battery < 20:  and the program then prints Low battery!'
   hint: 'Compare the if line with the else line. What does else: have that the if
     line is missing?'
-  wrongChoiceFeedback:
-  - 
-  - < is a valid comparison, so changing it won't fix a SyntaxError. Something is
-    missing from how the if line is written - compare it with the else line.
-  - battery = 15 is a correct number. Quotes would turn it into text, and comparing
-    text with 20 would cause a different error.
-  - 'The else: line is written correctly. Deleting it would change what the program
-    does, but the if line would still be broken.'
-  wrongAnswerFeedback: 
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: 'Compare your line with the else: line. Keep the same condition,
+    and check the end of the line.'

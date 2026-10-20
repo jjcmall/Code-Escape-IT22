@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1833b97b4e8284e489c3555d5dace838, type: 3}
+  m_Name: PY_RUN_02_ARITHMETIC
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.QuestionData
+  id: PY_RUN_02_ARITHMETIC
+  language: 1
+  topic: Arithmetic
+  difficulty: 0
+  questionType: 2
+  questionText: A shop sells items at a price each. Fill in the blank so total is
+    the price multiplied by the quantity.
+  code: 'total = ____
+
+    print(total)'
+  answerFormat: 2
+  choices: []
+  correctChoiceIndex: 0
+  monospaceChoices: 0
+  acceptedAnswers: []
+  caseSensitive: 1
+  referenceFill: price * quantity
+  runTests:
+  - setup: 'price = 2
+
+      quantity = 7'
+    expectedOutput: 14
+  - setup: 'price = 5
+
+      quantity = 3'
+    expectedOutput: 15
+  - setup: 'price = 10
+
+      quantity = 0'
+    expectedOutput: 0
+  explanation: '* multiplies numbers in Python. price * quantity gives the cost of
+    every item together, whatever the price and quantity are.'
+  hint: Which operator multiplies two numbers?
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: Use the variables price and quantity (not fixed numbers) and
+    the operator that multiplies.

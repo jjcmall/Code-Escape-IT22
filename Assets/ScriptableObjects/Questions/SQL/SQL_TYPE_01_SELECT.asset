@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1833b97b4e8284e489c3555d5dace838, type: 3}
+  m_Name: SQL_TYPE_01_SELECT
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.QuestionData
+  id: SQL_TYPE_01_SELECT
+  language: 3
+  topic: SELECT
+  difficulty: 0
+  questionType: 2
+  questionText: Type the column name so the query shows only the witness of every
+    sighting.
+  code: 'Table: sightings
+
+    +----+----------+-------+---------+
+
+    | id | location
+    | time  | witness |
+
+    +----+----------+-------+---------+
+
+    |  1 | Park    
+    | 15:10 | Mia     |
+
+    |  2 | Library  | 15:40 | Leo     |
+
+    |  3 | Bus
+    Stop | 16:05 | Ana     |
+
+    |  4 | Arcade   | 15:25 | Leo     |
+
+    +----+----------+-------+---------+
+
+
+    SELECT
+    ____ FROM sightings;'
+  answerFormat: 1
+  choices: []
+  correctChoiceIndex: 0
+  monospaceChoices: 0
+  acceptedAnswers:
+  - witness
+  caseSensitive: 0
+  referenceFill: 
+  runTests: []
+  explanation: SELECT lists the columns you want to see. SELECT witness FROM sightings
+    shows only the witness column for every row.
+  hint: SELECT is followed by the name of the column to show. Which column holds
+    the names of the people?
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: Type just the column name that holds the witness names. Check
+    the spelling against the table header.

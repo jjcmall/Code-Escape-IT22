@@ -25344,7 +25344,7 @@ MonoBehaviour:
   obstacleId: home_hallway_door
   displayName: Locked Door
   questions:
-  - {fileID: 11400000, guid: 906f921e3d9e2db4d885ab337ccc9ac1, type: 2}
+  - {fileID: 11400000, guid: 5d428aa6d6cd38e43a0bc93da0636f85, type: 2}
   - {fileID: 11400000, guid: c861198a0b71d074382e282a0937ecc3, type: 2}
   - {fileID: 11400000, guid: e61c596ea128add48b610d76a0d9616e, type: 2}
   fallbackTopic: 
