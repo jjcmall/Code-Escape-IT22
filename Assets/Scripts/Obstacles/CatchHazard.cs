@@ -226,6 +226,11 @@ namespace CodeEscape.Obstacles
                 if (candidates.Count == 0)
                     candidates.AddRange(database.GetQuestions(language));
 
+                // Typing code under pressure isn't fair: hazards keep to quick choice and typed-answer questions.
+                List<QuestionData> quick = candidates.FindAll(q => !q.IsRunCode);
+                if (quick.Count > 0)
+                    candidates = quick;
+
                 // Gradual difficulty: in the first half of the game hazards only ask Easy questions (when
                 // there are any); later levels mix in the harder ones as well.
                 if (difficulty == HazardDifficulty.Any && candidates.Count > 1 && IsEarlyLevel())

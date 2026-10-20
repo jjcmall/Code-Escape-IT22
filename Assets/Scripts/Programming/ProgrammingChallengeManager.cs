@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using CodeEscape.Execution;
 using CodeEscape.Game;
 using CodeEscape.Obstacles;
 using CodeEscape.UI;
@@ -213,6 +214,48 @@ namespace CodeEscape.Programming
                 Evaluate(activeQuestion.IsCorrectTypedAnswer(answer), -1);
         }
 
+        /// <summary>
+        /// Run Code questions: runs the player's fill against every test in the sandboxed interpreter and
+        /// checks the printed output. The code never leaves the interpreter (no files, network or imports).
+        /// </summary>
+        public void SubmitCode(string fill)
+        {
+            if (!CanAnswer() || !activeQuestion.IsRunCode)
+                return;
+
+            string problem = CodeRunner.ValidateFill(fill);
+            if (problem != null)
+            {
+                challengeUI.ShowRunOutput(problem, true);
+                return;
+            }
+
+            JudgeResult judged = CodeRunner.Judge(activeQuestion.Code, fill, activeQuestion.RunTests);
+            string detail = judged.Passed ? null : judged.Message;
+            if (!judged.Passed)
+            {
+                string tip = activeQuestion.GetWrongAnswerFeedback(-1);
+                if (!string.IsNullOrWhiteSpace(tip))
+                    detail += "\n\n" + tip;
+            }
+            Evaluate(judged.Passed, -1, detail);
+        }
+
+        /// <summary>Runs the fill with the first test's setup and shows what it prints. Not an answer: no score, no penalty.</summary>
+        public void RunPreview(string fill)
+        {
+            if (!CanAnswer() || !activeQuestion.IsRunCode)
+                return;
+
+            RunTest[] tests = activeQuestion.RunTests;
+            string setup = tests != null && tests.Length > 0 ? tests[0].setup : null;
+            RunResult result = CodeRunner.RunWithSetup(activeQuestion.Code, fill, setup);
+            if (!result.Success)
+                challengeUI.ShowRunOutput(result.ErrorLine > 0 ? "Line " + result.ErrorLine + ": " + result.Error : result.Error, true);
+            else
+                challengeUI.ShowRunOutput(string.IsNullOrEmpty(result.Output.Trim()) ? "(nothing was printed)" : result.Output.TrimEnd(), false);
+        }
+
         /// <summary>Shows the hint. The penalty applies the first time each question's hint is used.</summary>
         public void UseHint()
         {
@@ -304,7 +347,7 @@ namespace CodeEscape.Programming
         }
 
         // choiceIndex is the picked choice, or -1 for a typed answer.
-        void Evaluate(bool correct, int choiceIndex)
+        void Evaluate(bool correct, int choiceIndex, string feedbackOverride = null)
         {
             int pointsAwarded = 0;
             if (correct)
@@ -324,8 +367,14 @@ namespace CodeEscape.Programming
             // A correct answer explains why it is right. A wrong one explains the mistake in the chosen
             // answer instead, so the right answer isn't given away and the player can try again.
             string feedback = correct ? activeQuestion.Explanation : activeQuestion.GetWrongAnswerFeedback(choiceIndex);
+            if (!correct && !string.IsNullOrWhiteSpace(feedbackOverride))
+                feedback = feedbackOverride;
             if (!correct && string.IsNullOrWhiteSpace(feedback))
                 feedback = WrongAnswerFallback;
+            // Predict the output: after a correct prediction, show what the code really printed when the game ran it.
+            // (Never after a wrong one, which would give the answer away.)
+            if (correct && activeQuestion.TryGetRealOutput(out string realOutput))
+                feedback += $"\n\n<color=#4ADE80>The game ran the code. It printed: <noparse>{realOutput.Replace("\n", " / ")}</noparse></color>";
 
             Debug.Log($"[Challenge] {activeQuestion.Id} answered {(correct ? "correctly" : "incorrectly")}. Score {score}");
             challengeUI.ShowResult(correct, feedback, pointsAwarded, correct ? activeSource.ClueRewardText : null, activeSource.IsMandatory);

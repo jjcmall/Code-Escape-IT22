@@ -1,4 +1,5 @@
 using TMPro;
+using CodeEscape.Execution;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -39,6 +40,13 @@ namespace CodeEscape.UI
         [SerializeField] TMP_Text[] choiceLabels = new TMP_Text[QuestionData.MaxChoices];
         [SerializeField] GameObject typedAnswerRoot;
         [SerializeField] TMP_InputField answerInput;
+        [SerializeField, Tooltip("The line above the input box (e.g. 'Type your answer').")]
+        TMP_Text answerPrompt;
+        [SerializeField, Tooltip("Run Code questions: runs the typed code and shows what it prints (does not count as an answer).")]
+        Button runButton;
+        [SerializeField, Tooltip("Run Code questions: the console that shows the printed output or an error.")]
+        GameObject outputPanel;
+        [SerializeField] TMP_Text outputText;
 
         [Header("Result")]
         [SerializeField] GameObject resultRoot;
@@ -104,6 +112,11 @@ namespace CodeEscape.UI
         bool caught;
         bool questionShown;
         string continueDefault;
+        string submitDefault;
+        string promptDefault;
+        string placeholderDefault;
+        Vector2 inputDefaultPosition;
+        Vector2 inputDefaultSize;
         Color borderDefault;
         Color glowDefault;
 
@@ -115,7 +128,8 @@ namespace CodeEscape.UI
         public LessonData Lesson => lesson;
 
         ProgrammingChallengeManager Manager => manager != null ? manager : ProgrammingChallengeManager.Instance;
-        bool IsTyped => question != null && question.AnswerFormat == AnswerFormat.TypedAnswer;
+        bool IsRunCode => question != null && question.AnswerFormat == AnswerFormat.RunCode;
+        bool IsTyped => question != null && (question.AnswerFormat == AnswerFormat.TypedAnswer || question.AnswerFormat == AnswerFormat.RunCode);
 
         void Awake()
         {
@@ -123,6 +137,18 @@ namespace CodeEscape.UI
                 overlay.SetActive(false);
             if (continueLabel != null)
                 continueDefault = continueLabel.text;
+            if (submitButton != null && submitButton.GetComponentInChildren<TMP_Text>(true) != null)
+                submitDefault = submitButton.GetComponentInChildren<TMP_Text>(true).text;
+            if (answerPrompt != null)
+                promptDefault = answerPrompt.text;
+            if (answerInput != null)
+            {
+                var inputRect = (RectTransform)answerInput.transform;
+                inputDefaultPosition = inputRect.anchoredPosition;
+                inputDefaultSize = inputRect.sizeDelta;
+                if (answerInput.placeholder is TMP_Text placeholder)
+                    placeholderDefault = placeholder.text;
+            }
             if (windowBorder != null)
                 borderDefault = windowBorder.color;
             if (windowGlow != null)
@@ -165,7 +191,8 @@ namespace CodeEscape.UI
 
             bool hasCode = !string.IsNullOrWhiteSpace(data.Code);
             codePanel.SetActive(hasCode);
-            codeText.text = hasCode ? string.Format(CodeFormat, data.Code) : string.Empty;
+            codeText.text = hasCode ? (IsRunCode ? BuildRunCodeView(string.Empty) : string.Format(CodeFormat, data.Code)) : string.Empty;
+            SetActive(outputPanel, false);
 
             for (int i = 0; i < choiceButtons.Length; i++)
             {
@@ -197,6 +224,10 @@ namespace CodeEscape.UI
 
             choicesRoot.SetActive(!IsTyped);
             typedAnswerRoot.SetActive(IsTyped);
+            SetActive(runButton, IsRunCode);
+            ApplyAnswerLayout();
+            if (!IsRunCode)
+                SetActive(outputPanel, false);
             resultRoot.SetActive(false);
 
             submitButton.gameObject.SetActive(true);
@@ -315,12 +346,18 @@ namespace CodeEscape.UI
         public void OnAnswerTextChanged(string text)
         {
             UpdateSubmitState();
+            if (IsRunCode)
+                codeText.text = BuildRunCodeView(text);
         }
 
         /// <summary>Enter pressed in the typed-answer field.</summary>
         public void OnAnswerSubmitted(string text)
         {
-            OnSubmitClicked();
+            // Enter on a Run Code question previews the code; CHECK is a deliberate button press.
+            if (IsRunCode)
+                OnRunClicked();
+            else
+                OnSubmitClicked();
         }
 
         public void OnSubmitClicked()
@@ -328,7 +365,12 @@ namespace CodeEscape.UI
             if (question == null || IsLessonOpen || !submitButton.gameObject.activeInHierarchy || Manager == null)
                 return;
 
-            if (IsTyped)
+            if (IsRunCode)
+            {
+                if (!string.IsNullOrWhiteSpace(answerInput.text))
+                    Manager.SubmitCode(answerInput.text);
+            }
+            else if (IsTyped)
             {
                 if (!string.IsNullOrWhiteSpace(answerInput.text))
                     Manager.SubmitTypedAnswer(answerInput.text);
@@ -337,6 +379,24 @@ namespace CodeEscape.UI
             {
                 Manager.SubmitChoice(selectedChoice);
             }
+        }
+
+        /// <summary>RUN: previews the typed code. Not an answer - no score and no penalty.</summary>
+        public void OnRunClicked()
+        {
+            if (question == null || IsLessonOpen || !IsRunCode || Manager == null || !runButton.gameObject.activeInHierarchy)
+                return;
+            Manager.RunPreview(answerInput.text);
+        }
+
+        /// <summary>Shows the output console under the code (called by the manager).</summary>
+        public void ShowRunOutput(string text, bool isError)
+        {
+            SetActive(outputPanel, true);
+            if (outputText == null)
+                return;
+            outputText.text = "<noparse>" + text + "</noparse>";
+            outputText.color = isError ? incorrectColor : correctColor;
         }
 
         // Hint, Retry and Continue sit behind the learning card while it is open; ignore them then
@@ -409,6 +469,43 @@ namespace CodeEscape.UI
             }
             lessonPanel.SetActive(true);
             UIFocus.Select(lessonContinueButton);
+        }
+
+        // The template with the blank replaced by what the player has typed so far, and the first test's setup above it.
+        string BuildRunCodeView(string typed)
+        {
+            var sb = new System.Text.StringBuilder();
+            RunTest[] tests = question.RunTests;
+            if (tests != null && tests.Length > 0 && !string.IsNullOrWhiteSpace(tests[0].setup))
+                sb.Append("<color=#8B98A5><noparse>").Append(tests[0].setup.Trim()).Append("</noparse></color>\n");
+            string template = question.Code;
+            int at = template.IndexOf(CodeRunner.Blank, System.StringComparison.Ordinal);
+            if (at < 0)
+                sb.Append("<noparse>").Append(template).Append("</noparse>");
+            else
+            {
+                string shown = string.IsNullOrWhiteSpace(typed) ? CodeRunner.Blank : typed.Trim();
+                sb.Append("<noparse>").Append(template.Substring(0, at)).Append("</noparse>")
+                  .Append("<color=#4ADE80><noparse>").Append(shown).Append("</noparse></color>")
+                  .Append("<noparse>").Append(template.Substring(at + CodeRunner.Blank.Length)).Append("</noparse>");
+            }
+            // Not CodeFormat: it wraps everything in <noparse>, which would also show the colour tags as text.
+            return "<mspace=0.66em>" + sb + "</mspace>";
+        }
+
+        // Run Code questions put the input on the left, RUN beside it and the output console on the right.
+        void ApplyAnswerLayout()
+        {
+            var inputRect = (RectTransform)answerInput.transform;
+            inputRect.anchoredPosition = IsRunCode ? new Vector2(-460f, inputDefaultPosition.y) : inputDefaultPosition;
+            inputRect.sizeDelta = IsRunCode ? new Vector2(600f, inputDefaultSize.y) : inputDefaultSize;
+            if (answerPrompt != null)
+                answerPrompt.text = IsRunCode ? "Type the missing code, then press RUN to try it, or CHECK to submit it." : promptDefault;
+            if (answerInput.placeholder is TMP_Text placeholder)
+                placeholder.text = IsRunCode ? "Type the code for the blank..." : placeholderDefault;
+            TMP_Text submitLabel = submitButton.GetComponentInChildren<TMP_Text>(true);
+            if (submitLabel != null)
+                submitLabel.text = IsRunCode ? "CHECK" : submitDefault;
         }
 
         void RefreshChoiceColours()

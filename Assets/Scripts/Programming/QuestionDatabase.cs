@@ -85,7 +85,7 @@ namespace CodeEscape.Programming
             return null;
         }
 
-        /// <summary>Lists authoring problems (empty entries, invalid questions or lessons, duplicate IDs, questions without a lesson).</summary>
+        /// <summary>Lists authoring problems (empty entries, invalid questions or lessons, duplicate IDs, multiple-choice questions, questions without a lesson).</summary>
         public List<string> Validate()
         {
             var problems = new List<string>();
@@ -104,6 +104,8 @@ namespace CodeEscape.Programming
                     problems.Add($"{question.name}: {error}");
                 if (!string.IsNullOrEmpty(question.Id) && !ids.Add(question.Id))
                     problems.Add($"{question.name}: duplicate ID '{question.Id}'");
+                if (question.AnswerFormat == AnswerFormat.Choices)
+                    problems.Add($"{question.name}: uses multiple choice (questions should be typed)");
                 if (lessons.Count > 0 && FindLesson(question) == null)
                     problems.Add($"{question.name}: no lesson teaches this question");
             }

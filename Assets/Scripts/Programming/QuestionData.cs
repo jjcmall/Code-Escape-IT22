@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using CodeEscape.Execution;
 using UnityEngine;
 
 namespace CodeEscape.Programming
@@ -20,16 +21,22 @@ namespace CodeEscape.Programming
         Hard = 2
     }
 
-    /// <summary>How the player answers: by picking one of the choices, or by typing a short answer.</summary>
+    /// <summary>
+    /// How the player answers. All current questions are typed (TypedAnswer or RunCode); Choices is kept
+    /// only so older assets still load, and QuestionDatabase.Validate() flags any question that uses it.
+    /// </summary>
     public enum AnswerFormat
     {
         Choices = 0,
-        TypedAnswer = 1
+        TypedAnswer = 1,
+        /// <summary>Fill the blank in a short Python snippet; it is run in the game's sandboxed interpreter.</summary>
+        RunCode = 2
     }
 
     /// <summary>
     /// One predefined programming question. Answers are only compared with the stored correct answer:
-    /// player input is never compiled or executed, and SQL questions use fictional sample tables.
+    /// typed text is never compiled or run by Unity or the system. Run Code questions use the game's own limited
+    /// Python interpreter (CodeRunner), and SQL questions use fictional sample tables.
     /// </summary>
     [CreateAssetMenu(fileName = "Question", menuName = "Code Escape/Question Data")]
     public class QuestionData : ScriptableObject
@@ -63,6 +70,12 @@ namespace CodeEscape.Programming
         [SerializeField, Tooltip("Typed format: must upper/lower case match exactly?")]
         bool caseSensitive = true;
 
+        [Header("Run Code format")]
+        [SerializeField, Tooltip("The correct fill for the blank. Only used to check the question at authoring time.")]
+        string referenceFill;
+        [SerializeField, Tooltip("Run Code format: the Code field is the template and must contain one ____ blank. Each test runs it after its setup lines and compares the printed output.")]
+        RunTest[] runTests = new RunTest[0];
+
         [Header("Feedback")]
         [SerializeField, TextArea(2, 6), Tooltip("Shown after a correct answer: why the answer is right.")]
         string explanation;
@@ -86,7 +99,31 @@ namespace CodeEscape.Programming
         public bool MonospaceChoices => monospaceChoices;
         public string Explanation => explanation;
         public string Hint => hint;
+        public string ReferenceFill => referenceFill;
+        public RunTest[] RunTests => runTests;
+        public bool IsRunCode => answerFormat == AnswerFormat.RunCode;
         public bool HasHint => !string.IsNullOrWhiteSpace(hint);
+
+        /// <summary>
+        /// Python "predict the output" questions are checked by running their code in the game's interpreter
+        /// and comparing the player's prediction with what it really prints (the stored accepted answers are
+        /// only used if the code can't be run).
+        /// </summary>
+        public bool ChecksByRunning => answerFormat == AnswerFormat.TypedAnswer && questionType == QuestionType.PredictOutput
+            && language == ProgrammingLanguage.Python && !string.IsNullOrWhiteSpace(code);
+
+        /// <summary>Runs the question's code and returns what it prints. False when it can't be run.</summary>
+        public bool TryGetRealOutput(out string output)
+        {
+            output = null;
+            if (!ChecksByRunning)
+                return false;
+            RunResult run = CodeRunner.Run(code);
+            if (!run.Success)
+                return false;
+            output = run.Output.TrimEnd('\n', '\r', ' ');
+            return true;
+        }
 
         /// <summary>
         /// Feedback for a wrong answer: what the chosen answer gets wrong, without revealing the right one.
@@ -116,10 +153,21 @@ namespace CodeEscape.Programming
                 return false;
 
             string given = NormalizeAnswer(answer);
+            string givenCode = CodeText.Squash(answer);
             StringComparison comparison = caseSensitive ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
+
+            // Predict the output: the real output of the code decides (several printed lines may be typed on one line).
+            if (TryGetRealOutput(out string realOutput))
+                return string.Equals(given, NormalizeAnswer(realOutput), comparison);
+
             foreach (string accepted in acceptedAnswers)
             {
-                if (!string.IsNullOrWhiteSpace(accepted) && string.Equals(given, NormalizeAnswer(accepted), comparison))
+                if (string.IsNullOrWhiteSpace(accepted))
+                    continue;
+                // Exact (ignoring spacing) first; then the code-aware form, which also ignores spaces around
+                // symbols and a final semicolon, so "age>3;" matches "age > 3".
+                if (string.Equals(given, NormalizeAnswer(accepted), comparison)
+                    || string.Equals(givenCode, CodeText.Squash(accepted), comparison))
                     return true;
             }
             return false;
@@ -171,6 +219,14 @@ namespace CodeEscape.Programming
                     if (string.IsNullOrWhiteSpace(choices[i])) return $"choice {i} is empty";
                 }
             }
+            else if (answerFormat == AnswerFormat.RunCode)
+            {
+                if (string.IsNullOrEmpty(code) || !code.Contains(CodeRunner.Blank)) return "Run Code needs a code template containing ____";
+                if (runTests == null || runTests.Length == 0) return "Run Code needs at least one test";
+                if (string.IsNullOrWhiteSpace(referenceFill)) return "Run Code needs a reference fill";
+                JudgeResult check = CodeRunner.Judge(code, referenceFill, runTests);
+                if (!check.Passed) return "the reference fill fails its own tests: " + check.Message.Replace('\n', ' ');
+            }
             else
             {
                 bool any = false;
@@ -180,6 +236,16 @@ namespace CodeEscape.Programming
                         any |= !string.IsNullOrWhiteSpace(accepted);
                 }
                 if (!any) return "no accepted typed answers";
+
+                // Python is checked by running code: typed Python questions must be runnable predict-the-output ones.
+                if (language == ProgrammingLanguage.Python)
+                {
+                    if (!ChecksByRunning) return "Python typed questions must be Predict the Output with code (use Run Code for writing code)";
+                    if (!TryGetRealOutput(out string output)) return "its code doesn't run in the game's Python interpreter";
+                    if (!string.Equals(NormalizeAnswer(acceptedAnswers[0]), NormalizeAnswer(output),
+                            caseSensitive ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase))
+                        return $"its first accepted answer doesn't match the real output '{output}'";
+                }
             }
             return null;
         }
@@ -194,8 +260,8 @@ namespace CodeEscape.Programming
                 case QuestionType.PredictOutput: return "Predict the Output";
                 case QuestionType.FillMissingCode: return "Fill in the Missing Code";
                 case QuestionType.FixIncorrectCode: return "Fix the Incorrect Code";
-                case QuestionType.ChooseCorrectCode: return "Choose the Correct Code";
-                default: return "Multiple Choice";
+                case QuestionType.ChooseCorrectCode: return "Write the Correct Code";
+                default: return "Concept Check";
             }
         }
     }
