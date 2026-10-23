@@ -75,6 +75,13 @@ namespace CodeEscape.Programming
         string referenceFill;
         [SerializeField, Tooltip("Run Code format: the Code field is the template and must contain one ____ blank. Each test runs it after its setup lines and compares the printed output.")]
         RunTest[] runTests = new RunTest[0];
+        [SerializeField, Tooltip("Fix the Bug: the wrong line SENTINEL planted in the blank. It starts in the answer box and must fail the tests.")]
+        string buggyFill;
+
+        [Header("World effect")]
+        [SerializeField, Tooltip("Optional: the CodeEffect on the lock that shows this program's output in the level " +
+            "(\"keypad\", \"counter\" or \"lasers\"). Empty = no effect.")]
+        string effectId;
 
         [Header("Feedback")]
         [SerializeField, TextArea(2, 6), Tooltip("Shown after a correct answer: why the answer is right.")]
@@ -102,6 +109,10 @@ namespace CodeEscape.Programming
         public string ReferenceFill => referenceFill;
         public RunTest[] RunTests => runTests;
         public bool IsRunCode => answerFormat == AnswerFormat.RunCode;
+        public string BuggyFill => buggyFill;
+        /// <summary>Fix the Bug: a Run Code question whose blank starts filled with a planted bug the player repairs.</summary>
+        public bool IsBugFix => IsRunCode && !string.IsNullOrWhiteSpace(buggyFill);
+        public string EffectId => effectId;
         public bool HasHint => !string.IsNullOrWhiteSpace(hint);
 
         /// <summary>
@@ -123,6 +134,39 @@ namespace CodeEscape.Programming
                 return false;
             output = run.Output.TrimEnd('\n', '\r', ' ');
             return true;
+        }
+
+        /// <summary>The full answer, for SHOW ANSWER: the code for the blank, or what the code prints (lines on one line).</summary>
+        public string GetRevealedAnswer()
+        {
+            if (IsRunCode)
+                return referenceFill ?? string.Empty;
+            if (TryGetRealOutput(out string output))
+                return output.Replace("\r", string.Empty).Replace("\n", " ");
+            return acceptedAnswers != null && acceptedAnswers.Length > 0 ? acceptedAnswers[0] : string.Empty;
+        }
+
+        /// <summary>
+        /// The first part of the answer, for SHOW START (e.g. "price * ..."), or null when the answer is too short
+        /// to show part of it without giving it all away.
+        /// </summary>
+        public string GetStarter()
+        {
+            string answer = IsRunCode ? referenceFill : null;
+            if (!IsRunCode && TryGetRealOutput(out string output))
+            {
+                string[] lines = output.Replace("\r", string.Empty).Split('\n');
+                if (lines.Length > 1)
+                    return lines[0].Trim() + " ...";
+                answer = output;
+            }
+            answer = answer?.Trim();
+            if (string.IsNullOrEmpty(answer) || answer.Length < 4)
+                return null;
+            string[] words = answer.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            if (words.Length > 1)
+                return string.Join(" ", words, 0, (words.Length + 1) / 2) + " ...";
+            return answer.Substring(0, (answer.Length + 1) / 2) + "...";
         }
 
         /// <summary>
@@ -209,6 +253,7 @@ namespace CodeEscape.Programming
             if (!language.IsValid()) return "language is not set";
             if (string.IsNullOrWhiteSpace(questionText)) return "missing question text";
             if (string.IsNullOrWhiteSpace(explanation)) return "missing explanation";
+            if (!string.IsNullOrEmpty(effectId) && !Obstacles.CodeEffect.IsKnown(effectId)) return $"unknown world effect '{effectId}'";
 
             if (answerFormat == AnswerFormat.Choices)
             {
@@ -226,7 +271,11 @@ namespace CodeEscape.Programming
                 if (string.IsNullOrWhiteSpace(referenceFill)) return "Run Code needs a reference fill";
                 JudgeResult check = CodeRunner.Judge(code, referenceFill, runTests);
                 if (!check.Passed) return "the reference fill fails its own tests: " + check.Message.Replace('\n', ' ');
+                if (!string.IsNullOrWhiteSpace(buggyFill) && CodeRunner.Judge(code, buggyFill, runTests).Passed)
+                    return "the planted bug passes the tests, so there is nothing to fix";
             }
+            else if (!string.IsNullOrWhiteSpace(buggyFill))
+                return "only Run Code questions can have a planted bug";
             else
             {
                 bool any = false;
@@ -259,7 +308,7 @@ namespace CodeEscape.Programming
             {
                 case QuestionType.PredictOutput: return "Predict the Output";
                 case QuestionType.FillMissingCode: return "Fill in the Missing Code";
-                case QuestionType.FixIncorrectCode: return "Fix the Incorrect Code";
+                case QuestionType.FixIncorrectCode: return "Fix the Bug";
                 case QuestionType.ChooseCorrectCode: return "Write the Correct Code";
                 default: return "Concept Check";
             }

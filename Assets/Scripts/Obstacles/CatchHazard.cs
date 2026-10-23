@@ -65,6 +65,10 @@ namespace CodeEscape.Obstacles
         Transform releasePoint;
         [SerializeField, Min(0f), Tooltip("Seconds after escaping during which no hazard can catch Alex.")]
         float graceSeconds = 2f;
+        [SerializeField, Tooltip("A one-time trap (e.g. a SENTINEL bug trap): once escaped it switches off for the rest of the session.")]
+        bool disarmWhenEscaped;
+        [SerializeField, Tooltip("Hidden when the trap is disarmed (its glow, warning lights).")]
+        GameObject[] armedVisuals = new GameObject[0];
 
         [Header("Rewards (optional, first escape only)")]
         [SerializeField] ClueData clueReward;
@@ -72,6 +76,8 @@ namespace CodeEscape.Obstacles
         string completeStoryEvent;
 
         static readonly Dictionary<string, int> NextQuestion = new Dictionary<string, int>();
+        // One-time traps already escaped this session (by hazard ID), so they stay off when the level is reloaded.
+        static readonly HashSet<string> Disarmed = new HashSet<string>();
         static float graceUntil = -1f;
 
         Collider2D playerCollider;
@@ -84,7 +90,8 @@ namespace CodeEscape.Obstacles
         public HazardMotion Motion => motion;
         public int TimesCaught => timesCaught;
         public int TimesEscaped => timesEscaped;
-        public bool IsDangerous => motion == null || motion.IsDangerous;
+        public bool IsDangerous => !IsDisarmed && (motion == null || motion.IsDangerous);
+        public bool IsDisarmed => disarmWhenEscaped && Disarmed.Contains(hazardId);
         /// <summary>True while this hazard holds Alex (its challenge is open).</summary>
         public bool IsHoldingPlayer
         {
@@ -110,7 +117,21 @@ namespace CodeEscape.Obstacles
         static void ResetStatics()
         {
             NextQuestion.Clear();
+            Disarmed.Clear();
             graceUntil = -1f;
+        }
+
+        void Start()
+        {
+            if (IsDisarmed)
+                SetArmedVisuals(false);
+        }
+
+        void SetArmedVisuals(bool armed)
+        {
+            foreach (GameObject visual in armedVisuals)
+                if (visual != null)
+                    visual.SetActive(armed);
         }
 
         void Awake()
@@ -298,7 +319,14 @@ namespace CodeEscape.Obstacles
                 if (!string.IsNullOrEmpty(completeStoryEvent) && StoryManager.Instance != null)
                     StoryManager.Instance.CompleteEvent(completeStoryEvent);
             }
-            if (NotificationUI.Instance != null)
+            if (disarmWhenEscaped)
+            {
+                Disarmed.Add(hazardId);
+                SetArmedVisuals(false);
+                if (NotificationUI.Instance != null)
+                    NotificationUI.Instance.Show("BUG FIXED!", $"The {displayName.ToLowerInvariant()} is switched off for good.", new Color(0.29f, 0.87f, 0.5f), 2.5f);
+            }
+            else if (NotificationUI.Instance != null)
                 NotificationUI.Instance.Show("ESCAPED!", $"Watch the {displayName.ToLowerInvariant()} - time your move.", new Color(0.29f, 0.87f, 0.5f), 2.5f);
             Debug.Log($"[Hazard] Escaped from '{displayName}' ({hazardId})");
         }

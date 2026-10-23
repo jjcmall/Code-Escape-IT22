@@ -20,7 +20,7 @@ Text in [brackets] must be filled in by the team with true information before th
 
 ## Slide 4 - How the game works (1 minute)
 **Say:**
-"The player explores a level in 2D, with a 3D look, which is why we call it 2.5D. There are two kinds of challenges. **Code locks** are doors the player chooses to open. **Hazards**, like lasers and patrol bots, catch the player and force a challenge that must be answered to escape. Every correct lock earns 100 points and a clue. Using a hint costs 25 points."
+"The player explores a level in 2D, with a 3D look, which is why we call it 2.5D. There are two kinds of challenges. **Code locks** are doors the player chooses to open. **Hazards**, like lasers and patrol bots, catch the player and force a challenge that must be answered to escape. Every correct lock earns 100 points and a clue. Using a hint costs 25 points. Nobody stays stuck: after three wrong answers the hint is free and the game can show how the answer starts, and after five it can show the whole answer - the player still runs it and reads why it works, but earns no points for it."
 
 ## Slide 5 - Our learn-before-you-answer design (1.5 minutes)
 **Say:**
@@ -31,8 +31,8 @@ We cover 10 Python concepts: variables, data types, arithmetic, comparison, if/e
 
 ## Slide 6 - Content and safety (1 minute)
 **Say:**
-"The game is Python only, and every challenge is checked by running code. It has 29 Python challenges and 10 lesson cards. [The questions were reviewed by (name/role) - SAY THIS ONLY IF TRUE.]
-There are two kinds of challenge. In **Run Code** challenges (every door, 21 in total), the player types the missing code, presses RUN to see what it prints, and presses CHECK; the game runs it against several hidden test cases, so typing the answer value doesn't pass. In **Predict the Output** challenges (used by hazards, 8 in total), the player types what the code will print, and the game runs the code to check the prediction, then shows the real output.
+"The game is Python only, and every challenge is checked by running code. It has 32 Python challenges and 10 lesson cards. [The questions were reviewed by (name/role) - SAY THIS ONLY IF TRUE.]
+There are two kinds of challenge. In **Run Code** challenges (every door, plus three bug traps, 24 in total), the player types the missing code, presses RUN to see what it prints, and presses CHECK; the game runs it against several hidden test cases, so typing the answer value doesn't pass. In the three bug traps, SENTINEL has already filled the blank with a bug, and the player has to find and fix it. In **Predict the Output** challenges (used by hazards, 8 in total), the player types what the code will print, and the game runs the code to check the prediction, then shows the real output.
 For safety, the code never runs on the computer itself: it runs in a small Python interpreter we wrote inside the game, which understands beginner Python only, has no file, network or import access, and has limits on steps, time, output and memory, so an endless loop just stops with a friendly message. The content is fixed and managed by the developers, so there is no way to change questions or answers while playing.
 PHP and SQL are planned for future versions; their content is kept in the project but not offered in this version."
 
@@ -41,8 +41,14 @@ PHP and SQL are planned for future versions; their content is kept in the projec
 "At about 70 percent we have:
 - the full core loop: explore, learn, answer, feedback, clue and points;
 - six levels with a level map and progression rules;
-- 29 Python challenges, all checked by running code in our sandboxed interpreter, and 10 lessons;
+- 32 Python challenges, all checked by running code in our sandboxed interpreter, and 10 lessons;
 - scoring, hints and a clue journal called Investigation Logs;
+- nine doors, in every level, where the player's code visibly drives a device by the door (keypad, counters, gate lights, a function machine, a laser grid) - and wrong code shows its wrong result in red;
+- a help ladder so no one gets stuck (free hint, then the start of the answer, then the answer, with no points for a shown answer);
+- excitement: the camera zooms to each device as the player's code plays, a first-try streak badge, and a SENTINEL boss in the final level whose three shields break as the player solves the last three locks;
+- SENTINEL bug traps, where the player fixes planted bugs (including an endless loop), an alarm escape after the last lock of the later levels (red edges, tense music and faster hazards, but coding is never timed), and a "Signal to Sam" meter that grows with each cleared level;
+- 24 achievements and up to 3 stars per level, which reward learning (first tries, fixing code after feedback, playing without hints), never speed;
+- game feel: Alex and SENTINEL reactions, flashes and shakes on answers and hazard catches, and a mission line for every level;
 - saved progress, including Unity Cloud Save with anonymous sign-in;
 - settings, the SDG 4 information screen, cutscenes, dialogue and audio;
 - a redesigned main menu and level map."
@@ -82,8 +88,11 @@ We will also measure learning with a short pre-test and post-test."
 4. Type a **wrong** line on purpose (for example score = 15), press RUN to see what it prints, then CHECK: show that the feedback explains what the code printed without giving the answer. Press **Review Concept**, then **Back to Challenge**, then Retry.
 5. Type the **right** line (score = score + 5) and press CHECK: show the explanation, +100 points and the clue.
    (Second Run Code demo, Warehouse door: type price + quantity, RUN shows 9, CHECK explains it should print 14, then fix it with price * quantity.)
+   After the window closes, point out the **hallway keypad** typing in the code your program printed: "the code the player wrote is what opens the door." (Every level has doors like this: counters, gate lights, a function machine and a laser grid. If you close a window after a wrong CHECK, the device shows the wrong result in red.)
 6. Walk into a hazard (the vacuum or the tripwire): show CAUGHT, type the predicted output, and point out "The game ran the code. It printed: ..." before Alex is released.
-7. Open Investigation Logs to show the collected clue, and (optional) the Cloud Progress panel.
+7. Back on the level map, point out the stars on the cleared level, then open **Achievements** from the main menu to show the badges earned in the demo (for example Debugger and the Variables badge).
+8. Open Investigation Logs to show the collected clue, and (optional) the Cloud Progress panel.
+9. (Optional, if time allows) In the Sentinel Control Room, solve one lock and point out the camera visiting the SENTINEL core as a shield breaks. Then step on the glowing bug trap: press RUN on SENTINEL's line to show the endless loop being stopped safely, fix it to n = n - 1, and CHECK. Point out the "Signal to Sam" meter at the bottom left.
 Tip: use a fresh save for the demo.
 
 ## Likely questions and short answers
@@ -92,6 +101,8 @@ Tip: use a fresh save for the demo.
 - **Can a player break the game by typing code?** The interpreter has no file, network or import access and stops after a fixed number of steps, output size, call depth and time (about half a second). We tested infinite loops, endless recursion, huge numbers and lists, and forbidden names; they all end with an error message. [Say how many automated tests pass when you rehearse: run the Test Runner first.]
 - **How does a question get its lesson card?** Each lesson lists the IDs of the questions it teaches; the challenge manager looks up the lesson when a challenge opens. If none is found it falls back to the topic.
 - **How do you stop players from guessing?** Wrong-answer feedback never reveals the answer, hints cost points, and each question gives points only once.
+- **What if a student is stuck?** After three wrong answers the hint is free and SHOW START gives the first part of the answer; after five, SHOW ANSWER types it in. The student still runs it and reads the explanation, but gets no points, badge or "no hints" star, so the help never pays more than solving.
+- **Doesn't the alarm escape rush students?** No. Only the running is under pressure. Challenge windows pause the game, there is no timer, and being caught just opens the normal challenge.
 - **How is progress saved?** Locally and in Unity Cloud Save with an anonymous ID; the game waits for the cloud to load before play starts.
 - **How will you know students learn?** A short pre-test and post-test around a play session, plus the in-game scores and hint use.
 - **What if there is no internet?** The cloud gate asks the player to connect and offers Retry. [If this is a concern for the panel, mention the plan for an offline mode as future work.]

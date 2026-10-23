@@ -8435,6 +8435,7 @@ Transform:
   - {fileID: 277266701}
   - {fileID: 1038219215}
   - {fileID: 538380248}
+  - {fileID: 1266220111}
   m_Father: {fileID: 1907501945}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &614476462
@@ -15934,6 +15935,109 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1256066730}
   m_Mesh: {fileID: -5927431150484363894, guid: 57e63edcf83ad1c4ebc6cf1bb58951ea, type: 2}
+--- !u!1001 &1266220110
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 608441083}
+    m_Modifications:
+    - target: {fileID: 2686182994378332213, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4315247240271867493, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_Name
+      value: BugTrap
+      objectReference: {fileID: 0}
+    - target: {fileID: 4694130187163152234, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5994199828487023597, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 8.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5994199828487023597, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5994199828487023597, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5994199828487023597, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5994199828487023597, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5994199828487023597, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5994199828487023597, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5994199828487023597, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5994199828487023597, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5994199828487023597, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6092825880112561341, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: hazardId
+      value: st_bugtrap
+      objectReference: {fileID: 0}
+    - target: {fileID: 6092825880112561341, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: displayName
+      value: SENTINEL Bug Trap
+      objectReference: {fileID: 0}
+    - target: {fileID: 6092825880112561341, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: disarmWhenEscaped
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6092825880112561341, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: questions.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6092825880112561341, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: armedVisuals.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6092825880112561341, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: 'questions.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: f6969b0185c095643a305604b304fcb3, type: 2}
+    - target: {fileID: 6092825880112561341, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: 'armedVisuals.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1266220112}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+--- !u!4 &1266220111 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5994199828487023597, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+  m_PrefabInstance: {fileID: 1266220110}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1266220112 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8069503767805108958, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+  m_PrefabInstance: {fileID: 1266220110}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1266252740
 GameObject:
   m_ObjectHideFlags: 0
@@ -22746,6 +22850,7 @@ GameObject:
   - component: {fileID: 1846558057}
   - component: {fileID: 1846558059}
   - component: {fileID: 1846558058}
+  - component: {fileID: 1846558060}
   m_Layer: 0
   m_Name: StationGate
   m_TagString: Untagged
@@ -22853,6 +22958,26 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 3, y: 3.5}
   m_EdgeRadius: 0
+--- !u!114 &1846558060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1846558056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3472255e9ab0ab4f872cfbda138a00b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Obstacles.GateLightEffect
+  effectId: gate
+  offset: {x: 2.7, y: 1.9, z: 3.5}
+  pixelSize: 0.0055
+  standOnPost: 0
+  floorY: -3.5
+  font: {fileID: 11400000, guid: 7943b7691221e8f4a927ad6e611f6537, type: 2}
+  accent: {r: 0.13, g: 0.83, b: 0.93, a: 1}
+  title: PLATFORM GATE
 --- !u!1 &1856483249
 GameObject:
   m_ObjectHideFlags: 0

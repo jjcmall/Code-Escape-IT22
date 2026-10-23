@@ -78,5 +78,7 @@ namespace CodeEscape.Cloud
         /// <summary>ProgressData JSON of the playthrough in progress; empty when none is active.</summary>
         public string progress_json = string.Empty;
         public List<LanguageLevelProgress> level_progress = new List<LanguageLevelProgress>();
+        /// <summary>Lifetime achievement counters, badges and level stars (AchievementProgress as JSON); empty in older saves.</summary>
+        public string achievements_json = string.Empty;
     }
 }

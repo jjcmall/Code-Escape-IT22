@@ -102,13 +102,28 @@ namespace CodeEscape.UI
         [SerializeField] Color correctColor = new Color(0.29f, 0.87f, 0.5f);
         [SerializeField] Color incorrectColor = new Color(0.97f, 0.44f, 0.44f);
 
+        [Header("Feedback")]
+        [SerializeField, Tooltip("A short line from Alex or SENTINEL beside the buttons. Created from the clue text when left empty.")]
+        TMP_Text reactionText;
+
+        static readonly string[] AlexSolved = { "Yes! That did it.", "The lock clicked open!", "One step closer to Sam.", "The code checks out.", "Nice - that worked." };
+        static readonly string[] AlexEscaped = { "Phew - I'm free!", "Got out of that one!", "Made it. Careful now." };
+        static readonly string[] SentinelRejected = { "Input rejected.", "Incorrect. Try again, intruder.", "That is not the answer.", "Access denied." };
+        static readonly string[] SentinelCaught = { "Intruder detected. Prove you can code.", "You will not pass without the right answer.", "Caught you. Solve this to go free." };
+        const string AlexOffersHint = "Stuck? The hint is free now - try it.";
+        const string AlexOffersStart = "Stuck? SHOW START shows how the answer begins.";
+        const string AlexOffersAnswer = "Still stuck? SHOW ANSWER fills it in - CHECK it, then read why it works.";
+
         const string CaughtMessage = "CAUGHT!  SOLVE THE CODE TO ESCAPE!";
+        const string BugTrapMessage = "BUG TRAP!  FIX THE CODE TO ESCAPE!";
+        static readonly string[] SentinelBugTrap = { "I rewrote your code. Good luck fixing it.", "One small bug. Can you even find it?", "My code, my rules. Fix it if you can." };
         const string ReviewReminder = "\n<size=85%><color=#8B98A5>Need a reminder? Press REVIEW CONCEPT to read the lesson again.</color></size>";
 
         QuestionData question;
         LessonData lesson;
         int selectedChoice = -1;
         bool hintShown;
+        bool helpShown;
         bool caught;
         bool questionShown;
         string continueDefault;
@@ -170,6 +185,7 @@ namespace CodeEscape.UI
             question = data;
             lesson = lessonData;
             hintShown = false;
+            helpShown = false;
             questionShown = false;
             caught = caughtByHazard;
             if (closeButton != null)
@@ -177,7 +193,7 @@ namespace CodeEscape.UI
             if (caughtBanner != null)
                 caughtBanner.SetActive(caught);
             if (caughtText != null)
-                caughtText.text = CaughtMessage;
+                caughtText.text = data.IsBugFix ? BugTrapMessage : CaughtMessage;
             if (continueLabel != null)
                 continueLabel.text = caught ? "ESCAPE" : continueDefault;
             if (windowBorder != null)
@@ -189,9 +205,11 @@ namespace CodeEscape.UI
             questionTypeText.text = data.QuestionType.ToDisplayName().ToUpperInvariant();
             questionText.text = data.QuestionText;
 
+            // Fix the Bug: the planted wrong line starts in the answer box (and in the code), ready to be edited.
+            string startFill = data.IsBugFix ? data.BuggyFill : string.Empty;
             bool hasCode = !string.IsNullOrWhiteSpace(data.Code);
             codePanel.SetActive(hasCode);
-            codeText.text = hasCode ? (IsRunCode ? BuildRunCodeView(string.Empty) : string.Format(CodeFormat, data.Code)) : string.Empty;
+            codeText.text = hasCode ? (IsRunCode ? BuildRunCodeView(startFill) : string.Format(CodeFormat, data.Code)) : string.Empty;
             SetActive(outputPanel, false);
 
             for (int i = 0; i < choiceButtons.Length; i++)
@@ -201,7 +219,7 @@ namespace CodeEscape.UI
                 if (used)
                     choiceLabels[i].text = FormatChoice(i, data.GetChoice(i), data.MonospaceChoices);
             }
-            answerInput.SetTextWithoutNotify(string.Empty);
+            answerInput.SetTextWithoutNotify(startFill);
 
             hintPanel.SetActive(false);
             hintButtonLabel.text = $"Hint (-{ProgrammingChallengeManager.HintPenalty})";
@@ -209,6 +227,12 @@ namespace CodeEscape.UI
                 ShowHint(data.Hint);
 
             overlay.SetActive(true);
+            SetReaction(caught ? "SENTINEL" : null, caught ? Pick(data.IsBugFix ? SentinelBugTrap : SentinelCaught) : null, caughtColor);
+            if (caught)
+            {
+                Flash(caughtColor, 0.26f);
+                Shake(22f);
+            }
             // Learn first: the lesson's card comes before the question it teaches.
             if (lesson != null && lessonPanel != null)
                 ShowLesson(false);
@@ -233,10 +257,13 @@ namespace CodeEscape.UI
             submitButton.gameObject.SetActive(true);
             retryButton.gameObject.SetActive(false);
             continueButton.gameObject.SetActive(false);
-            hintButton.gameObject.SetActive(question.HasHint);
-            hintButton.interactable = !hintShown;
+            RefreshHelpButton(true);
             SetActive(reviewButton, lesson != null);
             UpdateSubmitState();
+            if (caught)
+                SetReaction("SENTINEL", Pick(question.IsBugFix ? SentinelBugTrap : SentinelCaught), caughtColor);
+            else
+                SetReaction(null, null, default);
 
             UIFocus.Clear();
             if (IsTyped)
@@ -259,10 +286,22 @@ namespace CodeEscape.UI
                 resultTitleText.text = correct
                     ? (pointsAwarded > 0 ? $"CORRECT!  +{pointsAwarded} POINTS" : "CORRECT!")
                     : "NOT QUITE - READ THE FEEDBACK, THEN TRY AGAIN";
+            if (correct && Manager != null && Manager.Streak >= 2)
+                resultTitleText.text += $"   STREAK x{Manager.Streak}";
             resultTitleText.color = correct ? correctColor : incorrectColor;
             explanationText.text = correct
                 ? feedback
                 : $"<noparse>{feedback}</noparse>" + (lesson != null ? ReviewReminder : string.Empty);
+
+            if (correct)
+                SetReaction("ALEX", Pick(caughtByHazard ? AlexEscaped : AlexSolved), correctColor);
+            else if (OfferedHelp() is string offer)
+                SetReaction("ALEX", offer, correctColor);
+            else
+                SetReaction("SENTINEL", Pick(SentinelRejected), incorrectColor);
+            Flash(correct ? correctColor : incorrectColor, correct ? 0.2f : 0.22f);
+            if (!correct)
+                Shake(9f);
 
             bool hasClue = correct && !string.IsNullOrWhiteSpace(clueReward);
             clueRewardText.gameObject.SetActive(hasClue);
@@ -271,7 +310,7 @@ namespace CodeEscape.UI
             submitButton.gameObject.SetActive(false);
             retryButton.gameObject.SetActive(!correct);
             continueButton.gameObject.SetActive(correct);
-            hintButton.gameObject.SetActive(!correct && question.HasHint);
+            RefreshHelpButton(!correct);
             SetActive(reviewButton, !correct && lesson != null);
             UIFocus.Clear();
         }
@@ -281,8 +320,66 @@ namespace CodeEscape.UI
             hintShown = true;
             hintPanel.SetActive(true);
             hintText.text = "HINT: " + hint;
-            hintButtonLabel.text = "Hint shown";
-            hintButton.interactable = false;
+            RefreshHelpButton(hintButton.gameObject.activeSelf);
+        }
+
+        /// <summary>Shows a later help step (SHOW START or SHOW ANSWER) in the hint strip, in place of the hint.</summary>
+        public void ShowHelp(string label, string text)
+        {
+            if (string.IsNullOrEmpty(text))
+                return;
+            helpShown = true;
+            hintPanel.SetActive(true);
+            hintText.text = $"{label}:  <noparse>{text}</noparse>";
+            RefreshHelpButton(hintButton.gameObject.activeSelf);
+        }
+
+        /// <summary>Types an answer into the box (SHOW ANSWER), so CHECK runs it.</summary>
+        public void FillAnswer(string text)
+        {
+            answerInput.text = text ?? string.Empty;
+            if (IsTyped)
+                answerInput.ActivateInputField();
+        }
+
+        // The hint button walks the help ladder: Hint, then SHOW START, then SHOW ANSWER (see NextHelp).
+        void RefreshHelpButton(bool visible)
+        {
+            ProgrammingChallengeManager.HelpStep next = Manager != null ? Manager.NextHelp : ProgrammingChallengeManager.HelpStep.None;
+            switch (next)
+            {
+                case ProgrammingChallengeManager.HelpStep.Hint:
+                    hintButtonLabel.text = Manager.IsHintFree ? "Hint (free)" : $"Hint (-{ProgrammingChallengeManager.HintPenalty})";
+                    break;
+                case ProgrammingChallengeManager.HelpStep.Starter:
+                    hintButtonLabel.text = "SHOW START";
+                    break;
+                case ProgrammingChallengeManager.HelpStep.Answer:
+                    hintButtonLabel.text = "SHOW ANSWER";
+                    break;
+                default:
+                    hintButtonLabel.text = helpShown ? "Help shown" : "Hint shown";
+                    break;
+            }
+            hintButton.interactable = next != ProgrammingChallengeManager.HelpStep.None;
+            hintButton.gameObject.SetActive(visible && (next != ProgrammingChallengeManager.HelpStep.None || hintShown || helpShown));
+        }
+
+        // When this wrong answer is the one that unlocks more help, Alex points to the next step; otherwise null.
+        string OfferedHelp()
+        {
+            if (Manager == null)
+                return null;
+            int wrong = Manager.ActiveWrongAnswers;
+            if (wrong != ProgrammingChallengeManager.StarterAfterWrongAnswers && wrong != ProgrammingChallengeManager.AnswerAfterWrongAnswers)
+                return null;
+            switch (Manager.NextHelp)
+            {
+                case ProgrammingChallengeManager.HelpStep.Hint: return AlexOffersHint;
+                case ProgrammingChallengeManager.HelpStep.Starter: return AlexOffersStart;
+                case ProgrammingChallengeManager.HelpStep.Answer: return AlexOffersAnswer;
+                default: return null;
+            }
         }
 
         public void SetScore(int score, int hintsUsed)
@@ -304,6 +401,8 @@ namespace CodeEscape.UI
                 caughtBanner.SetActive(false);
             if (closeButton != null)
                 closeButton.gameObject.SetActive(true);
+            SetReaction(null, null, default);
+            StopFeedback();
             UIFocus.Clear();
         }
 
@@ -404,7 +503,7 @@ namespace CodeEscape.UI
         public void OnHintClicked()
         {
             if (Manager != null && !IsLessonOpen)
-                Manager.UseHint();
+                Manager.UseHelp();
         }
 
         public void OnRetryClicked()
@@ -423,6 +522,139 @@ namespace CodeEscape.UI
         {
             if (Manager != null)
                 Manager.CloseChallenge();
+        }
+
+        // ---------- Feedback (reactions, flash, shake) ----------
+
+        Image flashImage;
+        RectTransform windowRect;
+        Vector2 windowRest;
+        Coroutine flashRoutine;
+        Coroutine shakeRoutine;
+
+        static string Pick(string[] lines) => lines[Random.Range(0, lines.Length)];
+
+        /// <summary>Shows "SPEAKER: line" beside the buttons, or hides it when <paramref name="speaker"/> is null.</summary>
+        void SetReaction(string speaker, string line, Color speakerColor)
+        {
+            if (speaker == null)
+            {
+                if (reactionText != null)
+                    reactionText.gameObject.SetActive(false);
+                return;
+            }
+            EnsureReactionText();
+            if (reactionText == null)
+                return;
+            reactionText.gameObject.SetActive(true);
+            reactionText.text = $"<color=#{ColorUtility.ToHtmlStringRGB(speakerColor)}><b>{speaker}:</b></color> <i><noparse>{line}</noparse></i>";
+        }
+
+        void EnsureReactionText()
+        {
+            if (reactionText != null || clueRewardText == null || overlay == null)
+                return;
+            Transform window = windowBorder != null ? windowBorder.transform.parent : clueRewardText.transform.parent;
+            reactionText = Instantiate(clueRewardText, window);
+            reactionText.name = "ReactionText";
+            // Drawn under the learning card, which covers the question while it is open.
+            if (lessonPanel != null && lessonPanel.transform.parent == window)
+                reactionText.transform.SetSiblingIndex(lessonPanel.transform.GetSiblingIndex());
+            var r = (RectTransform)reactionText.transform;
+            r.anchorMin = r.anchorMax = new Vector2(0.5f, 0.5f);
+            r.pivot = new Vector2(0.5f, 0.5f);
+            r.sizeDelta = new Vector2(500f, 64f);
+            r.anchoredPosition = new Vector2(175f, -425f);
+            reactionText.alignment = TextAlignmentOptions.Center;
+            reactionText.fontSize = 22f;
+            reactionText.enableAutoSizing = true;
+            reactionText.fontSizeMin = 14f;
+            reactionText.fontSizeMax = 22f;
+            reactionText.textWrappingMode = TextWrappingModes.Normal;
+            reactionText.color = new Color(0.86f, 0.9f, 0.95f);
+            reactionText.richText = true;
+        }
+
+        void EnsureWindowFx()
+        {
+            if (windowRect != null)
+                return;
+            Transform window = windowBorder != null ? windowBorder.transform.parent : null;
+            if (window == null)
+                return;
+            windowRect = (RectTransform)window;
+            windowRest = windowRect.anchoredPosition;
+            var go = new GameObject("FeedbackFlash", typeof(RectTransform), typeof(Image));
+            go.transform.SetParent(window, false);
+            go.transform.SetSiblingIndex(Mathf.Min(2, window.childCount - 1)); // over the window background, under the content
+            var r = (RectTransform)go.transform;
+            r.anchorMin = Vector2.zero;
+            r.anchorMax = Vector2.one;
+            r.offsetMin = r.offsetMax = Vector2.zero;
+            flashImage = go.GetComponent<Image>();
+            flashImage.raycastTarget = false;
+            flashImage.color = Color.clear;
+        }
+
+        /// <summary>A quick colour wash over the window (green for right, red for wrong or caught).</summary>
+        void Flash(Color color, float strength)
+        {
+            EnsureWindowFx();
+            if (flashImage == null || !isActiveAndEnabled)
+                return;
+            if (flashRoutine != null)
+                StopCoroutine(flashRoutine);
+            flashRoutine = StartCoroutine(FlashRoutine(color, strength));
+        }
+
+        System.Collections.IEnumerator FlashRoutine(Color color, float strength)
+        {
+            const float duration = 0.45f;
+            for (float t = 0f; t < duration; t += Time.unscaledDeltaTime)
+            {
+                float a = strength * (1f - t / duration);
+                flashImage.color = new Color(color.r, color.g, color.b, a * a / Mathf.Max(0.01f, strength));
+                yield return null;
+            }
+            flashImage.color = Color.clear;
+            flashRoutine = null;
+        }
+
+        /// <summary>Shakes the window for a moment (a wrong answer, or a hazard catching Alex).</summary>
+        void Shake(float amount)
+        {
+            EnsureWindowFx();
+            if (windowRect == null || !isActiveAndEnabled)
+                return;
+            if (shakeRoutine != null)
+                StopCoroutine(shakeRoutine);
+            shakeRoutine = StartCoroutine(ShakeRoutine(amount));
+        }
+
+        System.Collections.IEnumerator ShakeRoutine(float amount)
+        {
+            const float duration = 0.35f;
+            for (float t = 0f; t < duration; t += Time.unscaledDeltaTime)
+            {
+                float fall = 1f - t / duration;
+                windowRect.anchoredPosition = windowRest + new Vector2(Mathf.Sin(t * 70f) * amount * fall, Mathf.Cos(t * 53f) * amount * 0.35f * fall);
+                yield return null;
+            }
+            windowRect.anchoredPosition = windowRest;
+            shakeRoutine = null;
+        }
+
+        void StopFeedback()
+        {
+            if (flashRoutine != null)
+                StopCoroutine(flashRoutine);
+            if (shakeRoutine != null)
+                StopCoroutine(shakeRoutine);
+            flashRoutine = shakeRoutine = null;
+            if (flashImage != null)
+                flashImage.color = Color.clear;
+            if (windowRect != null)
+                windowRect.anchoredPosition = windowRest;
         }
 
         // ---------- Helpers ----------
@@ -500,7 +732,8 @@ namespace CodeEscape.UI
             inputRect.anchoredPosition = IsRunCode ? new Vector2(-460f, inputDefaultPosition.y) : inputDefaultPosition;
             inputRect.sizeDelta = IsRunCode ? new Vector2(600f, inputDefaultSize.y) : inputDefaultSize;
             if (answerPrompt != null)
-                answerPrompt.text = IsRunCode ? "Type the missing code, then press RUN to try it, or CHECK to submit it." : promptDefault;
+                answerPrompt.text = question.IsBugFix ? "SENTINEL planted a bug in the green line. Fix it, RUN to test it, then CHECK."
+                    : IsRunCode ? "Type the missing code, then press RUN to try it, or CHECK to submit it." : promptDefault;
             if (answerInput.placeholder is TMP_Text placeholder)
                 placeholder.text = IsRunCode ? "Type the code for the blank..." : placeholderDefault;
             TMP_Text submitLabel = submitButton.GetComponentInChildren<TMP_Text>(true);

@@ -17,8 +17,8 @@ MonoBehaviour:
   topic: Arithmetic
   difficulty: 0
   questionType: 2
-  questionText: A shop sells items at a price each. Fill in the blank so total is
-    the price multiplied by the quantity.
+  questionText: The warehouse counter wall shows the total your program prints. Fill
+    in the blank so total is the price multiplied by the quantity.
   code: 'total = ____
 
     print(total)'
@@ -42,6 +42,7 @@ MonoBehaviour:
 
       quantity = 0'
     expectedOutput: 0
+  effectId: counter
   explanation: '* multiplies numbers in Python. price * quantity gives the cost of
     every item together, whatever the price and quantity are.'
   hint: Which operator multiplies two numbers?

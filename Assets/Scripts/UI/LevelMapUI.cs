@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using CodeEscape.Game;
 using CodeEscape.Programming;
+using CodeEscape.Rewards;
 
 namespace CodeEscape.UI
 {
@@ -145,6 +146,7 @@ namespace CodeEscape.UI
                 LevelMapState state = progress.GetState(language, level.levelId);
                 nodes[i].Show(i + 1, level.displayName, level.mapTagline, level.mapPicture, state, level == next,
                     StatusText(level, state), accent, clearedColor, lockedColor, checkIcon);
+                nodes[i].SetStars(StarsFor(level), state == LevelMapState.Completed);
             }
             for (int i = 0; i < pathSegments.Count; i++)
             {
@@ -313,20 +315,29 @@ namespace CodeEscape.UI
 
         string PanelMessage(int index, LevelInfo level, LevelMapState state, bool canResume, LevelInfo skipTarget)
         {
+            string mission = string.IsNullOrWhiteSpace(level.mission) ? string.Empty : $"<color=#FACC15><b>MISSION:</b></color> {level.mission}\n";
             switch (state)
             {
                 case LevelMapState.Locked:
                     return $"This level is locked.\nClear <b>Level {index} - {levels[index - 1].displayName}</b> first to unlock it.";
                 case LevelMapState.Completed:
-                    string replay = "You've already cleared this level. Replay it to practise again";
-                    return skipTarget != null
+                    int stars = StarsFor(level);
+                    string best = $"Best result: <color=#FACC15><b>{stars} of {AchievementManager.MaxStarsPerLevel} stars</b></color>" +
+                                  (stars < AchievementManager.MaxStarsPerLevel ? ".\nEarn the rest with no hints and every lock solved on the first CHECK.\n" : ". Perfect!\n");
+                    string replay = "Replay it to practise again";
+                    return best + (skipTarget != null
                         ? $"{replay}, or skip ahead to <b>Level {levels.IndexOf(skipTarget) + 1} - {skipTarget.displayName}</b>."
-                        : $"{replay}.";
+                        : $"{replay}.");
                 default:
                     return canResume
-                        ? "Your investigation here is saved.\nContinue where you left off, or restart the level from the beginning."
-                        : $"{level.mapDescription}\nSolve its code locks to clear the level.";
+                        ? mission + "Your investigation here is saved. Continue where you left off, or restart the level."
+                        : mission + $"{level.mapDescription}";
             }
+        }
+
+        static int StarsFor(LevelInfo level)
+        {
+            return AchievementManager.Instance != null ? AchievementManager.Instance.StarsFor(level.levelId) : 0;
         }
 
         /// <summary>Back to Map button (and Esc): closes the level panel.</summary>

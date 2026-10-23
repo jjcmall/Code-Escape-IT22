@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1833b97b4e8284e489c3555d5dace838, type: 3}
+  m_Name: BUG_PY_02_BOOLEAN
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.QuestionData
+  id: BUG_PY_02_BOOLEAN
+  language: 1
+  topic: Boolean Logic
+  difficulty: 1
+  questionType: 3
+  questionText: The platform gate should open only when Alex has the key AND the
+    card. SENTINEL's line opens it with just one of them. Fix the condition.
+  code: "if ____:\n    print(\"GATE OPEN\")\nelse:\n    print(\"GATE LOCKED\")"
+  answerFormat: 2
+  choices: []
+  correctChoiceIndex: 0
+  monospaceChoices: 0
+  acceptedAnswers: []
+  caseSensitive: 1
+  referenceFill: has_key and has_card
+  runTests:
+  - setup: 'has_key = True
+
+      has_card = False'
+    expectedOutput: GATE LOCKED
+  - setup: 'has_key = True
+
+      has_card = True'
+    expectedOutput: GATE OPEN
+  - setup: 'has_key = False
+
+      has_card = True'
+    expectedOutput: GATE LOCKED
+  buggyFill: has_key or has_card
+  effectId: 
+  explanation: or is True when at least one side is True, so one item was enough.
+    and is True only when both sides are True, so the gate needs the key and the
+    card.
+  hint: Which word means both sides must be True?
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: 'Try each case: with only the key, the gate must stay locked.'

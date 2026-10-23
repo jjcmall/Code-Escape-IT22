@@ -106,6 +106,7 @@ namespace CodeEscape.Audio
             ProgrammingChallengeManager.AnswerChecked += HandleAnswerChecked;
             ProgrammingChallengeManager.HintShown += HandleHintShown;
             ProgrammingChallengeManager.HazardCaught += HandleHazardCaught;
+            ProgrammingChallengeManager.CodeRun += HandleCodeRun;
             ClueManager.ClueCollected += HandleClueCollected;
         }
 
@@ -119,6 +120,7 @@ namespace CodeEscape.Audio
             ProgrammingChallengeManager.AnswerChecked -= HandleAnswerChecked;
             ProgrammingChallengeManager.HintShown -= HandleHintShown;
             ProgrammingChallengeManager.HazardCaught -= HandleHazardCaught;
+            ProgrammingChallengeManager.CodeRun -= HandleCodeRun;
             ClueManager.ClueCollected -= HandleClueCollected;
         }
 
@@ -151,10 +153,22 @@ namespace CodeEscape.Audio
             musicRoutine = StartCoroutine(CrossFade(clip));
         }
 
-        /// <summary>The current scene's normal track (used after challenges and cutscenes).</summary>
+        /// <summary>The current scene's normal track (used after challenges and cutscenes), or the override while one is set.</summary>
         public void PlaySceneMusic()
         {
-            PlayMusic(TrackForScene(SceneManager.GetActiveScene().name));
+            PlayMusic(SceneMusicOverride != MusicTrack.None ? SceneMusicOverride : TrackForScene(SceneManager.GetActiveScene().name));
+        }
+
+        /// <summary>
+        /// Replaces the scene's track until the next scene loads (e.g. the alarm escape plays the tense challenge
+        /// music). None = the scene's own track.
+        /// </summary>
+        public MusicTrack SceneMusicOverride { get; private set; }
+
+        public void SetSceneMusicOverride(MusicTrack track)
+        {
+            SceneMusicOverride = track;
+            PlaySceneMusic();
         }
 
         public void PlayMusic(AudioClip clip, bool loop = true)
@@ -322,7 +336,10 @@ namespace CodeEscape.Audio
         void HandleSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             if (mode == LoadSceneMode.Single)
+            {
+                SceneMusicOverride = MusicTrack.None;
                 PlayMusic(TrackForScene(scene.name));
+            }
         }
 
         void HandleChallengeOpened(QuestionData question) => PlayMusic(MusicTrack.Challenge);
@@ -332,5 +349,12 @@ namespace CodeEscape.Audio
         void HandleHintShown() => PlaySfx(SfxType.Hint);
         void HandleHazardCaught(string hazardId) => PlaySfx(SfxType.Alarm);
         void HandleClueCollected(ClueData clue) => PlaySfx(SfxType.Clue);
+        // RUN: a terminal-style click; an error adds the low "incorrect" tone.
+        void HandleCodeRun(bool ranWithoutError)
+        {
+            PlayUIClick();
+            if (!ranWithoutError)
+                PlaySfx(incorrectClip, effectsVolume * 0.5f);
+        }
     }
 }

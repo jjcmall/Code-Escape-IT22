@@ -94,6 +94,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 70ad5bcfe19ef9c448013450edba4a9f, type: 2}
   - {fileID: 11400000, guid: c12a9618ab127f94dac961e641ab064b, type: 2}
   - {fileID: 11400000, guid: 14ea02f722b58ff4d8c2bd0416f7b8db, type: 2}
+  - {fileID: 11400000, guid: 7bbbe26d534f230428ff4e59749d8809, type: 2}
+  - {fileID: 11400000, guid: f6969b0185c095643a305604b304fcb3, type: 2}
+  - {fileID: 11400000, guid: b43eab121137cfc418774f95d23fddce, type: 2}
   lessons:
   - {fileID: 11400000, guid: 299e7617f4d7cb6499636398b008acff, type: 2}
   - {fileID: 11400000, guid: e119a81935aef1048a0b90cf3788f256, type: 2}

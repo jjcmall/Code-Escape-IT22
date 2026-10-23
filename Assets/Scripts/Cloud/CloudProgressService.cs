@@ -9,6 +9,7 @@ using PlayerData = Unity.Services.CloudSave.Models.Data.Player;
 using Unity.Services.Core;
 using CodeEscape.Game;
 using CodeEscape.Programming;
+using CodeEscape.Rewards;
 using CodeEscape.SaveSystem;
 
 namespace CodeEscape.Cloud
@@ -344,6 +345,10 @@ namespace CodeEscape.Cloud
 
                 if (LevelProgressManager.Instance != null)
                     LevelProgressManager.Instance.ReloadFromSave();
+
+                // Achievements are lifetime progress: merge, never replace.
+                if (AchievementManager.Instance != null)
+                    AchievementManager.Instance.MergeFromCloud(snapshot.achievements_json, Record != null ? Record.achievements : null);
             }
             finally
             {
@@ -509,7 +514,8 @@ namespace CodeEscape.Cloud
             if (challenges != null && current.IsValid())
             {
                 var scored = new HashSet<string>(record.scored_challenges);
-                foreach (string obstacleId in challenges.CompletedObstacleIds)
+                // Doors opened with SHOW ANSWER earned no points, so they don't count here either.
+                foreach (string obstacleId in challenges.ScoredObstacleIds)
                     scored.Add($"{current.ToId()}:{obstacleId}");
                 var hinted = new HashSet<string>(record.penalised_hints);
                 foreach (string questionId in challenges.HintedQuestionIds)
@@ -521,6 +527,8 @@ namespace CodeEscape.Cloud
                                               - record.penalised_hints.Count * ProgrammingChallengeManager.HintPenalty);
 
             UnlockAchievements(record, maxClearedInOneLanguage, levels != null ? levels.LevelCount : 0);
+            if (AchievementManager.Instance != null)
+                snapshot.achievements_json = AchievementManager.Instance.ExportJson();
         }
 
         static List<string> SortedList(HashSet<string> set)
@@ -556,6 +564,13 @@ namespace CodeEscape.Cloud
                     record.achievements.Add(id);
                     LastUnlockedAchievement = Achievements.NameOf(id);
                 }
+            }
+            // Everything the achievement system has awarded (learning, code, story and concept badges).
+            AchievementManager achievements = AchievementManager.Instance;
+            if (achievements != null)
+            {
+                foreach (string id in achievements.Progress.unlocked)
+                    Unlock(id, true);
             }
             Unlock(Achievements.FirstChallenge, record.scored_challenges.Count >= 1);
             Unlock(Achievements.FirstLevel, record.completed_levels.Count >= 1);
@@ -624,15 +639,8 @@ namespace CodeEscape.Cloud
 
         public static string NameOf(string id)
         {
-            switch (id)
-            {
-                case FirstChallenge: return "First Challenge Solved";
-                case FirstLevel: return "First Level Cleared";
-                case FiveChallenges: return "Five Challenges Solved";
-                case Halfway: return "Halfway Through the Case";
-                case CaseClosed: return "Case Closed";
-                default: return id;
-            }
+            ProgrammingChallengeManager challenges = ProgrammingChallengeManager.Instance;
+            return AchievementCatalog.NameOf(id, challenges != null ? challenges.Database : null);
         }
     }
 }

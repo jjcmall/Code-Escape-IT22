@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1833b97b4e8284e489c3555d5dace838, type: 3}
+  m_Name: BUG_PY_03_LOOPS
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.QuestionData
+  id: BUG_PY_03_LOOPS
+  language: 1
+  topic: Loops
+  difficulty: 1
+  questionType: 3
+  questionText: SENTINEL trapped the countdown in a loop that never ends. Fix the
+    last line inside the loop so n counts down to 1, then the program prints Liftoff.
+  code: "while n > 0:\n    print(n)\n    ____\nprint(\"Liftoff\")"
+  answerFormat: 2
+  choices: []
+  correctChoiceIndex: 0
+  monospaceChoices: 0
+  acceptedAnswers: []
+  caseSensitive: 1
+  referenceFill: n = n - 1
+  runTests:
+  - setup: n = 3
+    expectedOutput: '3
+
+      2
+
+      1
+
+      Liftoff'
+  - setup: n = 1
+    expectedOutput: '1
+
+      Liftoff'
+  - setup: n = 0
+    expectedOutput: Liftoff
+  buggyFill: n = n + 1
+  effectId: 
+  explanation: A while loop repeats while its condition is True. Adding 1 made n
+    grow forever, so n > 0 never became False. Subtracting 1 brings n down to 0,
+    and the loop stops.
+  hint: To count down, should n get bigger or smaller each time round the loop?
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: 'Make sure the loop can end: n has to reach 0.'

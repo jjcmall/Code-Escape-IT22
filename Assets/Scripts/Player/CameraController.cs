@@ -81,6 +81,12 @@ namespace CodeEscape.Player
             return Pan(point, duration, zoom);
         }
 
+        /// <summary>Centres the view on a world point, at the normal view size times <paramref name="sizeFactor"/> (below 1 zooms in).</summary>
+        public IEnumerator FocusPoint(Vector2 point, float duration, float sizeFactor)
+        {
+            return Move(new Vector3(point.x, point.y, transform.position.z), defaultSize * sizeFactor, duration);
+        }
+
         /// <summary>Returns to the normal view on Alex, then hands the camera back to CameraFollow2D.</summary>
         public IEnumerator ResetView(float duration)
         {

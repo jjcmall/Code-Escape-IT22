@@ -21,6 +21,8 @@ namespace CodeEscape.Game
         public string mapTagline;
         [Tooltip("Picture of the location shown on its level map card.")]
         public Sprite mapPicture;
+        [TextArea(1, 2), Tooltip("The level's goal and the concept it uses, e.g. \"Open the warehouse door using arithmetic.\" Shown on the level map and when the level starts.")]
+        public string mission;
         public bool unlockedAtStart;
         [Tooltip("Obstacle IDs that must be solved before the player may leave this level.")]
         public string[] requiredChallenges = new string[0];
@@ -255,6 +257,8 @@ namespace CodeEscape.Game
             {
                 currentLevel = scene.name;
                 unlocked.Add(scene.name);
+                if (mode == LoadSceneMode.Single && !string.IsNullOrWhiteSpace(GetInfo(scene.name).mission))
+                    StartCoroutine(AnnounceMission(GetInfo(scene.name)));
             }
             else if (scene.name == SceneNames.Ending && AreRequiredChallengesComplete(currentLevel, out _))
             {
@@ -263,6 +267,15 @@ namespace CodeEscape.Game
                 if (LevelProgressManager.Instance != null)
                     LevelProgressManager.Instance.RecordLevelCleared(currentLevel, null);
             }
+        }
+
+        // Shown a frame after the scene loads, because notifications from the previous scene are cleared on load.
+        // The notification waits for any opening cutscene to finish.
+        System.Collections.IEnumerator AnnounceMission(LevelInfo level)
+        {
+            yield return null;
+            if (UI.NotificationUI.Instance != null)
+                UI.NotificationUI.Instance.Show($"MISSION - LEVEL {IndexOf(level) + 1}", level.mission, new Color(0.98f, 0.8f, 0.2f), 5f);
         }
 
         void HandleNewGame(ProgrammingLanguage language)

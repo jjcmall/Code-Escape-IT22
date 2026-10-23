@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using CodeEscape.Clues;
 using CodeEscape.Cutscenes;
 using CodeEscape.Game;
+using CodeEscape.Programming;
 using CodeEscape.Story;
 
 namespace CodeEscape.UI
@@ -127,14 +128,15 @@ namespace CodeEscape.UI
                     g.color = c;
                 }
 
-                // Messages wait while a cutscene plays, and pause (hidden) if one starts mid-message.
-                while (CutsceneManager.IsActive)
+                // Messages wait while a cutscene, challenge or the pause menu covers the screen, and pause (hidden)
+                // if one opens mid-message, so they aren't used up behind it.
+                while (Covered())
                     yield return null;
                 yield return Fade(0f, 1f);
                 float shown = 0f;
                 while (shown < m.duration)
                 {
-                    bool hidden = CutsceneManager.IsActive;
+                    bool hidden = Covered();
                     group.alpha = hidden ? 0f : 1f;
                     if (!hidden)
                         shown += Time.unscaledDeltaTime;
@@ -151,11 +153,21 @@ namespace CodeEscape.UI
             while (t < fadeTime)
             {
                 t += Time.unscaledDeltaTime;
-                // Stays hidden if a cutscene starts mid-fade.
-                group.alpha = CutsceneManager.IsActive ? 0f : Mathf.Lerp(from, to, t / fadeTime);
+                // Stays hidden if something covers the screen mid-fade.
+                group.alpha = Covered() ? 0f : Mathf.Lerp(from, to, t / fadeTime);
                 yield return null;
             }
-            group.alpha = CutsceneManager.IsActive ? 0f : to;
+            group.alpha = Covered() ? 0f : to;
+        }
+
+        static bool Covered()
+        {
+            if (CutsceneManager.IsActive)
+                return true;
+            ProgrammingChallengeManager challenges = ProgrammingChallengeManager.Instance;
+            if (challenges != null && challenges.IsChallengeOpen)
+                return true;
+            return GameManager.Instance != null && GameManager.Instance.CurrentState == GameState.Paused;
         }
 
         static bool InGameplay()

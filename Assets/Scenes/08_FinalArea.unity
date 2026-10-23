@@ -211,6 +211,61 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &8637301
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8637302}
+  - component: {fileID: 8637303}
+  m_Layer: 0
+  m_Name: SentinelCore
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8637302
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8637301}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 608441083}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8637303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8637301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fd398d818aef6c4983d83f4f166826a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Obstacles.SentinelCore
+  shieldObstacleIds:
+  - final_lock_a
+  - final_lock_b
+  - final_door
+  shieldLabels:
+  - LASER GRID
+  - FUNCTION LOCK
+  - CORE DOOR
+  screenPosition: {x: 6.3, y: 0.3, z: 1.8}
+  font: {fileID: 11400000, guid: 7943b7691221e8f4a927ad6e611f6537, type: 2}
+  pixelSize: 0.0055
 --- !u!1 &17997886
 GameObject:
   m_ObjectHideFlags: 0
@@ -7393,6 +7448,8 @@ Transform:
   - {fileID: 69747393}
   - {fileID: 170538824}
   - {fileID: 1309342289}
+  - {fileID: 8637302}
+  - {fileID: 1266220111}
   m_Father: {fileID: 1907501945}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &612448302
@@ -10084,6 +10141,7 @@ GameObject:
   - component: {fileID: 842784121}
   - component: {fileID: 842784123}
   - component: {fileID: 842784122}
+  - component: {fileID: 842784124}
   m_Layer: 0
   m_Name: CoreDoor
   m_TagString: Untagged
@@ -10191,6 +10249,27 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 3, y: 3.5}
   m_EdgeRadius: 0
+--- !u!114 &842784124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 842784120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00c44b31a27b4944e8b4e4e18610ffd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Obstacles.CounterWallEffect
+  effectId: counter
+  offset: {x: -1.6, y: 1.9, z: 1.8}
+  pixelSize: 0.0055
+  standOnPost: 0
+  floorY: -3.5
+  font: {fileID: 11400000, guid: 7943b7691221e8f4a927ad6e611f6537, type: 2}
+  accent: {r: 0.13, g: 0.83, b: 0.93, a: 1}
+  title: CORE COUNTER
+  valueLabel: EVEN TOTAL
 --- !u!1 &857268818
 GameObject:
   m_ObjectHideFlags: 0
@@ -11180,6 +11259,7 @@ GameObject:
   - component: {fileID: 972101349}
   - component: {fileID: 972101351}
   - component: {fileID: 972101350}
+  - component: {fileID: 972101352}
   m_Layer: 0
   m_Name: SecurityLockA
   m_TagString: Untagged
@@ -11287,6 +11367,27 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 3, y: 3.5}
   m_EdgeRadius: 0
+--- !u!114 &972101352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 972101348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d51efa5d6780824482b29645e09be74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Obstacles.LaserGridEffect
+  effectId: lasers
+  offset: {x: -1.4, y: 1.9, z: 1.8}
+  pixelSize: 0.0055
+  standOnPost: 0
+  floorY: -3.5
+  font: {fileID: 11400000, guid: 7943b7691221e8f4a927ad6e611f6537, type: 2}
+  accent: {r: 0.13, g: 0.83, b: 0.93, a: 1}
+  title: LASER GRID
+  beamColor: {r: 0.97, g: 0.27, b: 0.27, a: 1}
 --- !u!1 &977130165
 GameObject:
   m_ObjectHideFlags: 0
@@ -14563,6 +14664,109 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.InputActionReference
   m_Asset: {fileID: 731019256}
   m_ActionId: dad70c86-b58c-4b17-88ad-f5e53adf419e
+--- !u!1001 &1266220110
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 608441083}
+    m_Modifications:
+    - target: {fileID: 2686182994378332213, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4315247240271867493, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_Name
+      value: BugTrap
+      objectReference: {fileID: 0}
+    - target: {fileID: 4694130187163152234, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5994199828487023597, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -8.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5994199828487023597, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5994199828487023597, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5994199828487023597, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5994199828487023597, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5994199828487023597, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5994199828487023597, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5994199828487023597, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5994199828487023597, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5994199828487023597, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6092825880112561341, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: hazardId
+      value: fa_bugtrap
+      objectReference: {fileID: 0}
+    - target: {fileID: 6092825880112561341, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: displayName
+      value: SENTINEL Bug Trap
+      objectReference: {fileID: 0}
+    - target: {fileID: 6092825880112561341, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: disarmWhenEscaped
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6092825880112561341, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: questions.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6092825880112561341, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: armedVisuals.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6092825880112561341, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: 'questions.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: b43eab121137cfc418774f95d23fddce, type: 2}
+    - target: {fileID: 6092825880112561341, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: 'armedVisuals.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1266220112}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+--- !u!4 &1266220111 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5994199828487023597, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+  m_PrefabInstance: {fileID: 1266220110}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1266220112 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8069503767805108958, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+  m_PrefabInstance: {fileID: 1266220110}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1285769524
 GameObject:
   m_ObjectHideFlags: 0
@@ -21003,6 +21207,7 @@ GameObject:
   - component: {fileID: 1943733559}
   - component: {fileID: 1943733561}
   - component: {fileID: 1943733560}
+  - component: {fileID: 1943733562}
   m_Layer: 0
   m_Name: SecurityLockB
   m_TagString: Untagged
@@ -21110,6 +21315,27 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 3, y: 3.5}
   m_EdgeRadius: 0
+--- !u!114 &1943733562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1943733558}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0c0cc8b0f35d464bb177539ebaf7a88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Obstacles.FunctionMachineEffect
+  effectId: function
+  offset: {x: -1.6, y: 1.9, z: 1.8}
+  pixelSize: 0.0055
+  standOnPost: 0
+  floorY: -3.5
+  font: {fileID: 11400000, guid: 7943b7691221e8f4a927ad6e611f6537, type: 2}
+  accent: {r: 0.13, g: 0.83, b: 0.93, a: 1}
+  title: FUNCTION MACHINE
+  callLabel: double(num)
 --- !u!114 &1952698328
 MonoBehaviour:
   m_ObjectHideFlags: 0

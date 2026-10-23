@@ -36,6 +36,7 @@ MonoBehaviour:
     expectedOutput: Allowed
   - setup: age = 12
     expectedOutput: Too young
+  effectId: gate
   explanation: The if branch runs only when its condition is True. age >= 13 is True
     for 13 and for every older age, so those players see Allowed, and everyone else
     goes to else.

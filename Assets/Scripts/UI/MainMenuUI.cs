@@ -9,8 +9,8 @@ using CodeEscape.SaveSystem;
 namespace CodeEscape.UI
 {
     /// <summary>
-    /// Main menu: Play Adventure (continue the saved level, or pick a language and level), Investigation Logs, Settings, SDG 4 and
-    /// Terminate Session (exit).
+    /// Main menu: Play Adventure (continue the saved level, or open the level map), Investigation Logs, Achievements, Settings,
+    /// SDG 4 and Terminate Session (exit).
     /// </summary>
     public class MainMenuUI : MonoBehaviour
     {
@@ -28,6 +28,9 @@ namespace CodeEscape.UI
         [SerializeField] Selectable investigationLogsButton;
         [SerializeField] GameObject sdgPanel;
         [SerializeField] Selectable sdgButton;
+        [SerializeField, Tooltip("Achievements, concept badges and level stars.")]
+        GameObject achievementsPanel;
+        [SerializeField] Selectable achievementsButton;
 
         [Header("Continue Panel")]
         [SerializeField, Tooltip("Shown by Play Adventure when a saved playthrough exists.")]
@@ -42,6 +45,7 @@ namespace CodeEscape.UI
         {
             SetPanel(investigationLogsPanel, false);
             SetPanel(sdgPanel, false);
+            SetPanel(achievementsPanel, false);
             SetPanel(continuePanel, false);
         }
 
@@ -127,6 +131,11 @@ namespace CodeEscape.UI
         public void OnInvestigationLogsClicked()
         {
             OpenPanel(investigationLogsPanel, investigationLogsButton);
+        }
+
+        public void OnAchievementsClicked()
+        {
+            OpenPanel(achievementsPanel, achievementsButton);
         }
 
         public void OnSettingsClicked()

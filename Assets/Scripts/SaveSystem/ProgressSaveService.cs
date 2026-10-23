@@ -188,6 +188,7 @@ namespace CodeEscape.SaveSystem
                 data.completedChallenges = new List<string>(challenges.CompletedObstacleIds);
                 data.completedQuestions = new List<string>(challenges.CompletedQuestionIds);
                 data.hintedQuestions = new List<string>(challenges.HintedQuestionIds);
+                data.unscoredChallenges = new List<string>(challenges.UnscoredObstacleIds);
                 data.score = challenges.Score;
                 data.hintsUsed = challenges.HintsUsed;
             }

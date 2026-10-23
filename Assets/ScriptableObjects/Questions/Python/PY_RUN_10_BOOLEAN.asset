@@ -40,6 +40,7 @@ MonoBehaviour:
 
       has_ticket = True'
     expectedOutput: False
+  effectId: gate
   explanation: and is True only when both sides are True. A player who is old enough
     but has no ticket, or has a ticket but is too young, gets False.
   hint: Which word means both sides must be true?

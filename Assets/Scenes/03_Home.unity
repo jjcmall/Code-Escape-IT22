@@ -25300,6 +25300,7 @@ GameObject:
   - component: {fileID: 1200312285}
   - component: {fileID: 1200312287}
   - component: {fileID: 1200312286}
+  - component: {fileID: 1200312288}
   m_Layer: 0
   m_Name: LockedDoor
   m_TagString: Untagged
@@ -25407,6 +25408,24 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 3, y: 3.5}
   m_EdgeRadius: 0
+--- !u!114 &1200312288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1200312284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b66125f3048f3c04fa57eb565f12bb6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Obstacles.KeypadEffect
+  effectId: keypad
+  offset: {x: -1.6, y: 1.9, z: 1.55}
+  pixelSize: 0.0055
+  font: {fileID: 11400000, guid: 7943b7691221e8f4a927ad6e611f6537, type: 2}
+  accent: {r: 0.13, g: 0.83, b: 0.93, a: 1}
+  title: HALLWAY KEYPAD
 --- !u!1 &1201729829
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using CodeEscape.Game;
+using CodeEscape.Rewards;
 
 namespace CodeEscape.UI
 {
@@ -43,6 +44,8 @@ namespace CodeEscape.UI
         [SerializeField] TMP_Text nameText;
         [SerializeField] TMP_Text descriptionText;
         [SerializeField] TMP_Text statusText;
+        [SerializeField, Tooltip("Best stars earned on a cleared level. Created next to the status text when left empty.")]
+        StarRow stars;
 
         [Header("Animation")]
         [SerializeField] float highlightScale = 1.06f;
@@ -140,6 +143,25 @@ namespace CodeEscape.UI
             if (nextMarkerFill != null)
                 nextMarkerFill.color = accent;
             Animate();
+        }
+
+        /// <summary>Shows the best stars earned on the level (hidden for a level that isn't cleared).</summary>
+        public void SetStars(int earned, bool visible)
+        {
+            if (stars == null && statusText != null)
+            {
+                // In the free space at the bottom of the card, under the description (the status line is full).
+                var parent = (RectTransform)statusText.transform.parent;
+                stars = StarRow.Create(parent, AchievementManager.MaxStarsPerLevel, 17f, 9f);
+                var r = (RectTransform)stars.transform;
+                r.anchorMin = r.anchorMax = new Vector2(0.5f, 0f);
+                r.pivot = new Vector2(0.5f, 0.5f);
+                r.anchoredPosition = new Vector2(0f, 32f);
+            }
+            if (stars == null)
+                return;
+            stars.gameObject.SetActive(visible);
+            stars.Set(earned);
         }
 
         /// <summary>A short burst of glow (a level that was just cleared or unlocked).</summary>

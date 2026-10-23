@@ -878,7 +878,7 @@ namespace CodeEscape.Execution
                     string text = string.Join(" ", parts);
                     outputLines++;
                     if (outputLines > RunLimits.MaxOutputLines || output.Length + text.Length + 1 > RunLimits.MaxOutputChars)
-                        throw new PyError("The program printed too much.", line);
+                        throw new PyError("The program printed too much (a loop may never end).", line);
                     output.Append(text).Append('\n');
                     return null;
                 }
@@ -1312,6 +1312,16 @@ namespace CodeEscape.Execution
             return result;
         }
 
+        /// <summary>
+        /// Lines the challenge window shows above the template (the first test's setup). Add this to a template
+        /// line number so it matches the code on screen.
+        /// </summary>
+        public static int ShownSetupLines(IList<RunTest> tests)
+        {
+            if (tests == null || tests.Count == 0 || string.IsNullOrWhiteSpace(tests[0].setup)) return 0;
+            return tests[0].setup.Trim().Split('\n').Length;
+        }
+
         /// <summary>Runs the code against every test. Passed only if all outputs match.</summary>
         public static JudgeResult Judge(string template, string fill, IList<RunTest> tests)
         {
@@ -1330,16 +1340,16 @@ namespace CodeEscape.Execution
                 {
                     judged.FailedTest = i;
                     judged.Error = r.Error;
-                    judged.Message = r.ErrorLine > 0 ? "Line " + r.ErrorLine + ": " + r.Error : r.Error;
+                    judged.Message = r.ErrorLine > 0 ? "Line " + (r.ErrorLine + ShownSetupLines(tests)) + ": " + r.Error : r.Error;
                     return judged;
                 }
                 if (Normalize(r.Output) != Normalize(tests[i].expectedOutput))
                 {
                     judged.FailedTest = i;
                     string context = Context(tests[i].setup);
-                    judged.Message = "Your code printed:\n" + (Normalize(r.Output).Length == 0 ? "(nothing)" : Normalize(r.Output)) +
-                        "\nbut it should print:\n" + Normalize(tests[i].expectedOutput) +
-                        (context.Length > 0 ? "\n(when " + context + ")" : string.Empty);
+                    // One sentence, so it reads as feedback and fits the result line.
+                    judged.Message = "Your code printed " + OneLine(r.Output) + ", but it should print " + OneLine(tests[i].expectedOutput) +
+                        (context.Length > 0 ? " (when " + context + ")." : ".");
                     return judged;
                 }
             }
@@ -1354,6 +1364,15 @@ namespace CodeEscape.Execution
             foreach (string l in setup.Split('\n'))
                 if (!string.IsNullOrWhiteSpace(l)) parts.Add(l.Trim());
             return string.Join(", ", parts);
+        }
+
+        // Output lines joined with " / " and shortened, e.g. "1 / 2 / 3"; "(nothing)" when nothing was printed.
+        static string OneLine(string output)
+        {
+            const int MaxLength = 80;
+            string text = Normalize(output).Replace("\n", " / ");
+            if (text.Length == 0) return "(nothing)";
+            return text.Length <= MaxLength ? text : text.Substring(0, MaxLength) + "...";
         }
 
         static string Normalize(string text)

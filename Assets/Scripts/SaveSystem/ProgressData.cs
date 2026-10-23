@@ -23,6 +23,8 @@ namespace CodeEscape.SaveSystem
         public List<string> completedChallenges = new List<string>();
         public List<string> completedQuestions = new List<string>();
         public List<string> hintedQuestions = new List<string>();
+        /// <summary>Obstacles opened with SHOW ANSWER: solved, but they earned no points.</summary>
+        public List<string> unscoredChallenges = new List<string>();
         public List<string> collectedClues = new List<string>();
         public int score;
         public int hintsUsed;

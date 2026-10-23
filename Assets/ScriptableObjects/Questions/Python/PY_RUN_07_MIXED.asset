@@ -35,6 +35,7 @@ MonoBehaviour:
     expectedOutput: 6
   - setup: limit = 1
     expectedOutput: 0
+  effectId: counter
   explanation: n % 2 is the remainder after dividing by 2. It is 0 only for even
     numbers, so n % 2 == 0 lets the loop add just the even values to total.
   hint: The % operator gives a remainder. What is the remainder when an even number

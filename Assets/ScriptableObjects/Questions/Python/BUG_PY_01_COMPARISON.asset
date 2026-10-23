@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1833b97b4e8284e489c3555d5dace838, type: 3}
+  m_Name: BUG_PY_01_COMPARISON
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Programming.QuestionData
+  id: BUG_PY_01_COMPARISON
+  language: 1
+  topic: Comparison
+  difficulty: 1
+  questionType: 3
+  questionText: SENTINEL changed the pass check. A score of exactly 50 should PASS,
+    but the planted line only lets scores above 50 through. Fix the condition.
+  code: "if ____:\n    print(\"PASS\")\nelse:\n    print(\"TRY AGAIN\")"
+  answerFormat: 2
+  choices: []
+  correctChoiceIndex: 0
+  monospaceChoices: 0
+  acceptedAnswers: []
+  caseSensitive: 1
+  referenceFill: score >= 50
+  runTests:
+  - setup: score = 50
+    expectedOutput: PASS
+  - setup: score = 49
+    expectedOutput: TRY AGAIN
+  - setup: score = 80
+    expectedOutput: PASS
+  buggyFill: score > 50
+  effectId: 
+  explanation: '> means strictly greater than, so a score of exactly 50 failed. >=
+    means greater than or equal to, so 50 passes and 49 still fails.'
+  hint: Which operator also lets the value 50 itself through?
+  wrongChoiceFeedback: []
+  wrongAnswerFeedback: 'Check the edge: a score of exactly 50 must print PASS, and
+    49 must not.'

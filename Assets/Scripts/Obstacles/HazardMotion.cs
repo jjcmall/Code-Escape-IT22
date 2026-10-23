@@ -66,16 +66,31 @@ namespace CodeEscape.Obstacles
         bool warning;
         bool dangerous = true;
         Rigidbody2D body;
+        float clock;
+
+        /// <summary>
+        /// How fast every hazard's pattern runs (1 = normal). The alarm escape raises it; the pattern speeds up
+        /// smoothly from where it is, without jumping. Reset when a scene loads.
+        /// </summary>
+        public static float SpeedMultiplier = 1f;
 
         public HazardMotionMode Mode => mode;
         public bool IsDangerous => dangerous;
         /// <summary>True while a timed hazard is blinking its warning.</summary>
         public bool IsWarning => warning;
         Transform Target => target != null ? target : transform;
-        float Clock => Time.time + phase;
+        float Clock => clock;
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void ResetStatics()
+        {
+            SpeedMultiplier = 1f;
+        }
 
         void Awake()
         {
+            // Same starting point as before (scene time + phase); after that it advances with scaled time.
+            clock = Time.time + phase;
             startLocalPosition = Target.localPosition;
             startAngle = Target.localEulerAngles.z;
             // Moving colliders get a kinematic body so the physics engine follows them smoothly.
@@ -93,6 +108,7 @@ namespace CodeEscape.Obstacles
 
         void Update()
         {
+            clock += Time.deltaTime * SpeedMultiplier;
             Apply();
         }
 

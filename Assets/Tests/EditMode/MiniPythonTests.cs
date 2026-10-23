@@ -160,12 +160,36 @@ namespace CodeEscape.Execution.Tests
             StringAssert.Contains("14", r.Message);
             StringAssert.Contains("price = 2", r.Message);
         }
-        [Test] public void JudgeReportsSyntaxErrorWithTemplateLine()
+        [Test] public void JudgeReportsSyntaxErrorWithShownLine()
         {
+            // The window shows the two setup lines above the template, so its first line is line 3 on screen.
             JudgeResult r = CodeRunner.Judge(PriceTemplate, "price *", PriceTests);
             Assert.IsFalse(r.Passed);
-            StringAssert.Contains("Line 1", r.Message);
+            StringAssert.Contains("Line 3", r.Message);
         }
+        [Test] public void ShownSetupLinesCountsTheFirstTestsSetup()
+        {
+            Assert.AreEqual(2, CodeRunner.ShownSetupLines(PriceTests));
+            Assert.AreEqual(0, CodeRunner.ShownSetupLines(new[] { new RunTest { expectedOutput = "1" } }));
+        }
+        // ---- Fix the Bug: SENTINEL's endless countdown (BUG_PY_03_LOOPS)
+
+        const string CountdownTemplate = "while n > 0:\n    print(n)\n    ____\nprint(\"Liftoff\")";
+        static readonly RunTest[] CountdownTests =
+        {
+            new RunTest { setup = "n = 3", expectedOutput = "3\n2\n1\nLiftoff" },
+            new RunTest { setup = "n = 0", expectedOutput = "Liftoff" },
+        };
+
+        [Test] public void JudgeAcceptsFixedCountdown() => Assert.IsTrue(CodeRunner.Judge(CountdownTemplate, "n = n - 1", CountdownTests).Passed);
+        [Test] public void JudgeStopsEndlessLoopWithAFriendlyMessage()
+        {
+            JudgeResult r = CodeRunner.Judge(CountdownTemplate, "n = n + 1", CountdownTests);
+            Assert.IsFalse(r.Passed);
+            StringAssert.Contains("loop may never end", r.Message);
+            StringAssert.Contains("Line 3", r.Message); // print(n), under the shown "n = 3"
+        }
+
         [Test] public void JudgeRejectsEmptyFill() => Assert.IsFalse(CodeRunner.Judge(PriceTemplate, "  ", PriceTests).Passed);
         [Test] public void JudgeRejectsMultiLineFill() => Assert.IsFalse(CodeRunner.Judge(PriceTemplate, "1\nprint(2)", PriceTests).Passed);
         [Test] public void JudgeRejectsOverlongFill() => Assert.IsFalse(CodeRunner.Judge(PriceTemplate, new string('1', 200), PriceTests).Passed);

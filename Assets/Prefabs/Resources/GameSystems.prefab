@@ -2458,8 +2458,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -330, y: -375}
-  m_SizeDelta: {x: 820, y: 44}
+  m_AnchoredPosition: {x: -240, y: -375}
+  m_SizeDelta: {x: 1000, y: 44}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3559579217700647687
 CanvasRenderer:
@@ -10455,6 +10455,10 @@ GameObject:
   - component: {fileID: 7137963469483071081}
   - component: {fileID: 2020699141277357667}
   - component: {fileID: 6641829879318948776}
+  - component: {fileID: 7959025327290580712}
+  - component: {fileID: 4982417575516527526}
+  - component: {fileID: 5389975611178875093}
+  - component: {fileID: 2741401531173583952}
   m_Layer: 0
   m_Name: GameSystems
   m_TagString: Untagged
@@ -10751,6 +10755,7 @@ MonoBehaviour:
       first clue.
     mapTagline: A strange message waits on the computer.
     mapPicture: {fileID: 21300000, guid: 6be204c44584821469de09928ae7a566, type: 3}
+    mission: 'Get out of the house: open the hallway door by updating a variable.'
     unlockedAtStart: 1
     requiredChallenges:
     - home_hallway_door
@@ -10760,6 +10765,7 @@ MonoBehaviour:
     mapDescription: Follow the trail down Maple Street and open the gate's code lock.
     mapTagline: Follow Sam's trail down Maple Street.
     mapPicture: {fileID: 21300000, guid: a1a39b71f697fbf4bbe70afe793b7a85, type: 3}
+    mission: 'Follow Sam''s trail: turn text into a number to open the old gate.'
     unlockedAtStart: 0
     requiredChallenges:
     - neighborhood_gate
@@ -10769,6 +10775,7 @@ MonoBehaviour:
     mapDescription: Search Warehouse 7 for footprints and get past its security system.
     mapTagline: Crates, footprints and a security bot.
     mapPicture: {fileID: 21300000, guid: 7f8942741c4d4644083e8bffdc380716, type: 3}
+    mission: 'Break into Warehouse 7: work out the right total with arithmetic.'
     unlockedAtStart: 0
     requiredChallenges:
     - warehouse_security
@@ -10779,6 +10786,7 @@ MonoBehaviour:
       room.
     mapTagline: Labs, lasers and locked blast doors.
     mapPicture: {fileID: 21300000, guid: 51b827f9115aaf249b86167ee0607a2b, type: 3}
+    mission: Get through the lab doors using comparisons and if / else.
     unlockedAtStart: 0
     requiredChallenges:
     - facility_door_a
@@ -10789,6 +10797,7 @@ MonoBehaviour:
     mapDescription: Crack the old station's code lock and read SENTINEL's route display.
     mapTagline: An old platform hides SENTINEL's route.
     mapPicture: {fileID: 21300000, guid: 7a574487d41149348a6e181bdfeccabc, type: 3}
+    mission: Unlock the station gate with boolean logic (and, or, not).
     unlockedAtStart: 0
     requiredChallenges:
     - station_lock
@@ -10799,6 +10808,7 @@ MonoBehaviour:
       Sam.
     mapTagline: Reach SENTINEL's core and find Sam.
     mapPicture: {fileID: 21300000, guid: cdcd285688fd1e046b12592cb8ffb0ec, type: 3}
+    mission: 'Shut down SENTINEL: use loops and functions to reach the core.'
     unlockedAtStart: 0
     requiredChallenges:
     - final_lock_a
@@ -10864,6 +10874,67 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Game.LevelProgressManager
   activeLevelId: 
+--- !u!114 &7959025327290580712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8935516835678072354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f212a5a20ff4f7442a815b445bbec723, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Rewards.AchievementManager
+  headerFont: {fileID: 11400000, guid: de3cf1e022712f448b5d4270c852616e, type: 2}
+  bodyFont: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  accentColor: {r: 0.98, g: 0.8, b: 0.2, a: 1}
+  toastSeconds: 3.2
+--- !u!114 &4982417575516527526
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8935516835678072354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7934b25a4c0c09d4a9f5c2656c08cc0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.UI.StreakMeter
+  font: {fileID: 11400000, guid: de3cf1e022712f448b5d4270c852616e, type: 2}
+  accent: {r: 0.98, g: 0.62, b: 0.15, a: 1}
+--- !u!114 &5389975611178875093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8935516835678072354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d6c42d68ef423d43b8f7d4233690aff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Game.AlarmEscape
+  firstAlarmLevel: 2
+  hazardSpeed: 1.5
+  font: {fileID: 11400000, guid: de3cf1e022712f448b5d4270c852616e, type: 2}
+  alarmColor: {r: 0.94, g: 0.2, b: 0.2, a: 1}
+--- !u!114 &2741401531173583952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8935516835678072354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca711007a319a9c41b74764f9967d8a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.UI.SignalMeter
+  font: {fileID: 11400000, guid: de3cf1e022712f448b5d4270c852616e, type: 2}
+  onColor: {r: 0.29, g: 0.87, b: 0.5, a: 1}
+  offColor: {r: 0.25, g: 0.3, b: 0.36, a: 1}
 --- !u!1 &8971439491042918084
 GameObject:
   m_ObjectHideFlags: 0

@@ -17,8 +17,8 @@ MonoBehaviour:
   topic: Loops
   difficulty: 0
   questionType: 2
-  questionText: Fill in the blank so the loop prints the numbers from 1 up to count,
-    one per line.
+  questionText: The laser grid on this lock lights one beam for every line your loop
+    prints. Fill in the blank so the loop prints the numbers from 1 up to count.
   code: "for n in ____:\n    print(n)"
   answerFormat: 2
   choices: []
@@ -46,6 +46,7 @@ MonoBehaviour:
       5'
   - setup: count = 1
     expectedOutput: 1
+  effectId: lasers
   explanation: range(1, count + 1) starts at 1 and stops just before count + 1, so
     the last number printed is count. The stop value of range() is never included.
   hint: range(start, stop) does not include stop. How can you make count the last

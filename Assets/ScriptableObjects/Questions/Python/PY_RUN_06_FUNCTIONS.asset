@@ -34,6 +34,7 @@ MonoBehaviour:
     expectedOutput: 20
   - setup: num = 0
     expectedOutput: 0
+  effectId: function
   explanation: A function sends a value back with return. n * 2 uses the parameter
     n, so double(4) gives 8 and double(10) gives 20.
   hint: Inside the function, the value given to it is called n. What do you do with

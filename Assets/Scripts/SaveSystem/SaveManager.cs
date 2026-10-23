@@ -32,6 +32,20 @@ namespace CodeEscape.SaveSystem
             KeyFullscreen, KeyResolutionWidth, KeyResolutionHeight, KeyProgress
         };
 
+        // Lifetime achievements, badges and stars (JSON). Not part of a playthrough, so a new game keeps them.
+        const string KeyAchievements = KeyPrefix + "Achievements";
+
+        public static string LoadAchievementsJson()
+        {
+            return PlayerPrefs.GetString(KeyAchievements, string.Empty);
+        }
+
+        public static void SaveAchievementsJson(string json)
+        {
+            PlayerPrefs.SetString(KeyAchievements, json ?? string.Empty);
+            PlayerPrefs.Save();
+        }
+
         // ---------- Language ----------
 
         public static void SaveLanguage(ProgrammingLanguage language)

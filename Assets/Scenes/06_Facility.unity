@@ -7045,6 +7045,7 @@ GameObject:
   - component: {fileID: 319811062}
   - component: {fileID: 319811064}
   - component: {fileID: 319811063}
+  - component: {fileID: 319811065}
   m_Layer: 0
   m_Name: LabDoorB
   m_TagString: Untagged
@@ -7152,6 +7153,26 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 3, y: 3.5}
   m_EdgeRadius: 0
+--- !u!114 &319811065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 319811061}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3472255e9ab0ab4f872cfbda138a00b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Obstacles.GateLightEffect
+  effectId: gate
+  offset: {x: -1.35, y: 1.9, z: 1.75}
+  pixelSize: 0.0055
+  standOnPost: 0
+  floorY: -3.5
+  font: {fileID: 11400000, guid: 7943b7691221e8f4a927ad6e611f6537, type: 2}
+  accent: {r: 0.13, g: 0.83, b: 0.93, a: 1}
+  title: AGE CHECK GATE
 --- !u!1 &329747906
 GameObject:
   m_ObjectHideFlags: 0
@@ -11719,6 +11740,7 @@ Transform:
   - {fileID: 454249427}
   - {fileID: 2133214302}
   - {fileID: 1072274366}
+  - {fileID: 1352924144}
   m_Father: {fileID: 1907501945}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &614072573
@@ -21709,6 +21731,7 @@ GameObject:
   - component: {fileID: 1041791342}
   - component: {fileID: 1041791344}
   - component: {fileID: 1041791343}
+  - component: {fileID: 1041791345}
   m_Layer: 0
   m_Name: LabDoorA
   m_TagString: Untagged
@@ -21816,6 +21839,26 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 3, y: 3.5}
   m_EdgeRadius: 0
+--- !u!114 &1041791345
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1041791341}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3472255e9ab0ab4f872cfbda138a00b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Obstacles.GateLightEffect
+  effectId: gate
+  offset: {x: -1.6, y: 1.9, z: 1.75}
+  pixelSize: 0.0055
+  standOnPost: 0
+  floorY: -3.5
+  font: {fileID: 11400000, guid: 7943b7691221e8f4a927ad6e611f6537, type: 2}
+  accent: {r: 0.13, g: 0.83, b: 0.93, a: 1}
+  title: SCORE GATE
 --- !u!1 &1042746848
 GameObject:
   m_ObjectHideFlags: 0
@@ -28928,6 +28971,109 @@ Transform:
   - {fileID: 136155181}
   m_Father: {fileID: 608441083}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1352924143
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 608441083}
+    m_Modifications:
+    - target: {fileID: 2686182994378332213, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4315247240271867493, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_Name
+      value: BugTrap
+      objectReference: {fileID: 0}
+    - target: {fileID: 4694130187163152234, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5994199828487023597, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 8.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5994199828487023597, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5994199828487023597, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5994199828487023597, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5994199828487023597, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5994199828487023597, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5994199828487023597, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5994199828487023597, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5994199828487023597, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5994199828487023597, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6092825880112561341, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: hazardId
+      value: fac_bugtrap
+      objectReference: {fileID: 0}
+    - target: {fileID: 6092825880112561341, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: displayName
+      value: SENTINEL Bug Trap
+      objectReference: {fileID: 0}
+    - target: {fileID: 6092825880112561341, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: disarmWhenEscaped
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6092825880112561341, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: questions.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6092825880112561341, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: armedVisuals.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6092825880112561341, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: 'questions.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 7bbbe26d534f230428ff4e59749d8809, type: 2}
+    - target: {fileID: 6092825880112561341, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+      propertyPath: 'armedVisuals.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1352924145}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+--- !u!4 &1352924144 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5994199828487023597, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+  m_PrefabInstance: {fileID: 1352924143}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1352924145 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8069503767805108958, guid: 24794ec25ebaf69499a433616c3ba398, type: 3}
+  m_PrefabInstance: {fileID: 1352924143}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1362292814
 GameObject:
   m_ObjectHideFlags: 0

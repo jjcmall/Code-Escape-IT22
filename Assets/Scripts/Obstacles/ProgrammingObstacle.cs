@@ -128,6 +128,7 @@ namespace CodeEscape.Obstacles
             if (unlocked)
                 return;
             Debug.Log($"[Obstacle] '{displayName}' unlocked");
+            UnlockBurst.Play(transform.position + new Vector3(0f, 1f, -1.5f), new Color(0.29f, 0.87f, 0.5f));
             SetUnlocked(true, true);
 
             if (clueReward != null && ClueManager.Instance != null)

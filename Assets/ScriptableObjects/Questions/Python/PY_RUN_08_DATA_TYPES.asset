@@ -36,6 +36,7 @@ MonoBehaviour:
     expectedOutput: 15
   - setup: text = "0"
     expectedOutput: 3
+  effectId: counter
   explanation: Text and numbers are different data types. int() converts text such
     as "7" into the whole number 7, so number + 3 can be calculated.
   hint: A built-in function turns text into a whole number. Its name is the data

@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using CodeEscape.Game;
+using CodeEscape.Programming;
 
 namespace CodeEscape.Cloud
 {
@@ -37,6 +38,7 @@ namespace CodeEscape.Cloud
         // Starts collapsed so it doesn't cover the menu artwork; one click opens it.
         bool panelCollapsed = true;
         float savedShownUntil;
+        bool chipHiddenForChallenge;
         CloudSaveStatus lastStatus = CloudSaveStatus.Synced;
 
         void Awake()
@@ -83,6 +85,14 @@ namespace CodeEscape.Cloud
             bool gated = service.State != CloudState.Ready;
             if (gated)
                 KeepFocusOnGate();
+            // The chip would cover the challenge window's buttons: hide it while one is open.
+            ProgrammingChallengeManager challenges = ProgrammingChallengeManager.Instance;
+            bool challengeOpen = challenges != null && challenges.IsChallengeOpen;
+            if (challengeOpen != chipHiddenForChallenge)
+            {
+                chipHiddenForChallenge = challengeOpen;
+                dirty = true;
+            }
             if (dirty || (chip.activeSelf && Time.unscaledTime > savedShownUntil && service.SaveStatus == CloudSaveStatus.Synced))
             {
                 dirty = false;
@@ -148,9 +158,11 @@ namespace CodeEscape.Cloud
                     }
                     break;
             }
-            chip.SetActive(message != null && service.State == CloudState.Ready);
+            chip.SetActive(message != null && service.State == CloudState.Ready && !chipHiddenForChallenge);
             chipText.text = message ?? string.Empty;
             chipRetry.gameObject.SetActive(showRetry);
+            chipText.rectTransform.offsetMax = new Vector2(showRetry ? -150f : -14f, -6f);
+            PlaceChip(IsMenuScene(SceneManager.GetActiveScene().name));
         }
 
         void RefreshPanel(CloudProgressService service)
@@ -160,7 +172,7 @@ namespace CodeEscape.Cloud
                            && (scene == SceneNames.MainMenu || scene == SceneNames.LevelMap);
             panel.SetActive(visible);
             if (visible)
-                PlacePanel(scene == SceneNames.MainMenu);
+                PlacePanel();
             panelBody.SetActive(visible && !panelCollapsed);
             panelToggleLabel.text = panelCollapsed ? "CLOUD PROGRESS  +" : "CLOUD PROGRESS  -";
             if (!visible || panelCollapsed)
@@ -270,22 +282,26 @@ namespace CodeEscape.Cloud
             });
             gateRetry.gameObject.SetActive(false);
 
-            // Status chip (top right).
+            // Status chip: top right on the menus, bottom right (above the controls bar) in the levels.
             chip = NewImage("StatusChip", root, Panel);
-            Place(chip.GetComponent<RectTransform>(), new Vector2(1f, 1f), new Vector2(560, 120), new Vector2(-300, -80));
-            chipText = NewText("Text", chip.transform, 24, TextAnchor.MiddleLeft, Color.white);
-            Stretch(chipText.rectTransform, 16, 8, 190, 8);
-            chipRetry = NewButton("Retry", chip.transform, "RETRY", new Vector2(150, 60), new Vector2(0, 0), 26, () =>
+            chip.GetComponent<RectTransform>().sizeDelta = new Vector2(480, 84);
+            chipText = NewText("Text", chip.transform, 20, TextAnchor.MiddleLeft, Color.white);
+            Stretch(chipText.rectTransform, 14, 6, 14, 6);
+            chipText.resizeTextForBestFit = true;
+            chipText.resizeTextMinSize = 13;
+            chipText.resizeTextMaxSize = 20;
+            chipText.verticalOverflow = VerticalWrapMode.Truncate;
+            chipRetry = NewButton("Retry", chip.transform, "RETRY", new Vector2(120, 48), new Vector2(0, 0), 22, () =>
             {
                 if (CloudProgressService.Instance != null)
                     CloudProgressService.Instance.RetrySave();
             });
             var rr = chipRetry.GetComponent<RectTransform>();
             rr.anchorMin = rr.anchorMax = new Vector2(1f, 0.5f);
-            rr.anchoredPosition = new Vector2(-95, 0);
+            rr.anchoredPosition = new Vector2(-72, 0);
             chip.SetActive(false);
 
-            // Progression panel (bottom left).
+            // Progression panel (bottom right, see PlacePanel).
             panel = NewImage("ProgressPanel", root, Panel);
             Place(panel.GetComponent<RectTransform>(), new Vector2(0f, 0f), new Vector2(620, 600), new Vector2(340, 320));
             var rt = panel.GetComponent<RectTransform>();
@@ -323,19 +339,34 @@ namespace CodeEscape.Cloud
             SizePanel();
         }
 
+        static bool IsMenuScene(string scene)
+        {
+            return scene == SceneNames.MainMenu || scene == SceneNames.LevelMap || scene == SceneNames.LanguageSelect
+                || scene == SceneNames.Intro || scene == SceneNames.Ending || scene == SceneNames.Results;
+        }
+
+        // Menus have free space top right. In the levels the top corners hold the HUD and achievement toasts,
+        // so the chip sits bottom right, above the controls bar.
+        void PlaceChip(bool menu)
+        {
+            var rt = chip.GetComponent<RectTransform>();
+            Vector2 corner = menu ? new Vector2(1f, 1f) : new Vector2(1f, 0f);
+            rt.anchorMin = rt.anchorMax = rt.pivot = corner;
+            rt.anchoredPosition = menu ? new Vector2(-24, -24) : new Vector2(-24, 96);
+        }
+
         void SizePanel()
         {
             var rt = panel.GetComponent<RectTransform>();
             rt.sizeDelta = new Vector2(620, panelCollapsed ? 54 : 600);
         }
 
-        // Main menu: bottom right above the footer, clear of the menu column. Elsewhere: bottom left.
-        void PlacePanel(bool bottomRight)
+        // Bottom right above the footer: clear of the main menu column and of the level map's Back button.
+        void PlacePanel()
         {
             var rt = panel.GetComponent<RectTransform>();
-            Vector2 corner = bottomRight ? new Vector2(1f, 0f) : Vector2.zero;
-            rt.anchorMin = rt.anchorMax = rt.pivot = corner;
-            rt.anchoredPosition = bottomRight ? new Vector2(-24, 64) : new Vector2(24, 24);
+            rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(1f, 0f);
+            rt.anchoredPosition = new Vector2(-24, 64);
         }
 
         GameObject NewImage(string name, RectTransform parent, Color color)

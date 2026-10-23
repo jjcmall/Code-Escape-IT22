@@ -17,8 +17,9 @@ MonoBehaviour:
   topic: Variables
   difficulty: 0
   questionType: 2
-  questionText: The variable score already has a value. Fill in the blank so the
-    program adds 5 to the score and prints the new score.
+  questionText: 'The hallway keypad types in whatever your program prints. The variable
+    score holds the old access code: fill in the blank so the program adds 5 to it
+    and prints the new code.'
   code: '____
 
     print(score)'
@@ -36,6 +37,7 @@ MonoBehaviour:
     expectedOutput: 9
   - setup: score = 0
     expectedOutput: 5
+  effectId: keypad
   explanation: A variable can be reassigned using its own old value. score = score
     + 5 reads the current score, adds 5, and stores the result back in score, so
     it works whatever the starting score is.
