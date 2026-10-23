@@ -133,9 +133,6 @@ My test data was deleted from Cloud Save afterwards, and the local playthrough w
 
 
 ## Known limitations
-- Python only. PHP and SQL lessons and questions are kept in the project for future versions but are not offered.
-- The interpreter runs a beginner subset of Python (variables, arithmetic, comparisons, if/elif/else, for and while loops, lists, functions, print and a few built-ins). Unsupported syntax gives a friendly error. There is no free-form multi-line code editor: players type the missing part of a short program.
-- Content has not yet been reviewed by a teacher or checked against an official curriculum, and no classroom playtest has been done yet.
 - Anonymous identity only; no recovery or cross-device sync (see above).
 - Online-only. Unsaved changes are kept in the existing local save (PlayerPrefs) and retried, but they are never reported as saved.
 - Total score is computed from distinct solved and hinted IDs, so replaying a level does not add points, and a hint already penalised once is not penalised again on a replay.
