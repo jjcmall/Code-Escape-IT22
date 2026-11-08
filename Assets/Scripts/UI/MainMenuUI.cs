@@ -9,8 +9,8 @@ using CodeEscape.SaveSystem;
 namespace CodeEscape.UI
 {
     /// <summary>
-    /// Main menu: Play Adventure (continue the saved level, or open the level map), Investigation Logs, Achievements, Settings,
-    /// SDG 4 and Terminate Session (exit).
+    /// Main menu: Play (continue the saved level, or open the level map), Investigation Logs and Achievements on the
+    /// left, with the levels cleared below them; Settings, SDG 4, Account and Exit top right.
     /// </summary>
     public class MainMenuUI : MonoBehaviour
     {
@@ -37,6 +37,10 @@ namespace CodeEscape.UI
         GameObject continuePanel;
         [SerializeField] TMP_Text continueSummary;
         [SerializeField] Selectable continueButton;
+
+        [Header("Progress")]
+        [SerializeField, Tooltip("Shows how many levels are cleared, below the menu items.")]
+        TMP_Text levelsClearedLabel;
 
         GameObject openPanel;
         Selectable openPanelButton;
@@ -68,6 +72,12 @@ namespace CodeEscape.UI
         void Start()
         {
             UIFocus.Select(firstSelected);
+            if (levelsClearedLabel != null)
+            {
+                int total = LevelManager.Instance != null ? LevelManager.Instance.LevelCount : 6;
+                int cleared = Mathf.Clamp(Rewards.AchievementCatalog.ClearedLevels(), 0, total);
+                levelsClearedLabel.text = $"{cleared} / {total}  LEVELS CLEARED";
+            }
         }
 
         void Update()
@@ -147,6 +157,12 @@ namespace CodeEscape.UI
         public void OnSdgClicked()
         {
             OpenPanel(sdgPanel, sdgButton);
+        }
+
+        /// <summary>Account: the cloud account menu (sign out, delete account).</summary>
+        public void OnAccountClicked()
+        {
+            Cloud.ProgressionUI.OpenAccountMenu();
         }
 
         public void OnExitClicked()

@@ -135,6 +135,8 @@ namespace CodeEscape.SaveSystem
         {
             if (data == null)
                 return;
+            // Checkpoints and cloud copies come from outside this session: repair impossible values first.
+            SaveManager.SanitizeProgress(data, "the restored progress");
             data.language = (int)LanguageManager.Current;
 
             if (ProgrammingChallengeManager.Instance != null)

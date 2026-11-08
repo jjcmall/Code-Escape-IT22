@@ -5,9 +5,8 @@ using UnityEngine;
 namespace CodeEscape.Cloud
 {
     /// <summary>
-    /// The progression record stored in Unity Cloud Save under the authenticated player (key
-    /// <see cref="CloudProgressService.KeyProgression"/>). Field names match the project's data design.
-    /// Serialised with JsonUtility into one Cloud Save string value.
+    /// The progression record stored in Cloud Save (player key code_escape_progression) for the signed-in student.
+    /// Field names match the project's data design. Serialised with JsonUtility into one JSON document.
     /// </summary>
     [Serializable]
     public class PlayerProgressData
@@ -15,7 +14,7 @@ namespace CodeEscape.Cloud
         public const int CurrentVersion = 1;
 
         public int version = CurrentVersion;
-        /// <summary>Authenticated Unity Player ID this record belongs to.</summary>
+        /// <summary>Unity Authentication player ID this record belongs to.</summary>
         public string player_id = string.Empty;
         /// <summary>Level ID (LevelInfo.levelId) of the level currently reached.</summary>
         public string current_level = string.Empty;
@@ -40,18 +39,30 @@ namespace CodeEscape.Cloud
             return JsonUtility.FromJson<PlayerProgressData>(JsonUtility.ToJson(this));
         }
 
-        /// <summary>Repairs null lists (a hand-edited or older record) so the rest of the code can rely on them.</summary>
+        /// <summary>
+        /// Repairs a hand-edited, older or damaged record so the rest of the code can rely on it: null lists become
+        /// empty, empty and duplicate IDs are dropped, and the score can't be negative.
+        /// </summary>
         public void Sanitize()
         {
             player_id ??= string.Empty;
             current_level ??= string.Empty;
             highest_unlocked_level ??= string.Empty;
             last_played ??= string.Empty;
-            completed_levels ??= new List<string>();
-            achievements ??= new List<string>();
-            scored_challenges ??= new List<string>();
-            penalised_hints ??= new List<string>();
+            completed_levels = Distinct(completed_levels);
+            achievements = Distinct(achievements);
+            scored_challenges = Distinct(scored_challenges);
+            penalised_hints = Distinct(penalised_hints);
             total_score = Mathf.Max(0, total_score);
+        }
+
+        static List<string> Distinct(List<string> list)
+        {
+            if (list == null)
+                return new List<string>();
+            var seen = new HashSet<string>();
+            list.RemoveAll(id => string.IsNullOrEmpty(id) || !seen.Add(id));
+            return list;
         }
     }
 
@@ -65,7 +76,7 @@ namespace CodeEscape.Cloud
 
     /// <summary>
     /// What the game needs to resume exactly where it was: the existing local save files, as JSON, copied to
-    /// Cloud Save (key <see cref="CloudProgressService.KeySnapshot"/>). Lets the existing level map, checkpoints
+    /// Cloud Save (player key code_escape_snapshot). Lets the existing level map, checkpoints
     /// and Continue button work unchanged after a restore.
     /// </summary>
     [Serializable]

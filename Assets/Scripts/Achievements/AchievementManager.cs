@@ -45,6 +45,7 @@ namespace CodeEscape.Rewards
         // The open challenge.
         int attempts;
         bool challengeIsDoor;
+        bool challengeIsHazard;
 
         // The level being played.
         bool levelHinted;
@@ -148,6 +149,14 @@ namespace CodeEscape.Rewards
 
         public string ExportJson() => JsonUtility.ToJson(progress);
 
+        /// <summary>Forgets the local achievements when another player signs in on this computer (theirs come from Cloud Save).</summary>
+        public void ClearForNewPlayer()
+        {
+            progress = new AchievementProgress();
+            definitions = null;
+            Save();
+        }
+
         /// <summary>Adds achievements restored from Cloud Save (their counters and the record's ID list) to the local ones.</summary>
         public void MergeFromCloud(string json, IEnumerable<string> recordAchievements)
         {
@@ -177,7 +186,9 @@ namespace CodeEscape.Rewards
         {
             attempts = 0;
             ProgrammingChallengeManager manager = ProgrammingChallengeManager.Instance;
-            challengeIsDoor = manager != null && manager.ActiveSource != null && !manager.ActiveSource.IsMandatory;
+            // A practice challenge (the prologue computer) is neither, so it counts as no lock and no escape.
+            challengeIsDoor = manager != null && manager.ActiveSource != null && manager.ActiveSource.CountsAsObstacle;
+            challengeIsHazard = manager != null && manager.ActiveSource != null && manager.ActiveSource.IsMandatory;
         }
 
         void HandleAnswerChecked(bool correct)
@@ -218,7 +229,7 @@ namespace CodeEscape.Rewards
                 if (attempts == 0)
                     progress.firstTries++;
             }
-            else if (attempts == 0)
+            else if (challengeIsHazard && attempts == 0)
             {
                 progress.escapes++;
             }

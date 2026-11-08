@@ -108,15 +108,35 @@ namespace CodeEscape.SaveSystem
         {
             if (!HasProgress)
                 return null;
+            ProgressData progress;
             try
             {
-                return JsonUtility.FromJson<ProgressData>(PlayerPrefs.GetString(KeyProgress));
+                progress = JsonUtility.FromJson<ProgressData>(PlayerPrefs.GetString(KeyProgress));
             }
             catch (System.Exception e)
             {
                 Debug.LogWarning($"[SaveManager] Saved progress could not be read and was ignored: {e.Message}");
                 return null;
             }
+            SanitizeProgress(progress, "the saved progress");
+            return progress;
+        }
+
+        /// <summary>
+        /// Repairs a playthrough (from the save, a level checkpoint or the cloud) before it is used: see
+        /// <see cref="ProgressData.Sanitize"/>. Level and scene names are checked against the level list when it is loaded.
+        /// </summary>
+        public static void SanitizeProgress(ProgressData progress, string source)
+        {
+            if (progress == null)
+                return;
+            Game.LevelManager levels = Game.LevelManager.Instance;
+            bool repaired = progress.Sanitize(
+                levels != null ? new System.Predicate<string>(scene => levels.GetInfo(scene) != null) : null,
+                levels != null ? new System.Predicate<string>(id => levels.GetInfoById(id) != null) : null,
+                Game.SceneNames.Home);
+            if (repaired)
+                Debug.LogWarning($"[SaveManager] Repaired invalid values in {source} (missing lists, duplicates, negative numbers or unknown levels).");
         }
 
         public static void DeleteProgress()
