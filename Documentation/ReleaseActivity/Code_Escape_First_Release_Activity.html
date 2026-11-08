@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>First Release Activity: Code Escape</title>
+<style>
+  @page { size: A4; margin: 20mm 18mm 20mm 18mm;
+    @bottom-center { content: "Page " counter(page); font: 9pt Arial, sans-serif; color: #000; } }
+  @page :first { @bottom-center { content: ""; } }
+  html { font-family: Arial, Helvetica, sans-serif; font-size: 10pt; line-height: 1.4; color: #000; }
+  body { margin: 0; }
+  h1 { font-size: 14pt; margin: 0 0 4mm; border-bottom: 1px solid #000; padding-bottom: 1mm; break-after: avoid; }
+  h2 { font-size: 11pt; margin: 6mm 0 2mm; break-after: avoid; }
+  p { margin: 0 0 2.5mm; }
+  .part { break-before: page; }
+  table { width: 100%; border-collapse: collapse; margin: 2mm 0 4mm; font-size: 9pt; table-layout: fixed; }
+  thead { display: table-header-group; }
+  th, td { border: 1px solid #000; padding: 1.3mm 1.8mm; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+  th { background: #e6e6e6; }
+  tr { break-inside: avoid; }
+  code { font-family: Consolas, monospace; font-size: 8.5pt; }
+  pre { font-family: Consolas, monospace; font-size: 8pt; margin: 2mm 0 4mm; border: 1px solid #000; padding: 2mm; white-space: pre-wrap; break-inside: avoid; }
+  ul { margin: 0 0 3mm 5mm; padding: 0; }
+  .cover { text-align: center; padding-top: 50mm; page-break-after: always; break-after: page; }
+  .cover h1 { font-size: 22pt; border: 0; margin-bottom: 10mm; }
+  .cover table { width: 150mm; margin: 6mm auto; font-size: 10.5pt; }
+  .cover td:first-child { width: 42mm; font-weight: bold; }
+  .ph { font-style: italic; }
+  .note { border: 1px solid #000; padding: 2mm; margin: 2mm 0 4mm; font-size: 9pt; break-inside: avoid; }
+  .fig { margin: 2mm 0 4mm; break-inside: avoid; } .fig img { width: 100%; border: 1px solid #000; } .cap { font-size: 8.5pt; margin: 1mm 0 0; }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <h1>First Controlled Release</h1>
+  <p><b>Code Escape: Build, Test and Release of Version 0.1.0</b></p>
+  <p>Capstone Project (Unity, Windows)</p>
+  <table>
+    <tr><td>Group Number</td><td>IT22</td></tr>
+    <tr><td>Group Members</td><td style="text-align:left">Jean Joseph C. Mallari<br>Mark Daniel M. Haguisan<br>Louis Angelo D. Junio<br>Alynus Job C. Tombado</td></tr>
+    <tr><td>Release</td><td>Version 0.1.0 (testing build), 8 November 2026</td></tr>
+    <tr><td>Source</td><td>Branch <code>release-v0.1.0</code>, commit <code>f8b27a8</code>, tag <code>v0.1.0</code></td></tr>
+    <tr><td>Repository</td><td>https://github.com/jjcmall/Code-Escape-IT22</td></tr>
+    <tr><td>Release artifact</td><td><code>CodeEscape-v0.1.0.zip</code> (64.5 MB)</td></tr>
+    <tr><td>Course / Section</td><td class="ph">[Course and section]</td></tr>
+    <tr><td>Instructor</td><td class="ph">[Instructor]</td></tr>
+  </table>
+  <p style="margin-top:8mm; font-size:9pt">Status: the build, package, tag and release notes are done. The tests that need a real account, and a test on a second computer, are marked as not run and are still to be done by the group.</p>
+</section>
+
+<!-- ================= PART I ================= -->
+<section>
+  <h1>Part I. Deployment Environment Plan</h1>
+  <table>
+    <thead><tr><th style="width:14%">Environment</th><th style="width:27%">Where / Platform</th><th style="width:24%">Purpose</th><th>Required Software / Dependencies</th></tr></thead>
+    <tbody>
+      <tr><td>Development</td><td>Windows 11 PC with the Unity Editor</td><td>Write and test the game; commit to Git</td><td>Unity 6000.5.10f1 (C#, URP, Input System, uGUI), a code editor (VS Code settings are in the repository), Git with GitHub Desktop, a Unity account linked to the project for Unity Gaming Services</td></tr>
+      <tr><td>Testing</td><td>(1) A clean folder on the same PC, run from the extracted zip, outside the editor (done 8 Nov 2026). (2) A second Windows computer of another member (to be done).</td><td>Check that the packaged release runs without the development setup</td><td>Windows 10 or 11, 64-bit; internet connection; no Unity Editor needed</td></tr>
+      <tr><td>Release / Target</td><td>Windows 64-bit desktop or laptop (student computers, school laboratory)</td><td>The player runs the game</td><td><code>CodeEscape-v0.1.0.zip</code> (the packaged build); internet for sign-in and Cloud Save through Unity Gaming Services</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ================= PART II ================= -->
+<section class="part">
+  <h1>Part II. Deployment Technology Decision</h1>
+  <table>
+    <thead><tr><th style="width:17%">Technology</th><th style="width:13%">Needed?</th><th style="width:27%">Intended Use</th><th>Reason</th></tr></thead>
+    <tbody>
+      <tr><td>Virtual Machine</td><td>Possibly</td><td>A clean Windows environment for testing the release, if no second computer is available</td><td>Users run the game directly on Windows, so a VM is not needed to run it. It would only help to test a fresh Windows install. For this release the test used a clean folder with no previous game data, and a second computer is preferred.</td></tr>
+      <tr><td>Container / Docker</td><td>No</td><td>None</td><td>The game is a desktop client. There is no backend service of our own to package, because accounts and progress use Unity Authentication and Cloud Save.</td></tr>
+      <tr><td>Cloud Platform</td><td>Yes</td><td>Unity Gaming Services: Authentication (username and password) and Cloud Save</td><td>Progress must belong to a student account and load on any computer. This is an existing project requirement, not extra infrastructure.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ================= PART III ================= -->
+<section class="part">
+  <h1>Part III. Versioning Plan</h1>
+  <p>Convention: <code>MAJOR.MINOR.PATCH</code>, with a <code>v</code> prefix in tags and file names.</p>
+  <table>
+    <tbody>
+      <tr><td style="width:30%">Current Version</td><td>0.1.0 (testing build)</td></tr>
+      <tr><td>Version Number</td><td><code>0.1.0</code>, stored in Unity as <code>bundleVersion</code> (commit <code>f8b27a8</code>) and tagged <code>v0.1.0</code></td></tr>
+      <tr><td>Reason for Version Number</td><td>MAJOR is 0 because the capstone is not yet the agreed complete release. MINOR is 1 because this is the first controlled build with the working game. PATCH is 0 because it is not a fix release.</td></tr>
+      <tr><td>Included Features</td><td>Python puzzle game with six levels on a level map; 32 Python challenges checked by running code in a sandboxed interpreter; learning cards, hints and scoring; achievements and level stars; story systems and the prologue comic; username and password accounts with Cloud Save progress; one shared menu theme.</td></tr>
+      <tr><td>Excluded / Planned Features</td><td>PHP and SQL challenges (content is kept for future versions); builds for platforms other than Windows; a password reset inside the game.</td></tr>
+    </tbody>
+  </table>
+  <h2>Succeeding versions</h2>
+  <table>
+    <thead><tr><th style="width:38%">Change</th><th style="width:18%">Version After Change</th><th>Reason</th></tr></thead>
+    <tbody>
+      <tr><td>Fix an incorrect score calculation</td><td>0.1.1</td><td>A fix with no new feature raises PATCH.</td></tr>
+      <tr><td>Add leaderboard functionality</td><td>0.2.0</td><td>A new working feature raises MINOR and resets PATCH.</td></tr>
+      <tr><td>Major redesign affecting saved data compatibility</td><td>1.0.0 (or 2.0.0 once 1.0.0 exists)</td><td>An incompatible change raises MAJOR. While we are on 0.x, the first MAJOR is the agreed 1.0.0.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ================= PART IV ================= -->
+<section class="part">
+  <h1>Part IV. Release Readiness Check</h1>
+  <div class="note">This build is labelled a <b>testing build</b> because two checks do not pass yet: the pull requests were not reviewed and merged before the build. This is documented here instead of hidden.</div>
+  <table>
+    <thead><tr><th style="width:27%">Release Check</th><th style="width:11%">Status</th><th>Evidence / Remarks</th></tr></thead>
+    <tbody>
+      <tr><td>Required changes have been reviewed</td><td>Fail</td><td>Pull Request #1 (<code>refactor/save-progress</code>) is open with no reviewer. The menu theme branch has no pull request yet.</td></tr>
+      <tr><td>Accepted changes are integrated</td><td>Fail</td><td>The release branch <code>release-v0.1.0</code> carries the commits of both task branches, but they are not merged into <code>main</code> yet.</td></tr>
+      <tr><td>Correct source version is being used</td><td>Pass</td><td>The build was made from a clean checkout of commit <code>f8b27a8</code> (no uncommitted files), tagged <code>v0.1.0</code>.</td></tr>
+      <tr><td>Project opens without critical errors</td><td>Pass</td><td>The Unity Console showed no errors in the editor, and the batch build compiled with 0 compile errors.</td></tr>
+      <tr><td>Required scenes/modules are included</td><td>Pass</td><td>All 12 scenes are enabled in Build Settings (main menu, language select, level map, intro, six levels, ending, results).</td></tr>
+      <tr><td>Database/configuration is correct for testing</td><td>Pass</td><td>The project is linked to its Unity Cloud project. In the editor on 8 Nov 2026 the game signed in, loaded and saved progress to Cloud Save. The packaged build was only checked up to the welcome screen.</td></tr>
+      <tr><td>Temporary/debug content is reviewed</td><td>Partial</td><td>The test scaffold folder <code>Assets/playmode test</code> is untracked and is not in the commit. A full review of debug content in scenes was not done.</td></tr>
+      <tr><td>Target platform is selected correctly</td><td>Pass</td><td>Windows 64-bit (<code>StandaloneWindows64</code>).</td></tr>
+      <tr><td>Version number is updated</td><td>Pass</td><td><code>bundleVersion</code> changed from 1.0 to 0.1.0 in commit <code>f8b27a8</code>.</td></tr>
+      <tr><td>Build can be produced successfully</td><td>Pass</td><td>Unity batch build, result Success, 9.5 minutes.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ================= PART V ================= -->
+<section class="part">
+  <h1>Part V. Build and Release Evidence</h1>
+  <h2>How the build was made</h2>
+  <ol style="margin:0 0 3mm 5mm; padding:0">
+    <li>Set the version to 0.1.0 and committed it (<code>f8b27a8</code> on <code>release-v0.1.0</code>).</li>
+    <li>Made a clean checkout of that commit in a separate folder, so only committed files are built.</li>
+    <li>Ran Unity 6000.5.10f1 in batch mode with <code>-buildWindows64Player</code>, which builds the scenes enabled in Build Settings.</li>
+    <li>Copied the result to a release folder without the Burst debug information folder (not needed by players), added <code>README.txt</code>, <code>VERSION.txt</code> and <code>RELEASE_NOTES.txt</code>, and zipped it.</li>
+    <li>Tagged the source commit <code>v0.1.0</code>.</li>
+  </ol>
+  <table>
+    <tbody>
+      <tr><td style="width:30%">Build result</td><td>Success, 0 compile errors, 9.5 minutes (including the first asset import of the clean checkout)</td></tr>
+      <tr><td>Release folder</td><td><code>CodeEscape-v0.1.0/</code>: <code>CodeEscape.exe</code>, <code>CodeEscape_Data/</code>, <code>UnityPlayer.dll</code>, <code>MonoBleedingEdge/</code>, <code>D3D12/</code>, <code>DirectML.dll</code>, <code>dstorage.dll</code>, <code>dstoragecore.dll</code>, <code>UnityCrashHandler64.exe</code>, <code>README.txt</code>, <code>VERSION.txt</code>, <code>RELEASE_NOTES.txt</code></td></tr>
+      <tr><td>Size</td><td>189 MB unpacked; <code>CodeEscape-v0.1.0.zip</code> is 64.5 MB</td></tr>
+      <tr><td>SHA-256 of the zip</td><td><code>6AA6FE4345CE2A7C8FEA932C38A88EBCE57EF0D8E344744CBA8E29043F43EC6A</code></td></tr>
+      <tr><td>Version identification</td><td>The version is in <code>VERSION.txt</code>, <code>README.txt</code>, the zip name and the Unity setting <code>bundleVersion</code>. It is not shown inside the game menus, and the exe file properties show the Unity engine version, not the game version.</td></tr>
+    </tbody>
+  </table>
+  <div class="fig"><img src="evidence/01_packaged_build_welcome.png" alt="Packaged build welcome screen"><p class="cap">The packaged build (<code>CodeEscape.exe</code> from the extracted zip) after launch: the welcome screen with SIGN IN and CREATE ACCOUNT.</p></div>
+</section>
+
+<!-- ================= PART VI ================= -->
+<section class="part">
+  <h1>Part VI. Release Testing</h1>
+  <div class="note">Test environment: Windows 11 PC, the zip extracted to a clean folder, run as <code>CodeEscape.exe</code> (not from the Unity Editor). No previous game data existed for the standalone game on this PC (no saved settings, no log), so it ran as a first-time user. It is the same computer used for development, so a test on a second computer is still needed. Date: 8 November 2026.</div>
+  <table>
+    <thead><tr><th style="width:21%">Release Test</th><th style="width:25%">Expected Result</th><th style="width:36%">Actual Result</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>Application launches</td><td>The application opens normally</td><td>The window titled "Code Escape" opened, stayed running and responsive after 25 seconds, using about 790 MB of memory.</td><td>Pass</td></tr>
+      <tr><td>Main feature works</td><td>A player can sign in and play a level</td><td>The welcome screen with SIGN IN and CREATE ACCOUNT appeared. Signing in and playing a level was not tested because it needs a real account.</td><td>Not run</td></tr>
+      <tr><td>Save/load works</td><td>Progress is saved and loaded with an account</td><td>Not tested on the packaged build (needs an account). The same save and load logic passed 8 of 8 tests in the Unity Editor on 8 Nov 2026.</td><td>Not run</td></tr>
+      <tr><td>Required assets load</td><td>Menu scene, fonts, sprites and background load without errors</td><td>The main menu background, the Orbitron font and the themed panel and buttons are visible. <code>Player.log</code> has no errors or exceptions. Other scenes were not opened.</td><td>Pass (main menu only)</td></tr>
+      <tr><td>Application can close normally</td><td>The window closes without a crash</td><td>The window was closed, the process ended, and the log ends with a normal shutdown.</td><td>Pass</td></tr>
+      <tr><td>Version is identifiable</td><td>The version can be found</td><td><code>VERSION.txt</code> in the release folder says 0.1.0 with the commit and tag, and the zip name contains <code>v0.1.0</code>. The game menus do not show it.</td><td>Pass (by file)</td></tr>
+    </tbody>
+  </table>
+  <p>Result: 4 passed, 2 not run. The two that were not run are the ones that need a real account, so the group should run them on a second computer before calling the release tested.</p>
+</section>
+
+<!-- ================= PART VII ================= -->
+<section class="part">
+  <h1>Part VII. Release Notes and Traceability</h1>
+  <table>
+    <tbody>
+      <tr><td style="width:30%">Project</td><td>Code Escape (Group IT22)</td></tr>
+      <tr><td>Version</td><td>0.1.0</td></tr>
+      <tr><td>Release Date</td><td>8 November 2026</td></tr>
+      <tr><td>Release Type</td><td>Testing</td></tr>
+      <tr><td>Source Version / Branch / Changeset</td><td>Tag <code>v0.1.0</code>, commit <code>f8b27a8</code>, branch <code>release-v0.1.0</code></td></tr>
+    </tbody>
+  </table>
+  <h2>Included in This Version</h2>
+  <ul>
+    <li>Python puzzle game with six levels on a level map; cleared levels can be replayed.</li>
+    <li>32 Python challenges checked by running the player's code in a sandboxed interpreter.</li>
+    <li>Learning cards, wrong-answer feedback, a hint ladder, scoring (+100 per solved challenge, -25 for the first hint), achievements and level stars.</li>
+    <li>Story systems: cutscenes, dialogue, objectives, clue journal and the prologue comic.</li>
+    <li>Username and password accounts, with progress saved to Unity Cloud Save and a local save.</li>
+    <li>One shared look for menus, HUD and dialogs.</li>
+  </ul>
+  <h2>Fixed</h2>
+  <ul>
+    <li>No defect fixes in this version.</li>
+    <li>Internal change with no change in behavior: record building and snapshot restoring moved out of <code>CloudProgressService</code> into <code>ProgressRecordBuilder</code> and <code>ProgressSnapshotApplier</code>.</li>
+  </ul>
+  <h2>Known Issues</h2>
+  <ul>
+    <li>An internet connection and an account are needed to play.</li>
+    <li>There is no password reset in the game; the owner sets a new password in the Unity Dashboard.</li>
+    <li>The build is not code-signed, so Windows SmartScreen may warn on first run.</li>
+    <li>Pull Request #1 is not reviewed or merged yet.</li>
+    <li>Not yet tested on a second computer, and sign-in and save were not tested on the packaged build.</li>
+  </ul>
+  <h2>Not Yet Included</h2>
+  <ul>
+    <li>PHP and SQL challenges.</li>
+    <li>Builds for platforms other than Windows.</li>
+  </ul>
+  <h2>Installation / Running Instructions</h2>
+  <ol style="margin:0 0 3mm 5mm; padding:0">
+    <li>Extract <code>CodeEscape-v0.1.0.zip</code> to a normal folder. Do not run it from inside the zip.</li>
+    <li>Run <code>CodeEscape.exe</code>. If Windows SmartScreen warns, choose More info, then Run anyway.</li>
+    <li>Create an account: username 3 to 20 characters; password 8 to 30 characters with upper case, lower case, a number and a symbol. Or sign in.</li>
+    <li>Choose Select Level, then Play. Walk to a door and press E to open its challenge.</li>
+  </ol>
+  <h2>Source traceability</h2>
+<pre>Released build  ->  Version 0.1.0  ->  Tag v0.1.0  ->  Commit f8b27a8  (branch release-v0.1.0)
+Build input     :  clean checkout of f8b27a8, Unity 6000.5.10f1, StandaloneWindows64
+Artifact        :  CodeEscape-v0.1.0.zip, SHA-256 6AA6FE43...43EC6A</pre>
+  <p>The same release notes are in the repository as <code>Documentation/Releases/RELEASE_NOTES_v0.1.0.md</code> and inside the zip as <code>RELEASE_NOTES.txt</code>.</p>
+</section>
+
+<!-- ================= PART VIII ================= -->
+<section class="part">
+  <h1>Part VIII. Succeeding Release Process</h1>
+<pre>Develop Changes (task branch)
+  -> Review and Integrate (pull request, review, merge to main)
+  -> Determine New Version Number
+  -> Update Version (Unity bundleVersion, commit)
+  -> Build (clean checkout of that commit, batch build)
+  -> Test Packaged Build (from the extracted zip, on a second computer)
+  -> Create Release Notes (Documentation/Releases)
+  -> Label / Tag Source (git tag vX.Y.Z)
+  -> Publish / Archive Release (GitHub Release with the zip and its SHA-256)</pre>
+  <p><b>If the next change is only a bug fix, what will the next version be?</b> 0.1.1.</p>
+  <p><b>If the next change introduces a new working feature, what will the next version be?</b> 0.2.0.</p>
+  <p><b>What conditions should be met before Version 1.0.0?</b></p>
+  <ul>
+    <li>All task branches are reviewed and merged into <code>main</code>, and the release is built from <code>main</code>.</li>
+    <li>The features the group agreed for the capstone are complete.</li>
+    <li>The packaged build passes every release test on at least one other computer, including sign-in, play, save and load.</li>
+    <li>There are no known critical bugs, and the known issues are written in the release notes.</li>
+    <li>The release has a tag, release notes, and a published zip with its SHA-256.</li>
+  </ul>
+</section>
+
+<!-- ================= REPOSITORY / ARTIFACT ================= -->
+<section class="part">
+  <h1>Repository / Version-Control Reference</h1>
+  <table>
+    <tbody>
+      <tr><td style="width:30%">Repository</td><td>https://github.com/jjcmall/Code-Escape-IT22</td></tr>
+      <tr><td>Release branch</td><td><code>release-v0.1.0</code> (published on GitHub when the group publishes it)</td></tr>
+      <tr><td>Release tag</td><td><code>v0.1.0</code> on commit <code>f8b27a8</code></td></tr>
+      <tr><td>Version commit</td><td><code>f8b27a8</code>, "Set the version to 0.1.0 for the first controlled release" (Mark Daniel M. Haguisan)</td></tr>
+    </tbody>
+  </table>
+  <h1 style="margin-top:8mm">Release Artifact Location</h1>
+  <table>
+    <tbody>
+      <tr><td style="width:30%">File</td><td><code>CodeEscape-v0.1.0.zip</code>, 64.5 MB</td></tr>
+      <tr><td>Current location</td><td><code>C:\Users\Carl\Code Escape\Builds\CodeEscape-v0.1.0.zip</code> on the build computer (the <code>Builds/</code> folder is ignored by Git, as it should be)</td></tr>
+      <tr><td>Distribution</td><td class="ph">[To be done by the group: create a GitHub Release for tag v0.1.0 and attach the zip, or use the location approved by the instructor, and write the link here.]</td></tr>
+      <tr><td>SHA-256</td><td><code>6AA6FE4345CE2A7C8FEA932C38A88EBCE57EF0D8E344744CBA8E29043F43EC6A</code></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ================= PART IX ================= -->
+<section class="part">
+  <h1>Part IX. Individual Release Contribution</h1>
+  <p class="ph">Each student submits their own PDF with their own record. File name: Lastname_GroupNumber_FirstRelease.pdf (for example Haguisan_Group22_FirstRelease.pdf).</p>
+  <table>
+    <tbody>
+      <tr><th colspan="2">Member 1</th></tr>
+      <tr><td style="width:34%">Student Name</td><td>Jean Joseph C. Mallari</td></tr>
+      <tr><td>Group Number</td><td>IT22</td></tr>
+      <tr><td>Release Version</td><td>0.1.0</td></tr>
+      <tr><td>Assigned Release Responsibility</td><td class="ph">[responsibility]</td></tr>
+      <tr><td>Specific Contribution</td><td class="ph">[what was done]</td></tr>
+      <tr><td>Evidence</td><td class="ph">[commit, file, test result]</td></tr>
+      <tr><td>What I learned (about 100 words)</td><td class="ph">[answer]</td></tr>
+    </tbody>
+  </table>
+  <table>
+    <tbody>
+      <tr><th colspan="2">Member 2</th></tr>
+      <tr><td style="width:34%">Student Name</td><td>Mark Daniel M. Haguisan</td></tr>
+      <tr><td>Group Number</td><td>IT22</td></tr>
+      <tr><td>Release Version</td><td>0.1.0</td></tr>
+      <tr><td>Assigned Release Responsibility</td><td>Release preparation: version update, build, packaging, release testing and release notes</td></tr>
+      <tr><td>Specific Contribution</td><td>Set the version to 0.1.0; built the Windows release from a clean checkout of the commit; packaged and zipped it with README, VERSION and release notes; tested the packaged exe from a clean folder; tagged <code>v0.1.0</code>; wrote the release notes.</td></tr>
+      <tr><td>Evidence</td><td>Commit <code>f8b27a8</code>; tag <code>v0.1.0</code>; <code>CodeEscape-v0.1.0.zip</code> (SHA-256 starting 6AA6FE43); the test table in Part VI; <code>Documentation/Releases/RELEASE_NOTES_v0.1.0.md</code></td></tr>
+      <tr><td>What I learned (about 100 words)</td><td>I learned that developing a feature and releasing it are different jobs. In development the program only has to run in my editor. For the release I had to choose a version number, build from a clean checkout of one exact commit, package only what the player needs, test the packaged exe outside the editor, and record the commit and tag so the build can be traced. I also learned to say plainly what was not tested, such as signing in on a second computer. For the next release I will build from the reviewed main branch and follow the same steps.</td></tr>
+    </tbody>
+  </table>
+  <table>
+    <tbody>
+      <tr><th colspan="2">Member 3</th></tr>
+      <tr><td style="width:34%">Student Name</td><td>Louis Angelo D. Junio</td></tr>
+      <tr><td>Group Number</td><td>IT22</td></tr>
+      <tr><td>Release Version</td><td>0.1.0</td></tr>
+      <tr><td>Assigned Release Responsibility</td><td class="ph">&nbsp;</td></tr>
+      <tr><td>Specific Contribution</td><td class="ph">&nbsp;</td></tr>
+      <tr><td>Evidence</td><td class="ph">&nbsp;</td></tr>
+      <tr><td>What I learned (about 100 words)</td><td class="ph">&nbsp;</td></tr>
+    </tbody>
+  </table>
+  <table>
+    <tbody>
+      <tr><th colspan="2">Member 4</th></tr>
+      <tr><td style="width:34%">Student Name</td><td>Alynus Job C. Tombado</td></tr>
+      <tr><td>Group Number</td><td>IT22</td></tr>
+      <tr><td>Release Version</td><td>0.1.0</td></tr>
+      <tr><td>Assigned Release Responsibility</td><td class="ph">&nbsp;</td></tr>
+      <tr><td>Specific Contribution</td><td class="ph">&nbsp;</td></tr>
+      <tr><td>Evidence</td><td class="ph">&nbsp;</td></tr>
+      <tr><td>What I learned (about 100 words)</td><td class="ph">&nbsp;</td></tr>
+    </tbody>
+  </table>
+</section>
+
+</body>
+</html>
