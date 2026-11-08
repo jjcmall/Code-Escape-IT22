@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Software Architecture Activity: Code Escape</title>
+<style>
+  @page { size: A4; margin: 20mm 18mm 20mm 18mm;
+    @bottom-center { content: "Page " counter(page); font: 9pt Arial, sans-serif; color: #000; } }
+  @page :first { @bottom-center { content: ""; } }
+  html { font-family: Arial, Helvetica, sans-serif; font-size: 10pt; line-height: 1.4; color: #000; }
+  body { margin: 0; }
+  h1 { font-size: 14pt; margin: 0 0 4mm; border-bottom: 1px solid #000; padding-bottom: 1mm; break-after: avoid; }
+  h2 { font-size: 11pt; margin: 6mm 0 2mm; break-after: avoid; }
+  p { margin: 0 0 2.5mm; }
+  .part { break-before: page; }
+  table { width: 100%; border-collapse: collapse; margin: 2mm 0 4mm; font-size: 9pt; table-layout: fixed; }
+  thead { display: table-header-group; }
+  th, td { border: 1px solid #000; padding: 1.3mm 1.8mm; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+  th { background: #e6e6e6; }
+  tr { break-inside: avoid; }
+  code { font-family: Consolas, monospace; font-size: 8.5pt; }
+  pre { font-family: Consolas, monospace; font-size: 8pt; margin: 2mm 0 4mm; border: 1px solid #000; padding: 2mm; white-space: pre-wrap; break-inside: avoid; }
+  ul { margin: 0 0 3mm 5mm; padding: 0; }
+  .cover { text-align: center; padding-top: 55mm; page-break-after: always; break-after: page; }
+  .cover h1 { font-size: 22pt; border: 0; margin-bottom: 10mm; }
+  .cover table { width: 140mm; margin: 6mm auto; font-size: 10.5pt; }
+  .cover td:first-child { width: 42mm; font-weight: bold; }
+  .ph { font-style: italic; }
+  .note { border: 1px solid #000; padding: 2mm; margin: 2mm 0 4mm; font-size: 9pt; break-inside: avoid; }
+  .shot { border: 1px dashed #000; height: 48mm; margin: 1.5mm 0 4mm; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 9pt; padding: 0 4mm; break-inside: avoid; }
+  .diagram { display: flex; gap: 6mm; margin: 2mm 0 4mm; break-inside: avoid; }
+  .diagram > div { flex: 1; }
+  .diagram h2 { margin-top: 0; text-align: center; }
+  .box { border: 1px solid #000; padding: 1.5mm 2mm; text-align: center; font-size: 8.5pt; }
+  .box.sub { text-align: left; }
+  .arrow { text-align: center; font-size: 10pt; line-height: 1.1; }
+  .flow { margin: 2mm 0 4mm; break-inside: avoid; }
+  .flow .box { width: 120mm; margin: 0 auto; }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <h1>Software Architecture Activity</h1>
+  <p><b>Code Escape: Organizing the Existing Project</b></p>
+  <p>Capstone Project (Unity, Unity Gaming Services)</p>
+  <table>
+    <tr><td>Group Number</td><td>IT22</td></tr>
+    <tr><td>Group Members</td><td style="text-align:left">Jean Joseph C. Mallari<br>Mark Daniel M. Haguisan<br>Louis Angelo D. Junio<br>Alynus Job C. Tombado</td></tr>
+    <tr><td>Course / Section</td><td class="ph">[Course and section]</td></tr>
+    <tr><td>Instructor</td><td class="ph">[Instructor]</td></tr>
+    <tr><td>Date prepared</td><td>8 November 2026</td></tr>
+  </table>
+  <p style="margin-top:8mm; font-size:9pt">Selected feature: Save Player Progress.<br>Status: the refactor of the selected feature is applied in the code (Part V); it compiles in Unity, and all 8 tests in Part VII passed.</p>
+</section>
+
+<!-- ================= PART I ================= -->
+<section>
+  <h1>Project Title and Group</h1>
+  <table>
+    <tbody>
+      <tr><td style="width:30%">Project Title</td><td>Code Escape</td></tr>
+      <tr><td>Group Number</td><td>IT22</td></tr>
+      <tr><td>Group Members</td><td>Jean Joseph C. Mallari; Mark Daniel M. Haguisan; Louis Angelo D. Junio; Alynus Job C. Tombado</td></tr>
+      <tr><td>Project used for this activity</td><td>The actual capstone project (Unity 6000.5.10f1, C#). Student accounts (username and password) use Unity Authentication and progress is stored in Unity Cloud Save, both called directly by the game. The game currently offers Python only; PHP and SQL content stays in the project for future versions.</td></tr>
+    </tbody>
+  </table>
+
+  <h1 style="margin-top:8mm">Part I. Architecture Decision Matrix</h1>
+  <table>
+    <thead><tr><th style="width:15%">Architecture Concept</th><th style="width:12%">Will We Apply It?</th><th style="width:38%">How It Appears or Could Appear in Our Project</th><th>Reason</th></tr></thead>
+    <tbody>
+      <tr><td>Layered Architecture</td><td>Yes</td><td>Presentation: <code>UI/</code>, <code>ChallengeUI</code>, <code>ProgressionUI</code>. Game logic: <code>Game/</code>, <code>Programming/</code>, <code>Story/</code> managers, and now <code>ProgressRecordBuilder</code> / <code>ProgressSnapshotApplier</code>. Data / service: <code>SaveSystem/</code> and the Unity Authentication and Cloud Save calls in <code>CloudProgressService</code>. Storage: PlayerPrefs and Unity Cloud Save.</td><td>The project is already split this way by folder and namespace. The activity is about keeping the split clean where it is blurred (the save path).</td></tr>
+      <tr><td>MVC</td><td>Partially</td><td>Model: <code>PlayerProgressData</code>, <code>ProgressData</code>, <code>LevelProgressData</code>, <code>QuestionData</code>. View: <code>ChallengeUI</code>, <code>LevelMapUI</code>, <code>ProgressionUI</code>. Controller role: <code>ProgrammingChallengeManager</code> (the buttons of <code>ChallengeUI</code> only forward to it).</td><td>Unity managers already play the controller role. Strict MVC would add classes without a benefit, so it is used as a guide only.</td></tr>
+      <tr><td>Client-Server</td><td>Yes</td><td>The Unity game (client) signs in with Unity Authentication and reads and writes two Cloud Save keys (<code>code_escape_progression</code>, <code>code_escape_snapshot</code>) through the Unity Gaming Services packages. Unity stores each player's data under that player.</td><td>Progress must be tied to a student account and stored online. Unity Gaming Services is a managed backend, so there is no custom server of our own.</td></tr>
+      <tr><td>Microservices</td><td>No</td><td>Not used.</td><td>The backend is Unity's managed Authentication and Cloud Save. Independently deployed services of our own would add cost and complexity with no benefit for a student capstone.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ================= PART II ================= -->
+<section class="part">
+  <h1>Part II. Current Code Responsibility Check</h1>
+  <p>Inspected on 8 November 2026. The scripts are in <code>Assets/Scripts</code>.</p>
+  <table>
+    <thead><tr><th style="width:20%">Script / Module</th><th style="width:45%">Current Responsibility</th><th>Problem Identified</th></tr></thead>
+    <tbody>
+      <tr><td><code>Cloud/CloudProgressService.cs</code> (before the refactor)</td><td>About 970 lines. (1) Starts Unity Gaming Services and runs the connection state machine (connect, retry, sign in again on start). (2) Account actions through Unity Authentication: create account, sign in, sign out, delete account. (3) Player-name sync. (4) Load: reads the two Cloud Save keys, decides whether local or cloud data is newer, switches players. (5) Applies a snapshot to the game (language, level progress, achievements, score state). (6) Save: debouncing, fingerprint, Cloud Save write, status. (7) Builds the record: reads six managers, computes the score (+100 per solved challenge, -25 per hint), orders level IDs, finds the highest unlocked level. (8) Decides which achievements unlock.</td><td><b>Too many unrelated responsibilities.</b> Changing the score rule, an achievement or the level list means editing the same class that talks to Unity Cloud Save. <code>BuildRecord</code> (about 85 lines) and <code>ApplyToGame</code> (about 45 lines) know the internals of <code>LevelManager</code>, <code>LevelProgressManager</code>, <code>ProgrammingChallengeManager</code>, <code>AchievementManager</code>, <code>LanguageManager</code> and <code>SaveManager</code>.</td></tr>
+      <tr><td><code>Programming/ProgrammingChallengeManager.cs</code></td><td>Runs a challenge: picks the question, pauses the game, checks the answer against the stored solution, keeps score and hints, unlocks the obstacle, raises events.</td><td>Large, but all of it belongs to one concern (the challenge). The score rule it owns is repeated as constants in the save path (<code>PointsPerCorrectAnswer</code>, <code>HintPenalty</code>), which is acceptable as long as only one place computes the total.</td></tr>
+      <tr><td><code>UI/ChallengeUI.cs</code></td><td>Shows the learning card, question, choices, hint and result. Every button forwards to <code>ProgrammingChallengeManager</code>.</td><td>Responsibility is focused. It is the model of how the other views should behave.</td></tr>
+      <tr><td><code>SaveSystem/SaveManager.cs</code></td><td>Reads and writes the local save in PlayerPrefs (language, settings, progress JSON, level progress per language).</td><td>Responsibility is focused (local storage only). It does not know about Cloud Save.</td></tr>
+      <tr><td><code>Cloud/ProgressionUI.cs</code></td><td>Builds the sign-in gate, account menu, save-status chip and progression panel in code, and forwards button presses to <code>CloudProgressService</code>.</td><td>Responsibility is focused on display (it is long because the screens are built in code, not because it mixes concerns). It holds no save rules.</td></tr>
+      <tr><td><code>Game/GameManager.cs</code></td><td>Global game state and play time.</td><td>Focused. One small coupling: <code>Awake</code> reads <code>SaveManager.LoadProgress()</code> to restore the play time.</td></tr>
+    </tbody>
+  </table>
+  <div class="note">Finding: most of the project already follows one-responsibility-per-class. The clear exception is <code>CloudProgressService</code>, which grew as the cloud accounts and Cloud Save were added. Its save path is the feature chosen for Part V.</div>
+</section>
+
+<!-- ================= PART III ================= -->
+<section class="part">
+  <h1>Part III. Component Responsibility Plan</h1>
+  <p>Only two new classes were added. Every other component keeps its current job.</p>
+  <table>
+    <thead><tr><th style="width:23%">Component</th><th style="width:40%">Primary Responsibility</th><th>Should NOT Handle</th></tr></thead>
+    <tbody>
+      <tr><td><code>ProgressionUI</code> (View)</td><td>Show the sign-in gate, account menu, save-status chip and progression panel; forward button presses.</td><td>Building records, calling Cloud Save, score rules.</td></tr>
+      <tr><td><code>CloudProgressService</code> (Controller / coordinator)</td><td>Connection state, account actions through Unity Authentication, the Cloud Save read and write, when to save (debounce, retry), what is confirmed, notifying the UI.</td><td>Computing the score, deciding achievements, reading individual game managers, applying data to them.</td></tr>
+      <tr><td><code>ProgressRecordBuilder</code> (<b>new</b>, game-logic layer)</td><td>Read the current game state and produce a <code>PlayerProgressData</code> and <code>ProgressSnapshot</code>: completed and highest unlocked level, score total, achievements unlocked.</td><td>Network, PlayerPrefs sync flags, UI, deciding when to save.</td></tr>
+      <tr><td><code>ProgressSnapshotApplier</code> (<b>new</b>, game-logic layer)</td><td>Restore a loaded snapshot into the game through the existing managers (language, level progress, playthrough, achievements).</td><td>Network, building records, UI.</td></tr>
+      <tr><td><code>PlayerProgressData</code>, <code>ProgressSnapshot</code> (Model)</td><td>Hold the saved data; <code>Sanitize</code> and <code>Clone</code>.</td><td>Calling managers or Cloud Save.</td></tr>
+      <tr><td>Unity Authentication and Cloud Save (Data service, Unity packages)</td><td>Sign-in, session token, and per-player key-value storage. Called from <code>CloudProgressService</code> through the Unity SDK, so there is no separate client class of our own.</td><td>Gameplay rules, deciding what to save.</td></tr>
+      <tr><td><code>SaveManager</code> (Local storage)</td><td>PlayerPrefs reads and writes.</td><td>Network, score or level rules.</td></tr>
+      <tr><td>Unity Cloud Save (Storage)</td><td>Persistent, per-player storage of the two progress keys. It does not check the values, so the game repairs saved data with <code>Sanitize</code> before using it.</td><td>Anything about how the game displays progress.</td></tr>
+    </tbody>
+  </table>
+  <p><b>Test question from the activity.</b> If the score rule changes, only <code>ProgressRecordBuilder</code> (and <code>ProgrammingChallengeManager</code>, which awards the points) should change. If the cloud provider changes, only the Unity Authentication and Cloud Save calls in <code>CloudProgressService</code> should change. Today the first case also touches the class that talks to the network.</p>
+</section>
+
+<!-- ================= PART IV ================= -->
+<section class="part">
+  <h1>Part IV. Project / Code Structure</h1>
+  <p>Current structure, grouped by feature (file counts as of 8 November 2026):</p>
+<pre>Assets/Scripts/
+  Achievements/  (4)   Audio/ (1)       Clues/ (2)        Cutscenes/ (5)
+  Dialogue/      (2)   Execution/ (2)   Obstacles/ (13)   Player/ (4)
+  Story/         (3)
+  Game/         (12)   managers: GameManager, LevelManager, LevelProgressManager, ...
+  Programming/   (8)   ProgrammingChallengeManager, QuestionData, LanguageManager, ...
+  SaveSystem/    (5)   SaveManager, ProgressSaveService, ProgressData, LevelProgressData
+  Cloud/         (5)   CloudProgressService, ProgressionUI, PlayerProgressData, + 2 new (below)
+  UI/           (19)   ChallengeUI, LevelMapUI, MainMenuUI, ...
+Documentation/CloudSave.md  how accounts and Cloud Save work</pre>
+  <p>Change made (Cloud folder only, now 5 files):</p>
+<pre>Assets/Scripts/Cloud/
+  CloudProgressService.cs        coordinator (807 lines, was about 970)
+  ProgressRecordBuilder.cs       NEW  game state -> record + snapshot (163 lines)
+  ProgressSnapshotApplier.cs     NEW  snapshot -> game state (54 lines)
+  ProgressionUI.cs               unchanged (view)
+  PlayerProgressData.cs          unchanged (model)</pre>
+  <p><b>Why not rename the folders to Controllers / Models / Services.</b> The project is organised by feature, and each feature folder already has its own namespace (<code>CodeEscape.Game</code>, <code>CodeEscape.Cloud</code>, <code>CodeEscape.SaveSystem</code>, <code>CodeEscape.Programming</code>). Moving dozens of scripts into layer folders would add churn and merge risk without separating any responsibility. The layers are kept by role (Part III), not by folder name.</p>
+  <div class="shot">[Screenshot: Unity Project window or GitHub file tree showing Assets/Scripts and the Cloud folder. To be added by the group; after the refactor it should show ProgressRecordBuilder.cs and ProgressSnapshotApplier.cs.]</div>
+</section>
+
+<!-- ================= PART V ================= -->
+<section class="part">
+  <h1>Part V. Refactored Feature: Save Player Progress</h1>
+  <div class="note"><b>Status: applied in the code, compiles in Unity, and all 8 tests passed in Play Mode (see Part VII).</b> The "before" is the code as of 8 November 2026. The "after" is the real code now in the repository working folder (not yet committed). The tests are in Part VII; the network failure there was simulated.</div>
+
+  <h2>1. The feature before refactoring</h2>
+  <p>Saving progress is one chain inside <code>CloudProgressService</code>: <code>RequestSave</code> (debounce) → <code>FlushAsync</code> → <code>SaveAsync</code> → <code>BuildRecord</code> → <code>CloudSaveService.Instance.Data.Player.SaveAsync</code>. Loading is <code>HandleLoadedAsync</code> → <code>ApplyToGame</code>. <code>BuildRecord</code> contains the rules for what the record says:</p>
+<pre>// CloudProgressService.cs (actual, shortened)
+void BuildRecord(out PlayerProgressData record, out ProgressSnapshot snapshot)
+{
+    ProgressSaveService.Instance.SaveNow();            // flush local save
+    record = Record != null ? Record.Clone() : new PlayerProgressData();
+    ...
+    foreach (ProgrammingLanguage language in Languages)
+        { var data = SaveManager.LoadLevelProgress(language); ... }   // level progress
+    record.completed_levels = OrderedLevelIds(completed, levels);
+    ... LevelProgressManager.Instance.IsUnlocked(...) ...            // highest unlocked
+    ... ProgrammingChallengeManager.Instance.ScoredObstacleIds ...    // scored challenges
+    record.total_score = Mathf.Max(0, scored * PointsPerCorrectAnswer
+                                      - hints * HintPenalty);         // score rule
+    UnlockAchievements(record, maxClearedInOneLanguage, levelCount);  // achievement rules
+}</pre>
+
+  <h2>2. The problem with the original organization</h2>
+  <ul>
+    <li>The network coordinator also holds the score formula, the achievement rules and the "highest unlocked level" rule.</li>
+    <li>Saving and loading are mirror images (<code>BuildRecord</code> and <code>ApplyToGame</code>) but live in different parts of a very large class, so a change to one is easy to forget in the other.</li>
+    <li>The record builder cannot be tested without the service, the network client and every manager existing.</li>
+  </ul>
+
+  <h2>3. The new component organization</h2>
+<pre>ProgressionUI (view: status chip, panel)
+      |
+CloudProgressService (coordinator: state, debounce, confirm, retry)
+      |-- ProgressRecordBuilder   (game state -> PlayerProgressData + ProgressSnapshot)
+      |-- ProgressSnapshotApplier (ProgressSnapshot -> game managers)
+      |-- PlayerProgressData / ProgressSnapshot (model)
+      '-- Unity Authentication + Cloud Save (data service, Unity packages)</pre>
+  <ul>
+    <li><b>Move, do not change.</b> The method bodies of <code>BuildRecord</code>, <code>OrderedLevelIds</code>, <code>UnlockAchievements</code> and <code>ApplyToGame</code> move into the two new classes. The logic, the JSON written and the fingerprint stay the same, so a save made before the change is still loaded after it.</li>
+    <li><b>Same public behavior.</b> <code>CloudProgressService</code> keeps its public members (<code>RequestSave</code>, <code>State</code>, <code>SaveStatus</code>, <code>Changed</code>), so <code>ProgressionUI</code> and the rest of the game need no change.</li>
+    <li><b>No new layers or services.</b> Two classes, both in <code>Cloud/</code>.</li>
+  </ul>
+
+  <h2>4. Relevant code after refactoring</h2>
+<pre>// CloudProgressService.cs: the service now only calls the builder and the applier
+void BuildRecord(out PlayerProgressData record, out ProgressSnapshot snapshot)
+{
+    ProgressRecordBuilder.Build(Record, client.UserId, out record, out snapshot, out string newestAchievement);
+    LastUnlockedAchievement = newestAchievement;
+}
+
+void ApplyToGame(ProgressSnapshot snapshot)
+{
+    applying = true;
+    try { ProgressSnapshotApplier.Apply(snapshot, Record); }
+    finally { applying = false; }
+}
+
+// ProgressRecordBuilder.cs: the rules, with no network, no UI, no PlayerPrefs sync flags
+public static void Build(PlayerProgressData lastKnown, string playerId,
+    out PlayerProgressData record, out ProgressSnapshot snapshot, out string newestAchievement)
+{ ... completed levels, highest unlocked, score formula, achievements ... }
+
+// ProgressSnapshotApplier.cs: the mirror image
+public static void Apply(ProgressSnapshot snapshot, PlayerProgressData record)
+{ ... language, level progress, playthrough, achievements ... }</pre>
+  <p>The method bodies were moved without changing their logic. <code>SaveAsync</code>, <code>RequestSave</code>, <code>Fingerprint</code> and all public members of <code>CloudProgressService</code> are unchanged, so <code>ProgressionUI</code> and the rest of the game need no edits. The unused <code>Languages</code> field was removed from the service (the builder has its own).</p>
+
+  <h2>5. Evidence that the feature still works</h2>
+  <p>Partly available. After the change, Unity 6000.5.10f1 recompiled the project and the Console showed no errors (8 November 2026). It was then run in Play Mode and all 8 Part VII tests passed, including a real save to Cloud Save that was checked after a restart and then put back. A baseline can be taken from the last commit (<code>69731f9</code>), which predates the refactor and the username accounts. Cloud Save does not validate values, so the game repairs saved data with <code>Sanitize</code> before using it (see <code>Documentation/CloudSave.md</code>).</p>
+  <div class="shot">[Screenshot: Unity Dashboard, Player Management (the Cloud Save keys of the test player) and the Unity Console after a save, before and after the refactor. To be added by the group.]</div>
+</section>
+
+<!-- ================= PART VI ================= -->
+<section class="part">
+  <h1>Part VI. Before-and-After Architecture</h1>
+  <p>Selected feature: Save Player Progress. The right-hand diagram is the design now in the code.</p>
+  <div class="diagram">
+    <div>
+      <h2>Before Refactoring</h2>
+      <div class="box">ProgressionUI (view)</div>
+      <div class="arrow">&#8595;</div>
+      <div class="box sub"><b>CloudProgressService</b><br>
+        &bull; connection and accounts<br>
+        &bull; save timing and status<br>
+        &bull; builds the record<br>
+        &bull; score rule<br>
+        &bull; achievement rules<br>
+        &bull; applies data to the game<br>
+        &bull; calls Cloud Save</div>
+      <div class="arrow">&#8595;</div>
+      <div class="box">Unity Authentication + Cloud Save</div>
+      <div class="arrow">&#8595;</div>
+      <div class="box">Unity Cloud Save (storage)</div>
+    </div>
+    <div>
+      <h2>After Refactoring</h2>
+      <div class="box">ProgressionUI (view)</div>
+      <div class="arrow">&#8595;</div>
+      <div class="box sub"><b>CloudProgressService</b><br>
+        &bull; connection and accounts<br>
+        &bull; save timing and status</div>
+      <div class="arrow">&#8595;</div>
+      <div class="box sub"><b>ProgressRecordBuilder</b> (record, score, achievements)<br><b>ProgressSnapshotApplier</b> (restore into game)</div>
+      <div class="arrow">&#8595;</div>
+      <div class="box">PlayerProgressData / ProgressSnapshot (model)</div>
+      <div class="arrow">&#8595;</div>
+      <div class="box">Unity Authentication + Cloud Save (data service)</div>
+      <div class="arrow">&#8595;</div>
+      <div class="box">Unity Cloud Save (storage)</div>
+    </div>
+  </div>
+  <h2>Client-Server view of the same feature</h2>
+  <div class="flow">
+    <div class="box">CLIENT: Unity game (UI, gameplay, record building)</div>
+    <div class="arrow">&#8595; HTTPS request (upsert progress)</div>
+    <div class="box">SERVER / CLOUD SERVICE: Unity Gaming Services (Authentication, Cloud Save)</div>
+    <div class="arrow">&#8595;</div>
+    <div class="box">STORAGE: Cloud Save player data (two keys per player)</div>
+  </div>
+</section>
+
+<!-- ================= PART VII ================= -->
+<section class="part">
+  <h1>Part VII. Testing and Verification</h1>
+  <div class="note">Run on 8 November 2026 in Play Mode, Unity 6000.5.10f1, by Claude Code through the Unity Editor, with the developer's existing signed-in player. Where a test needed a real upload, the player's Cloud Save record was changed on purpose and then put back (the final record equalled the original, ignoring <code>last_played</code>). Where it did not, Cloud Save was detached so no test data was uploaded. Some conditions were simulated, as stated in each row. The editor PlayerPrefs were backed up first and restored afterwards. <b>All 8 tests passed.</b></div>
+  <table>
+    <thead><tr><th style="width:21%">Test</th><th style="width:30%">Expected Result</th><th style="width:37%">Actual Result</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>Solve one challenge, then save</td><td>Record has <code>total_score</code> +100 and the challenge appears once in <code>scored_challenges</code>.</td><td>Solved the home door (<code>PY_RUN_01_VARIABLES</code>) in the game with the correct answer; the challenge closed and the in-game score was 100. That door was already in the cloud record, so a copy of the record without it was used as the baseline: score 2225 to 2325 (+100), listed once after building twice. Cloud Save was detached for this test (no upload); the upload itself is the next row.</td><td>Pass</td></tr>
+      <tr><td>Score and hints are counted once (checked on the loaded record)</td><td><code>total_score</code> = scored challenges x 100 - hinted questions x 25; no duplicate entries.</td><td>27 x 100 - 15 x 25 = 2325, equal to the record's <code>total_score</code>. No duplicate IDs in cleared levels, scored challenges or hints.</td><td>Pass</td></tr>
+      <tr><td>Clear a level</td><td><code>completed_levels</code> lists it, the highest unlocked level is correct, achievements update.</td><td>Removing <code>final_area</code> from the Python level progress and applying gave 5 cleared levels. Marking it cleared again gave 6, <code>final_area</code> listed, highest unlocked <code>final_area</code>, <code>case_closed</code> present. (Simulated through the snapshot, not by playing.)</td><td>Pass</td></tr>
+      <tr><td>Save reaches Cloud Save</td><td>The cloud copy shows the new values; the status shows Synced.</td><td>Marked <code>final_area</code> as not cleared and requested a save: status Unsaved, then Synced with a confirmation time, record 5 cleared levels. After stopping and starting Play, the loaded cloud copy had 5 cleared levels, so the upload reached Cloud Save. The level was then cleared again and saved, and the record equalled the original.</td><td>Pass</td></tr>
+      <tr><td>Load on a second start</td><td>Level map, score and achievements are restored.</td><td>On Play the service reached Ready with status Synced and restored from the cloud: score 2325, 6 cleared levels, current and highest <code>final_area</code>, 24 achievements. Applying a built snapshot and building again gave an identical record.</td><td>Pass</td></tr>
+      <tr><td>Nothing changed</td><td>The rebuilt record equals the loaded one, so no new request is sent (the fingerprint matches).</td><td>After load the record equalled the original. Calling <code>RequestSave(true)</code> with nothing changed left the status at Synced and no save was confirmed (<code>LastConfirmedSaveUtc</code> stayed empty). The rebuilt record also equalled the loaded cloud record in the earlier run.</td><td>Pass</td></tr>
+      <tr><td>Failed save</td><td>Status shows Failed with Retry; no crash; Retry succeeds afterwards.</td><td><b>Simulated</b> by signing the Unity session out (the network was not cut). The save then failed with status Failed and the message "Access token is missing" (error 51), and the game kept running. After signing in again with the saved session and calling <code>RetrySave</code>, the status was Synced and the record equalled the original.</td><td>Pass</td></tr>
+      <tr><td>Save made before the refactor</td><td>Loads correctly after the refactor (the stored JSON format is unchanged).</td><td>The existing cloud record, saved before the refactor, loaded with the refactored code and was rebuilt identically.</td><td>Pass</td></tr>
+    </tbody>
+  </table>
+  <p>Limits: the network was not really switched off (the failure was simulated), and the level clearing in the first run was simulated through the snapshot, not by playing the level.</p>
+</section>
+
+<!-- ================= PART VIII ================= -->
+<section class="part">
+  <h1>Part VIII. Architecture Reflection</h1>
+  <p><b>1. Which component had the most mixed responsibilities?</b> <code>CloudProgressService</code>. It handles connection, accounts, save timing, the score rule, achievement rules and restoring data into the game.</p>
+  <p><b>2. Which responsibilities did we separate?</b> Building the record (with the score and achievement rules) and restoring a snapshot into the game moved into <code>ProgressRecordBuilder</code> and <code>ProgressSnapshotApplier</code>. The service keeps only connection and save timing.</p>
+  <p><b>3. Which concept was most useful?</b> Layered Architecture, together with Client-Server. They show where the rules end and the Cloud Save calls begin.</p>
+  <p><b>4. Which concept was not necessary?</b> Microservices. Unity's managed Cloud Save is enough for the capstone.</p>
+  <p><b>5. How will this help later?</b> A new level, score rule or achievement is changed in one small class, and a change of cloud provider only touches the Cloud Save calls.</p>
+</section>
+
+<!-- ================= REPOSITORY / EVIDENCE ================= -->
+<section class="part">
+  <h1>Repository Link</h1>
+  <p><a href="https://github.com/jjcmall/Code-Escape-IT22">https://github.com/jjcmall/Code-Escape-IT22</a></p>
+
+  <h1 style="margin-top:8mm">Relevant Screenshots / Evidence</h1>
+  <table>
+    <thead><tr><th style="width:8%">No.</th><th style="width:47%">Evidence</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Project or repository structure (<code>Assets/Scripts</code>, <code>Cloud</code> folder)</td><td class="ph">To be added</td></tr>
+      <tr><td>2</td><td><code>CloudProgressService.cs</code> before the refactor (BuildRecord, ApplyToGame)</td><td class="ph">To be added</td></tr>
+      <tr><td>3</td><td><code>ProgressRecordBuilder.cs</code> and <code>ProgressSnapshotApplier.cs</code> after the refactor</td><td class="ph">After the refactor</td></tr>
+      <tr><td>4</td><td>Unity Dashboard Cloud Save keys after a save, and the Unity Console log</td><td class="ph">After the refactor</td></tr>
+      <tr><td>5</td><td>Completed test table (Part VII) with date of each run</td><td class="ph">Screenshot of the results</td></tr>
+    </tbody>
+  </table>
+  <div class="shot">[Screenshot area]</div>
+</section>
+
+<!-- ================= PART IX ================= -->
+<section class="part">
+  <h1>Part IX. Individual Contribution Record</h1>
+  <p class="ph">Each member fills in their own record with the actual work done: a file name, commit hash, diagram or test result. General statements such as "helped the group" are not accepted.</p>
+
+  <table>
+    <tbody>
+      <tr><th colspan="2">Member 1</th></tr>
+      <tr><td style="width:30%">Student Name</td><td>Jean Joseph C. Mallari</td></tr>
+      <tr><td>Group Number</td><td>IT22</td></tr>
+      <tr><td>Component / File Worked On</td><td class="ph">[file or component]</td></tr>
+      <tr><td>Specific Contribution</td><td class="ph">[what was done]</td></tr>
+      <tr><td>Evidence of Contribution</td><td class="ph">[commit hash, file, screenshot]</td></tr>
+      <tr><td>Architecture Concept Applied</td><td class="ph">[concept]</td></tr>
+      <tr><td>What I Learned</td><td class="ph">[answer]</td></tr>
+      <tr><td>Next Technical Responsibility</td><td class="ph">[answer]</td></tr>
+    </tbody>
+  </table>
+  <table>
+    <tbody>
+      <tr><th colspan="2">Member 2</th></tr>
+      <tr><td style="width:30%">Student Name</td><td>Mark Daniel M. Haguisan</td></tr>
+      <tr><td>Group Number</td><td>IT22</td></tr>
+      <tr><td>Component / File Worked On</td><td class="ph">[file or component]</td></tr>
+      <tr><td>Specific Contribution</td><td class="ph">[what was done]</td></tr>
+      <tr><td>Evidence of Contribution</td><td class="ph">[commit hash, file, screenshot]</td></tr>
+      <tr><td>Architecture Concept Applied</td><td class="ph">[concept]</td></tr>
+      <tr><td>What I Learned</td><td class="ph">[answer]</td></tr>
+      <tr><td>Next Technical Responsibility</td><td class="ph">[answer]</td></tr>
+    </tbody>
+  </table>
+  <table>
+    <tbody>
+      <tr><th colspan="2">Member 3</th></tr>
+      <tr><td style="width:30%">Student Name</td><td>Louis Angelo D. Junio</td></tr>
+      <tr><td>Group Number</td><td>IT22</td></tr>
+      <tr><td>Component / File Worked On</td><td class="ph">[file or component]</td></tr>
+      <tr><td>Specific Contribution</td><td class="ph">[what was done]</td></tr>
+      <tr><td>Evidence of Contribution</td><td class="ph">[commit hash, file, screenshot]</td></tr>
+      <tr><td>Architecture Concept Applied</td><td class="ph">[concept]</td></tr>
+      <tr><td>What I Learned</td><td class="ph">[answer]</td></tr>
+      <tr><td>Next Technical Responsibility</td><td class="ph">[answer]</td></tr>
+    </tbody>
+  </table>
+  <table>
+    <tbody>
+      <tr><th colspan="2">Member 4</th></tr>
+      <tr><td style="width:30%">Student Name</td><td>Alynus Job C. Tombado</td></tr>
+      <tr><td>Group Number</td><td>IT22</td></tr>
+      <tr><td>Component / File Worked On</td><td class="ph">[file or component]</td></tr>
+      <tr><td>Specific Contribution</td><td class="ph">[what was done]</td></tr>
+      <tr><td>Evidence of Contribution</td><td class="ph">[commit hash, file, screenshot]</td></tr>
+      <tr><td>Architecture Concept Applied</td><td class="ph">[concept]</td></tr>
+      <tr><td>What I Learned</td><td class="ph">[answer]</td></tr>
+      <tr><td>Next Technical Responsibility</td><td class="ph">[answer]</td></tr>
+    </tbody>
+  </table>
+</section>
+
+</body>
+</html>

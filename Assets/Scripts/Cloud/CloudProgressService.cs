@@ -19,9 +19,11 @@ namespace CodeEscape.Cloud
         Starting,
         SigningIn,
         Loading,
-        /// <summary>Services initialised, player signed in and the progression loaded. Gameplay may start.</summary>
+        /// <summary>Player signed in and the progression loaded. Gameplay may start.</summary>
         Ready,
-        Failed
+        Failed,
+        /// <summary>Nobody is signed in on this computer: the player signs in or creates an account.</summary>
+        ChoosingAccount
     }
 
     public enum CloudSaveStatus
@@ -35,12 +37,14 @@ namespace CodeEscape.Cloud
     }
 
     /// <summary>
-    /// Stores and retrieves progression in Unity Cloud Save (the only cloud storage used). On start it
-    /// initialises Unity Gaming Services, signs the player in anonymously (no login UI), loads the saved
-    /// progression and restores it into the existing save system. Afterwards it saves automatically, in the
-    /// background, when levels are cleared or unlocked, points are earned, achievements unlock and the main menu
-    /// is reached. The existing local save (PlayerPrefs, SaveManager) is still what the game runs on; the cloud
-    /// copy is only reported as saved once Cloud Save has confirmed it.
+    /// Stores and retrieves accounts and progression with Unity Gaming Services: Unity Authentication (username and
+    /// password) and Cloud Save. On start it signs the student last signed in on this computer in again (Unity keeps a
+    /// session token, never the password); otherwise the student creates an account or signs in. Then it loads the
+    /// saved progression and restores it into the existing save system. Afterwards it saves automatically, in the
+    /// background, when levels are cleared or unlocked, points are earned, achievements unlock and the main menu is
+    /// reached. The existing local save (PlayerPrefs, SaveManager) is still what the game runs on; the cloud copy is only
+    /// reported as saved once Cloud Save has confirmed it. Passwords are never stored or logged.
+    /// See Documentation/CloudSave.md.
     /// </summary>
     public class CloudProgressService : MonoBehaviour
     {
@@ -51,8 +55,6 @@ namespace CodeEscape.Cloud
         const string PrefPlayerId = "CodeEscape.Cloud.PlayerId";
         const float SaveDebounceSeconds = 3f;
         const int TimeoutMilliseconds = 20000;
-
-        static readonly ProgrammingLanguage[] Languages = { ProgrammingLanguage.Python, ProgrammingLanguage.PHP, ProgrammingLanguage.SQL };
 
         public static CloudProgressService Instance { get; private set; }
 
@@ -70,6 +72,20 @@ namespace CodeEscape.Cloud
         public bool RestoredFromCloud { get; private set; }
         /// <summary>Achievements unlocked by the latest save, for a short on-screen message.</summary>
         public string LastUnlockedAchievement { get; private set; } = string.Empty;
+        /// <summary>The signed-in student's username, or empty.</summary>
+        public string DisplayName { get; private set; } = string.Empty;
+        /// <summary>
+        /// True while this computer is signed in as a player from before accounts existed (signed in automatically,
+        /// without a username). Creating an account then keeps that player's progress.
+        /// </summary>
+        public bool HasGuestProgress { get; private set; }
+        /// <summary>A note about the last account action that the account menu should show (e.g. "Your account was deleted.").</summary>
+        public string AccountNotice { get; private set; } = string.Empty;
+
+        public void ClearNotice()
+        {
+            AccountNotice = string.Empty;
+        }
 
         bool connecting;
         bool applying;
@@ -181,13 +197,9 @@ namespace CodeEscape.Cloud
             nextFlushTime = 0f;
         }
 
-        async Task ConnectAsync()
+        Task ConnectAsync()
         {
-            if (connecting)
-                return;
-            connecting = true;
-            ConnectionError = string.Empty;
-            try
+            return RunConnectStepAsync(async () =>
             {
                 if (Application.internetReachability == NetworkReachability.NotReachable)
                     throw new InvalidOperationException("No internet connection. Code Escape needs to be online to load and save progress.");
@@ -196,28 +208,39 @@ namespace CodeEscape.Cloud
                 await InitializeServicesAsync();
 
                 SetState(CloudState.SigningIn);
-                if (!AuthenticationService.Instance.IsSignedIn)
-                    await WithTimeout(AuthenticationService.Instance.SignInAnonymouslyAsync(), "Signing in");
+                IAuthenticationService auth = AuthenticationService.Instance;
+                if (!auth.IsSignedIn)
+                {
+                    // Only a saved session is resumed: with no session token nobody is signed in here, and no new
+                    // player is ever created without an account.
+                    if (!auth.SessionTokenExists)
+                    {
+                        SetState(CloudState.ChoosingAccount);
+                        return;
+                    }
+                    try
+                    {
+                        // With a session token this signs the same player in again (any sign-in method).
+                        await WithTimeout(auth.SignInAnonymouslyAsync(), "Signing in");
+                    }
+                    catch (AuthenticationException e) when (e.ErrorCode == AuthenticationErrorCodes.InvalidSessionToken)
+                    {
+                        auth.ClearSessionToken();
+                        SetState(CloudState.ChoosingAccount);
+                        return;
+                    }
+                }
 
-                SetState(CloudState.Loading);
-                Dictionary<string, Unity.Services.CloudSave.Models.Item> items = await WithTimeout(
-                    CloudSaveService.Instance.Data.Player.LoadAsync(
-                        new HashSet<string> { KeyProgression, KeySnapshot },
-                        new PlayerData.LoadOptions(new PlayerData.DefaultReadAccessClassOptions())),
-                    "Loading progress");
-
-                await HandleLoadedAsync(items);
-            }
-            catch (Exception e)
-            {
-                Debug.LogWarning($"[CloudProgress] Connect failed: {e}");
-                ConnectionError = Describe(e);
-                SetState(CloudState.Failed);
-            }
-            finally
-            {
-                connecting = false;
-            }
+                await RefreshAccountAsync();
+                if (HasGuestProgress)
+                {
+                    // Signed in as this computer's player from before accounts existed: the student chooses
+                    // CREATE ACCOUNT (keeps that progress) or SIGN IN.
+                    SetState(CloudState.ChoosingAccount);
+                    return;
+                }
+                await LoadAsync();
+            });
         }
 
         static async Task InitializeServicesAsync()
@@ -237,18 +260,287 @@ namespace CodeEscape.Cloud
                 throw new TimeoutException("Initialising Unity Gaming Services timed out.");
         }
 
+        // Runs one connect sequence at a time; any failure shows the gate's error with Retry.
+        async Task RunConnectStepAsync(Func<Task> steps)
+        {
+            if (connecting)
+                return;
+            connecting = true;
+            ConnectionError = string.Empty;
+            try
+            {
+                await steps();
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[CloudProgress] Connect failed: {e}");
+                ConnectionError = Describe(e);
+                SetState(CloudState.Failed);
+            }
+            finally
+            {
+                connecting = false;
+            }
+        }
+
+        // Reads the username of the signed-in player (empty for a player from before accounts existed).
+        async Task RefreshAccountAsync()
+        {
+            PlayerInfo info = await WithTimeout(AuthenticationService.Instance.GetPlayerInfoAsync(), "Reading your account");
+            DisplayName = info != null && !string.IsNullOrEmpty(info.Username) ? info.Username : string.Empty;
+            HasGuestProgress = DisplayName.Length == 0;
+            Changed?.Invoke();
+        }
+
+        async Task LoadAsync()
+        {
+            SetState(CloudState.Loading);
+            await SyncPlayerNameAsync();
+            Dictionary<string, Unity.Services.CloudSave.Models.Item> items = await WithTimeout(
+                CloudSaveService.Instance.Data.Player.LoadAsync(
+                    new HashSet<string> { KeyProgression, KeySnapshot },
+                    new PlayerData.LoadOptions(new PlayerData.DefaultReadAccessClassOptions())),
+                "Loading progress");
+            await HandleLoadedAsync(items);
+        }
+
+        // Sets the Unity player name to the username, so the Unity Dashboard's player list (Name column) shows who each
+        // player is. Unity adds "#" and a number to every player name. Best effort: a failure never blocks play.
+        async Task SyncPlayerNameAsync()
+        {
+            if (DisplayName.Length == 0)
+                return;
+            try
+            {
+                IAuthenticationService auth = AuthenticationService.Instance;
+                string current = await WithTimeout(auth.GetPlayerNameAsync(autoGenerate: false), "Reading your player name");
+                if (current == null || !current.StartsWith(DisplayName + "#", StringComparison.Ordinal))
+                    await WithTimeout(auth.UpdatePlayerNameAsync(DisplayName), "Setting your player name");
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[CloudProgress] Could not set the player name: {e.Message}");
+            }
+        }
+
+        // ---------- Accounts ----------
+        // Every account action returns null when it worked, or a message to show the student. Passwords are used for
+        // the request only: never stored, logged or kept in a field. There is no password reset in the game: the
+        // developers can set a new password in the Unity Dashboard (Player Management).
+
+        async Task<string> Guard(Func<Task> action, bool signingUp)
+        {
+            try
+            {
+                await InitializeServicesAsync();
+                await action();
+                return null;
+            }
+            catch (RequestFailedException e)
+            {
+                Debug.LogWarning($"[CloudProgress] Account action failed ({e.ErrorCode}): {e.Message}");
+                return Friendly(e, signingUp);
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[CloudProgress] Account action failed: {e}");
+                return Describe(e);
+            }
+        }
+
+        // Unity's rules: 3-20 characters, letters, digits and . - @ _
+        static string CheckUsername(string username)
+        {
+            string u = username ?? string.Empty;
+            if (u.Length < 3 || u.Length > 20)
+                return "Use 3 to 20 characters for the username.";
+            foreach (char c in u)
+            {
+                bool allowed = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == '.' || c == '-' || c == '@' || c == '_';
+                if (!allowed)
+                    return "The username can only use letters, numbers and . - @ _ (no spaces).";
+            }
+            return null;
+        }
+
+        // Unity's rules: 8-30 characters with an upper case letter, a lower case letter, a number and a symbol.
+        static string CheckPassword(string password)
+        {
+            string p = password ?? string.Empty;
+            if (p.Length < 8 || p.Length > 30)
+                return "Use 8 to 30 characters for the password.";
+            bool upper = false, lower = false, digit = false, symbol = false;
+            foreach (char c in p)
+            {
+                if (char.IsUpper(c)) upper = true;
+                else if (char.IsLower(c)) lower = true;
+                else if (char.IsDigit(c)) digit = true;
+                else symbol = true;
+            }
+            return upper && lower && digit && symbol ? null
+                : "The password needs an upper case letter, a lower case letter, a number and a symbol (like ! or #).";
+        }
+
+        /// <summary>CREATE ACCOUNT: the student is signed in straight away.</summary>
+        public async Task<string> RegisterAsync(string username, string password, string confirmPassword)
+        {
+            string problem = CheckUsername(username) ?? CheckPassword(password)
+                             ?? (password != confirmPassword ? "The two passwords are different. Type the same password twice." : null);
+            if (problem != null)
+                return problem;
+            string error = await Guard(async () =>
+            {
+                IAuthenticationService auth = AuthenticationService.Instance;
+                // A player from before accounts existed keeps their progress: the username is added to that player.
+                if (auth.IsSignedIn && HasGuestProgress)
+                    await WithTimeout(auth.AddUsernamePasswordAsync(username, password), "Creating your account");
+                else
+                    await WithTimeout(auth.SignUpWithUsernamePasswordAsync(username, password), "Creating your account");
+            }, signingUp: true);
+            if (error != null)
+                return error;
+            return SignedIn(username);
+        }
+
+        public async Task<string> SignInAsync(string username, string password)
+        {
+            string problem = string.IsNullOrEmpty(username) ? "Type your username." : string.IsNullOrEmpty(password) ? "Type your password." : null;
+            if (problem != null)
+                return problem;
+            string error = await Guard(async () =>
+            {
+                IAuthenticationService auth = AuthenticationService.Instance;
+                // Leaves the automatic player from before accounts existed (its progress stays in its own save).
+                if (auth.IsSignedIn)
+                    auth.SignOut(true);
+                await WithTimeout(auth.SignInWithUsernamePasswordAsync(username, password), "Signing in");
+            }, signingUp: false);
+            if (error != null)
+                return error;
+            return SignedIn(username);
+        }
+
+        string SignedIn(string username)
+        {
+            DisplayName = username;
+            HasGuestProgress = false;
+            AccountNotice = string.Empty;
+            _ = RunConnectStepAsync(LoadAsync);
+            return null;
+        }
+
+        /// <summary>
+        /// SIGN OUT: only once everything is confirmed saved, so nothing is lost. The local copy of the player's
+        /// progress is then cleared, so the next student on this computer starts from their own.
+        /// </summary>
+        public async Task<string> SignOutAsync()
+        {
+            if (State != CloudState.Ready || connecting || saving)
+                return "Please wait a moment and try again.";
+            connecting = true;
+            try
+            {
+                await SaveAsync(forceInitial: false);
+                if (SaveStatus != CloudSaveStatus.Synced)
+                    return "Your latest progress isn't saved yet, so you are still signed in. Check the connection and try again.";
+                FinishLeaving(deleteAccount: false);
+                return null;
+            }
+            finally
+            {
+                connecting = false;
+            }
+        }
+
+        /// <summary>DELETE MY ACCOUNT: removes the saved progress and then the account itself (privacy).</summary>
+        public async Task<string> DeleteAccountAsync()
+        {
+            if (State != CloudState.Ready || connecting)
+                return "Please wait a moment and try again.";
+            connecting = true;
+            try
+            {
+                string error = await Guard(async () =>
+                {
+                    await WithTimeout(CloudSaveService.Instance.Data.Player.DeleteAllAsync(), "Deleting your progress");
+                    await WithTimeout(AuthenticationService.Instance.DeleteAccountAsync(), "Deleting your account");
+                }, signingUp: false);
+                if (error != null)
+                    return error;
+                FinishLeaving(deleteAccount: true);
+                return null;
+            }
+            finally
+            {
+                connecting = false;
+            }
+        }
+
+        void FinishLeaving(bool deleteAccount)
+        {
+            // Not Ready first, so resetting the local game cannot queue a save for nobody.
+            SetState(CloudState.ChoosingAccount);
+            IAuthenticationService auth = AuthenticationService.Instance;
+            if (auth.IsSignedIn)
+                auth.SignOut(true);
+            else
+                auth.ClearSessionToken();
+            ResetLocalForNewPlayer();
+            Record = null;
+            DisplayName = string.Empty;
+            HasGuestProgress = false;
+            AccountNotice = deleteAccount ? "Your account and its saved progress were deleted." : string.Empty;
+            confirmedFingerprint = string.Empty;
+            pending = false;
+            SetSaveStatus(CloudSaveStatus.Synced, string.Empty);
+            Debug.Log(deleteAccount ? "[CloudProgress] Account deleted." : "[CloudProgress] Signed out.");
+            SceneManager.LoadScene(SceneNames.MainMenu);
+        }
+
+        // The local save belongs to one player; another player starts from their own cloud copy (or from nothing).
+        void ResetLocalForNewPlayer()
+        {
+            applying = true;
+            try
+            {
+                if (ProgressSaveService.Instance != null)
+                    ProgressSaveService.Instance.ResetProgress();
+                else
+                    SaveManager.DeleteAllLevelProgress();
+                if (LevelProgressManager.Instance != null)
+                    LevelProgressManager.Instance.ReloadFromSave();
+                if (AchievementManager.Instance != null)
+                    AchievementManager.Instance.ClearForNewPlayer();
+            }
+            finally
+            {
+                applying = false;
+            }
+            PlayerPrefs.DeleteKey(PrefUnsynced);
+            PlayerPrefs.DeleteKey(PrefPlayerId);
+            PlayerPrefs.Save();
+        }
+
         async Task HandleLoadedAsync(Dictionary<string, Unity.Services.CloudSave.Models.Item> items)
         {
             string playerId = AuthenticationService.Instance.PlayerId;
+
+            // The local save belongs to another player (an account switch on this computer): never carry it over.
+            string localOwner = PlayerPrefs.GetString(PrefPlayerId, string.Empty);
+            if (localOwner.Length > 0 && localOwner != playerId)
+            {
+                Debug.Log("[CloudProgress] A different player signed in - clearing the previous player's local progress.");
+                ResetLocalForNewPlayer();
+            }
+
             bool hasProgression = items.TryGetValue(KeyProgression, out var progressionItem);
             bool hasSnapshot = items.TryGetValue(KeySnapshot, out var snapshotItem);
-
             if (hasProgression != hasSnapshot)
                 throw new InvalidOperationException("The saved progression in Cloud Save is incomplete. It was left untouched; ask the developer to check it.");
 
             if (!hasProgression)
             {
-                // First launch for this player identity: no cloud record exists, so create one from the current game state.
+                // First sign-in for this account: no record exists, so create one from the current game state.
                 Debug.Log("[CloudProgress] No progression in Cloud Save for this player - creating a new record.");
                 Record = new PlayerProgressData { player_id = playerId };
                 RestoredFromCloud = false;
@@ -316,39 +608,7 @@ namespace CodeEscape.Cloud
             applying = true;
             try
             {
-                ProgressSaveService saveService = ProgressSaveService.Instance;
-                if (saveService != null)
-                    saveService.ResetProgress();
-
-                foreach (LanguageLevelProgress entry in snapshot.level_progress)
-                {
-                    var language = (ProgrammingLanguage)entry.language;
-                    if (!language.IsValid() || string.IsNullOrEmpty(entry.json))
-                        continue;
-                    LevelProgressData data = JsonUtility.FromJson<LevelProgressData>(entry.json);
-                    if (data != null)
-                        SaveManager.SaveLevelProgress(language, data);
-                }
-
-                var selected = (ProgrammingLanguage)snapshot.language;
-                if (LanguageManager.Instance != null)
-                    LanguageManager.Instance.RestoreLanguage(selected);
-                else if (selected.IsValid())
-                    SaveManager.SaveLanguage(selected);
-
-                if (saveService != null && !string.IsNullOrEmpty(snapshot.progress_json))
-                {
-                    ProgressData progress = JsonUtility.FromJson<ProgressData>(snapshot.progress_json);
-                    if (progress != null)
-                        saveService.Restore(progress);
-                }
-
-                if (LevelProgressManager.Instance != null)
-                    LevelProgressManager.Instance.ReloadFromSave();
-
-                // Achievements are lifetime progress: merge, never replace.
-                if (AchievementManager.Instance != null)
-                    AchievementManager.Instance.MergeFromCloud(snapshot.achievements_json, Record != null ? Record.achievements : null);
+                ProgressSnapshotApplier.Apply(snapshot, Record);
             }
             finally
             {
@@ -443,140 +703,11 @@ namespace CodeEscape.Cloud
 
         // ---------- Building the record ----------
 
-        // Reads the current game state (flushed to the local save first) and merges it into the last known record.
+        // Reads the current game state into a record and snapshot (the rules live in ProgressRecordBuilder).
         void BuildRecord(out PlayerProgressData record, out ProgressSnapshot snapshot)
         {
-            ProgressSaveService saveService = ProgressSaveService.Instance;
-            if (saveService != null)
-                saveService.SaveNow();
-
-            record = Record != null ? Record.Clone() : new PlayerProgressData();
-            record.Sanitize();
-            record.version = PlayerProgressData.CurrentVersion;
-            record.player_id = AuthenticationService.Instance.PlayerId;
-
-            ProgrammingLanguage current = LanguageManager.Current;
-            ProgressData progress = SaveManager.LoadProgress();
-            snapshot = new ProgressSnapshot
-            {
-                language = (int)current,
-                progress_json = progress != null ? JsonUtility.ToJson(progress) : string.Empty
-            };
-
-            LevelManager levels = LevelManager.Instance;
-            LevelProgressManager levelProgress = LevelProgressManager.Instance;
-            // Cleared levels mirror the current save (a progress reset clears them); score and achievements are lifetime totals.
-            var completed = new HashSet<string>();
-            int maxClearedInOneLanguage = 0;
-            foreach (ProgrammingLanguage language in Languages)
-            {
-                LevelProgressData data = SaveManager.LoadLevelProgress(language);
-                if (data == null)
-                    continue;
-                data.Sanitize(id => levels == null || levels.GetInfoById(id) != null);
-                snapshot.level_progress.Add(new LanguageLevelProgress { language = (int)language, json = JsonUtility.ToJson(data) });
-                foreach (string id in data.completedLevels)
-                    completed.Add(id);
-                maxClearedInOneLanguage = Mathf.Max(maxClearedInOneLanguage, data.completedLevels.Count);
-            }
-            record.completed_levels = OrderedLevelIds(completed, levels);
-
-            // Current level: the level being played, else the last one the record named.
-            string currentLevel = progress != null ? progress.activeLevel : string.Empty;
-            if (string.IsNullOrEmpty(currentLevel) && progress != null && levels != null)
-            {
-                LevelInfo info = levels.GetInfo(progress.currentLevel);
-                currentLevel = info != null ? info.levelId : string.Empty;
-            }
-            if (!string.IsNullOrEmpty(currentLevel))
-                record.current_level = currentLevel;
-            else if (string.IsNullOrEmpty(record.current_level) && levels != null && levels.Levels.Count > 0)
-                record.current_level = levels.Levels[0].levelId;
-
-            // Highest unlocked level in any language.
-            if (levels != null && levelProgress != null)
-            {
-                int best = -1;
-                for (int i = 0; i < levels.Levels.Count; i++)
-                {
-                    foreach (ProgrammingLanguage language in Languages)
-                    {
-                        if (levelProgress.IsUnlocked(language, levels.Levels[i].levelId))
-                            best = Mathf.Max(best, i);
-                    }
-                }
-                if (best >= 0)
-                    record.highest_unlocked_level = levels.Levels[best].levelId;
-            }
-
-            // Score: every solved challenge and every hinted question is counted once, however often events fire.
-            ProgrammingChallengeManager challenges = ProgrammingChallengeManager.Instance;
-            if (challenges != null && current.IsValid())
-            {
-                var scored = new HashSet<string>(record.scored_challenges);
-                // Doors opened with SHOW ANSWER earned no points, so they don't count here either.
-                foreach (string obstacleId in challenges.ScoredObstacleIds)
-                    scored.Add($"{current.ToId()}:{obstacleId}");
-                var hinted = new HashSet<string>(record.penalised_hints);
-                foreach (string questionId in challenges.HintedQuestionIds)
-                    hinted.Add($"{current.ToId()}:{questionId}");
-                record.scored_challenges = SortedList(scored);
-                record.penalised_hints = SortedList(hinted);
-            }
-            record.total_score = Mathf.Max(0, record.scored_challenges.Count * ProgrammingChallengeManager.PointsPerCorrectAnswer
-                                              - record.penalised_hints.Count * ProgrammingChallengeManager.HintPenalty);
-
-            UnlockAchievements(record, maxClearedInOneLanguage, levels != null ? levels.LevelCount : 0);
-            if (AchievementManager.Instance != null)
-                snapshot.achievements_json = AchievementManager.Instance.ExportJson();
-        }
-
-        static List<string> SortedList(HashSet<string> set)
-        {
-            var list = new List<string>(set);
-            list.Sort(StringComparer.Ordinal);
-            return list;
-        }
-
-        static List<string> OrderedLevelIds(HashSet<string> ids, LevelManager levels)
-        {
-            var result = new List<string>();
-            if (levels != null)
-            {
-                foreach (LevelInfo level in levels.Levels)
-                {
-                    if (ids.Remove(level.levelId))
-                        result.Add(level.levelId);
-                }
-            }
-            var rest = SortedList(ids); // IDs no longer in the level list are kept, not silently dropped.
-            result.AddRange(rest);
-            return result;
-        }
-
-        void UnlockAchievements(PlayerProgressData record, int maxClearedInOneLanguage, int levelCount)
-        {
-            LastUnlockedAchievement = string.Empty;
-            void Unlock(string id, bool earned)
-            {
-                if (earned && !record.achievements.Contains(id))
-                {
-                    record.achievements.Add(id);
-                    LastUnlockedAchievement = Achievements.NameOf(id);
-                }
-            }
-            // Everything the achievement system has awarded (learning, code, story and concept badges).
-            AchievementManager achievements = AchievementManager.Instance;
-            if (achievements != null)
-            {
-                foreach (string id in achievements.Progress.unlocked)
-                    Unlock(id, true);
-            }
-            Unlock(Achievements.FirstChallenge, record.scored_challenges.Count >= 1);
-            Unlock(Achievements.FirstLevel, record.completed_levels.Count >= 1);
-            Unlock(Achievements.FiveChallenges, record.scored_challenges.Count >= 5);
-            Unlock(Achievements.Halfway, levelCount > 0 && maxClearedInOneLanguage * 2 >= levelCount);
-            Unlock(Achievements.CaseClosed, levelCount > 0 && maxClearedInOneLanguage >= levelCount);
+            ProgressRecordBuilder.Build(Record, AuthenticationService.Instance.PlayerId, out record, out snapshot, out string newestAchievement);
+            LastUnlockedAchievement = newestAchievement;
         }
 
         // Identifies the saved content; last_played is excluded so an unchanged game state is never re-sent.
@@ -602,12 +733,42 @@ namespace CodeEscape.Cloud
             Changed?.Invoke();
         }
 
+        // A failed account request as a message a student can act on. The server's reason is also matched by text,
+        // because Unity reports some of them (wrong password, taken username) only in the message.
+        static string Friendly(RequestFailedException e, bool signingUp)
+        {
+            string message = e.Message ?? string.Empty;
+            int code = e.ErrorCode;
+            if (Contains(message, "WRONG_USERNAME_PASSWORD") || (!signingUp && (code == AuthenticationErrorCodes.InvalidParameters || code == CommonErrorCodes.InvalidToken)))
+                return "Wrong username or password.";
+            if (Contains(message, "USERNAME_ALREADY") || Contains(message, "ENTITY_EXISTS") || code == AuthenticationErrorCodes.AccountAlreadyLinked || code == CommonErrorCodes.Conflict)
+                return signingUp ? "That username is taken. Choose another one, or SIGN IN if it is yours." : "That account is already in use.";
+            if (code == AuthenticationErrorCodes.InvalidParameters)
+                return "Unity did not accept that username or password. Check the rules above and try again.";
+            if (code == CommonErrorCodes.TooManyRequests)
+                return "Too many tries. Wait a minute and try again.";
+            if (code == CommonErrorCodes.TransportError || code == CommonErrorCodes.Timeout || code == CommonErrorCodes.ServiceUnavailable)
+                return "Cannot reach the server. Check your internet connection and try again.";
+            if (code == AuthenticationErrorCodes.BannedUser)
+                return "This account is blocked. Ask your teacher or the developers.";
+            if (code == CommonErrorCodes.Forbidden || code == CommonErrorCodes.ProjectPolicyAccessDenied)
+                return "Username and password sign-in is not switched on for this game. Ask the developers to enable it in the Unity Dashboard.";
+            return "Something went wrong (code " + code + "). Try again.";
+        }
+
+        static bool Contains(string text, string part)
+        {
+            return text.IndexOf(part, StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+
         static string Describe(Exception e)
         {
             if (e is InvalidOperationException || e is TimeoutException)
                 return e.Message;
             if (Application.internetReachability == NetworkReachability.NotReachable)
                 return "No internet connection. Check your network and retry.";
+            if (e is RequestFailedException failed)
+                return $"Unity Gaming Services error {failed.ErrorCode}: {failed.Message}";
             return $"{e.GetType().Name}: {e.Message}";
         }
 

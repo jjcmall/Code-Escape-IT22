@@ -222,7 +222,7 @@ namespace CodeEscape.UI
             answerInput.SetTextWithoutNotify(startFill);
 
             hintPanel.SetActive(false);
-            hintButtonLabel.text = $"Hint (-{ProgrammingChallengeManager.HintPenalty})";
+            hintButtonLabel.text = Manager != null && Manager.IsHintFree ? "Hint (free)" : $"Hint (-{ProgrammingChallengeManager.HintPenalty})";
             if (hintAlreadyUnlocked)
                 ShowHint(data.Hint);
 

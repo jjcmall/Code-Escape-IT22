@@ -17,7 +17,7 @@ namespace CodeEscape.UI
     public class SignalMeter : MonoBehaviour
     {
         [SerializeField] TMP_FontAsset font;
-        [SerializeField] Color onColor = new Color(0.29f, 0.87f, 0.5f);
+        [SerializeField] Color onColor = new Color(0.72f, 0.9f, 1f); // MenuTheme.Ice
         [SerializeField] Color offColor = new Color(0.25f, 0.3f, 0.36f);
 
         CanvasGroup group;

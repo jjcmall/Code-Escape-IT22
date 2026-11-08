@@ -53,6 +53,8 @@ namespace CodeEscape.Programming
 
         readonly HashSet<string> completedObstacleIds = new HashSet<string>();
         readonly HashSet<string> completedQuestionIds = new HashSet<string>();
+        // Questions that fail their own checks (QuestionData.Validate): never shown to a player.
+        readonly HashSet<string> unplayableIds = new HashSet<string>();
         readonly HashSet<string> hintedQuestionIds = new HashSet<string>();
         // Help for a player who is stuck (this session only): wrong answers per question, and which
         // questions had their start or their whole answer shown.
@@ -172,6 +174,11 @@ namespace CodeEscape.Programming
             {
                 foreach (string problem in questionDatabase.Validate())
                     Debug.LogWarning($"[Challenge] Question problem: {problem}");
+                foreach (QuestionData question in questionDatabase.Questions)
+                {
+                    if (question != null && question.Validate() != null)
+                        unplayableIds.Add(question.Id);
+                }
             }
 
             // Restore score, hints and solved challenges from the saved playthrough.
@@ -246,7 +253,7 @@ namespace CodeEscape.Programming
                 return false;
             }
 
-            QuestionData question = obstacle.ResolveQuestion(language, questionDatabase, completedQuestionIds);
+            QuestionData question = PlayableOrReplacement(obstacle.ResolveQuestion(language, questionDatabase, completedQuestionIds), obstacle, language);
             if (question == null)
             {
                 Debug.LogError($"[Challenge] '{obstacle.DisplayName}' has no {language.ToDisplayName()} question.");
@@ -282,6 +289,43 @@ namespace CodeEscape.Programming
             if (obstacle.IsMandatory)
                 HazardCaught?.Invoke(obstacle.ObstacleId);
             return true;
+        }
+
+        /// <summary>
+        /// A question that fails its own checks (e.g. its reference answer does not pass its tests) is never shown, so a
+        /// broken asset cannot block a door or trap Alex in a hazard. The replacement is a playable question of the same
+        /// language, preferring the same kind (Run Code for doors, typed answers for hazards), the same topic, and one
+        /// not solved yet. Null when the language has no playable question at all.
+        /// </summary>
+        QuestionData PlayableOrReplacement(QuestionData question, IChallengeSource source, ProgrammingLanguage language)
+        {
+            if (question != null && !unplayableIds.Contains(question.Id))
+                return question;
+            if (questionDatabase == null)
+                return null;
+
+            bool wantRunCode = question != null ? question.IsRunCode : !source.IsMandatory;
+            string topic = question != null ? question.Topic : null;
+            QuestionData best = null;
+            int bestRank = int.MaxValue;
+            foreach (QuestionData candidate in questionDatabase.GetQuestions(language))
+            {
+                if (candidate == question || unplayableIds.Contains(candidate.Id))
+                    continue;
+                if (source.IsMandatory && candidate.IsRunCode)
+                    continue; // hazards never ask for typed-in code (see CatchHazard.ResolveQuestion)
+                int rank = (candidate.IsRunCode == wantRunCode ? 0 : 4)
+                           + (topic != null && string.Equals(candidate.Topic, topic, StringComparison.OrdinalIgnoreCase) ? 0 : 2)
+                           + (completedQuestionIds.Contains(candidate.Id) ? 1 : 0);
+                if (rank < bestRank)
+                {
+                    best = candidate;
+                    bestRank = rank;
+                }
+            }
+            Debug.LogWarning($"[Challenge] Question '{(question != null ? question.Id : "(none)")}' at '{source.DisplayName}' is not playable; " +
+                             (best != null ? $"using '{best.Id}' instead." : "no playable replacement was found."));
+            return best;
         }
 
         public void SubmitChoice(int choiceIndex)
@@ -410,7 +454,10 @@ namespace CodeEscape.Programming
         }
 
         /// <summary>True when the open question's hint costs nothing: the player is stuck (see <see cref="StarterAfterWrongAnswers"/>).</summary>
-        public bool IsHintFree => ActiveWrongAnswers >= StarterAfterWrongAnswers;
+        public bool IsHintFree => ActiveIsPractice || ActiveWrongAnswers >= StarterAfterWrongAnswers;
+
+        /// <summary>True for a practice challenge (the prologue computer): neither a lock nor a hazard, so it changes no score, hints or streak.</summary>
+        public bool ActiveIsPractice => activeSource != null && !activeSource.CountsAsObstacle && !activeSource.IsMandatory;
 
         /// <summary>
         /// Shows the hint. The penalty applies the first time each question's hint is used, unless the player is
@@ -422,7 +469,7 @@ namespace CodeEscape.Programming
                 return;
 
             string id = activeQuestion.Id;
-            if (!HintSeen(id))
+            if (!HintSeen(id) && !ActiveIsPractice)
             {
                 hintsUsed++;
                 // A free hint is kept apart, so the score here and in Cloud Save never count it as penalised.
@@ -513,7 +560,7 @@ namespace CodeEscape.Programming
                     }
                     ChallengeCompleted?.Invoke(obstacle.ObstacleId, question);
                 }
-                else
+                else if (obstacle.IsMandatory)
                 {
                     HazardEscaped?.Invoke(obstacle.ObstacleId);
                 }
@@ -552,16 +599,19 @@ namespace CodeEscape.Programming
         {
             int pointsAwarded = 0;
             bool revealed = ActiveAnswerRevealed;
+            bool practice = ActiveIsPractice;
             if (!correct)
             {
                 wrongAnswers[activeQuestion.Id] = ActiveWrongAnswers + 1;
-                SetStreak(0);
+                if (!practice)
+                    SetStreak(0);
             }
             if (correct)
             {
                 activeSolved = true;
                 // Wrong answers are counted per question, so closing and reopening doesn't make a first try.
-                SetStreak(ActiveWrongAnswers > 0 || revealed ? 0 : streak + 1);
+                if (!practice)
+                    SetStreak(ActiveWrongAnswers > 0 || revealed ? 0 : streak + 1);
                 // Escaping a hazard frees Alex but earns no points and isn't a solved obstacle.
                 if (activeSource.CountsAsObstacle)
                 {
