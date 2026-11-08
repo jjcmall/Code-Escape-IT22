@@ -55,7 +55,7 @@
     <thead><tr><th style="width:27%">Requirement</th><th style="width:14%">Status</th><th>Evidence / Action Taken</th></tr></thead>
     <tbody>
       <tr><td>Repository exists</td><td>Complete</td><td>GitHub repository <code>jjcmall/Code-Escape-IT22</code>; the local copy has <code>origin</code> pointing to it.</td></tr>
-      <tr><td>All active members have appropriate access</td><td>Incomplete</td><td class="ph">To confirm: in GitHub, Settings &gt; Collaborators, all four members are listed with Write access. Today every one of the 33 commits comes from one account (<code>jjcmall</code>), so the other members have not yet committed.</td></tr>
+      <tr><td>All active members have appropriate access</td><td>Incomplete</td><td class="ph">To confirm: in GitHub, Settings &gt; Collaborators, all four members are listed with Write access. Today every one of the 33 commits on <code>main</code> comes from Jean Joseph C. Mallari's account (<code>jjcmall</code>), so the other members have not yet committed on <code>main</code>.</td></tr>
       <tr><td>Main / accepted development branch exists</td><td>Complete</td><td><code>main</code> (the remote default, <code>origin/HEAD</code> points to <code>origin/main</code>).</td></tr>
       <tr><td>Project can be retrieved by another member</td><td>Incomplete</td><td class="ph">To confirm: a second member clones the repository with GitHub Desktop (File &gt; Clone repository) and shows it in the evidence.</td></tr>
       <tr><td>Project opens correctly after retrieval</td><td>Incomplete</td><td class="ph">To confirm: the clone is added in Unity Hub with Editor 6000.5.10f1 (the version in <code>ProjectSettings/ProjectVersion.txt</code>) and opens without errors.</td></tr>
@@ -75,7 +75,7 @@
       <tr><td>Repository Visibility / Access Setting</td><td class="ph">[Public or Private: confirm in GitHub Settings. If private, add the instructor as a collaborator.]</td></tr>
     </tbody>
   </table>
-  <div class="note">Honest status: the repository is set up correctly. Before this activity it had one contributor (<code>jjcmall</code>) and one working branch. Mark Daniel M. Haguisan now has a task branch with commits; the reviews and merges by different members are still to be done.</div>
+  <div class="note">Honest status: the repository is set up correctly. Before this activity it had one contributor (Jean Joseph C. Mallari, <code>jjcmall</code>) and one working branch. Mark Daniel M. Haguisan now has a task branch with commits; the reviews and merges by different members are still to be done.</div>
 </section>
 
 <!-- ================= PART II ================= -->
@@ -129,7 +129,7 @@
   <table>
     <thead><tr><th style="width:22%">Author</th><th style="width:12%">Commits</th><th>Examples (hash, date, message)</th></tr></thead>
     <tbody>
-      <tr><td>jjcmall</td><td>33 on <code>main</code></td><td><code>69731f9</code> 24 Oct 2026, Add code-driven devices, achievements, bug traps, alarm escape and Signal to Sam<br><code>b51c3cc</code> 20 Oct 2026, Make the game Python only<br><code>e1edf6e</code> 20 Oct 2026, Add sandboxed Python interpreter for running player code</td></tr>
+      <tr><td>Jean Joseph C. Mallari (<code>jjcmall</code>, c23-2059-291@uphsl.edu.ph)</td><td>33 on <code>main</code></td><td><code>69731f9</code> 24 Oct 2026, Add code-driven devices, achievements, bug traps, alarm escape and Signal to Sam<br><code>b51c3cc</code> 20 Oct 2026, Make the game Python only<br><code>e1edf6e</code> 20 Oct 2026, Add sandboxed Python interpreter for running player code</td></tr>
       <tr><td>Mark Daniel M. Haguisan</td><td>2 on <code>refactor/save-progress</code>; 1 on <code>docs/version-control-activity</code></td><td><code>3ac1680</code> 8 Nov 2026, Move record building and snapshot restore out of CloudProgressService<br><code>77a743a</code> 8 Nov 2026, Add software architecture activity report for the save progress refactor<br>Docs branch: Add version control activity report (hash on GitHub after publishing)</td></tr>
       <tr><td>Other members</td><td>0</td><td class="ph">No commits yet.</td></tr>
     </tbody>
@@ -140,7 +140,7 @@
   <table>
     <thead><tr><th style="width:16%">Member</th><th style="width:19%">Branch</th><th style="width:20%">Assigned task</th><th style="width:15%">Commit hash</th><th style="width:15%">Description</th><th>File / component</th></tr></thead>
     <tbody>
-      <tr><td>Jean Joseph C. Mallari</td><td class="ph">[branch]</td><td class="ph">[task]</td><td class="ph">[hash]</td><td class="ph">[message]</td><td class="ph">[file]</td></tr>
+      <tr><td>Jean Joseph C. Mallari</td><td class="ph">[branch still to be created]</td><td class="ph">[task]</td><td>Existing on <code>main</code>: <code>69731f9</code>, <code>b51c3cc</code>, <code>e1edf6e</code> (not made through a branch)</td><td class="ph">[message of the branch commit]</td><td class="ph">[file]</td></tr>
       <tr><td>Mark Daniel M. Haguisan</td><td><code>refactor/save-progress</code></td><td>Separate record building and snapshot restoring from <code>CloudProgressService</code></td><td><code>3ac1680</code>, <code>77a743a</code></td><td>Move record building and snapshot restore out of CloudProgressService; Add software architecture activity report</td><td><code>Cloud/ProgressRecordBuilder.cs</code>, <code>Cloud/ProgressSnapshotApplier.cs</code>, <code>Cloud/CloudProgressService.cs</code></td></tr>
       <tr><td>Louis Angelo D. Junio</td><td class="ph">[branch]</td><td class="ph">[task]</td><td class="ph">[hash]</td><td class="ph">[message]</td><td class="ph">[file]</td></tr>
       <tr><td>Alynus Job C. Tombado</td><td class="ph">[branch]</td><td class="ph">[task]</td><td class="ph">[hash]</td><td class="ph">[message]</td><td class="ph">[file]</td></tr>
@@ -299,7 +299,7 @@ Review first: Cloud/ProgressRecordBuilder.cs, Cloud/ProgressSnapshotApplier.cs, 
       <tr><td style="width:34%">Student Name</td><td>Jean Joseph C. Mallari</td></tr>
       <tr><td>Group Number</td><td>IT22</td></tr>
       <tr><td>Version-Control Platform Used</td><td>Git + GitHub</td></tr>
-      <tr><td>Username / Account</td><td class="ph">[GitHub username]</td></tr>
+      <tr><td>Username / Account</td><td>jjcmall (commit email c23-2059-291@uphsl.edu.ph)</td></tr>
       <tr><td>Branch Name</td><td class="ph">[branch]</td></tr>
       <tr><td>Assigned Task</td><td class="ph">[task]</td></tr>
       <tr><td>Commit Hash</td><td class="ph">[hash]</td></tr>
