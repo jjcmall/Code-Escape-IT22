@@ -280,7 +280,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Cutscenes.CutsceneTrigger
   cutsceneId: intro
-  mode: 0
+  mode: 3
   playOnce: 0
   storyEvent: 
   requiredEvent: 
@@ -1778,6 +1778,61 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.InputActionReference
   m_Asset: {fileID: 877187045}
   m_ActionId: dad70c86-b58c-4b17-88ad-f5e53adf419e
+--- !u!1 &1806320489
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1806320491}
+  - component: {fileID: 1806320490}
+  m_Layer: 0
+  m_Name: PrologueComic
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1806320490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1806320489}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55bd3861a1febfe40b73ea5c99c81730, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CodeEscape.Cutscenes.PrologueComic
+  titleFont: {fileID: 11400000, guid: de3cf1e022712f448b5d4270c852616e, type: 2}
+  codeFont: {fileID: 11400000, guid: 7943b7691221e8f4a927ad6e611f6537, type: 2}
+  houseArt: {fileID: 21300000, guid: 42ea083d8edce154184489994149a7a8, type: 3}
+  walkHomeArt: {fileID: 21300000, guid: 8a4e57eca89debe4089156f4c8be706e, type: 3}
+  roomArt: {fileID: 21300000, guid: 852c0f4639ea4334c9f1fa5b06fbd77b, type: 3}
+  computerArt: {fileID: 21300000, guid: 1f063867379d17c44a5ea3f55898cb4c, type: 3}
+  alexPortrait: {fileID: 21300000, guid: 413a18e5accaf4940bfb67e65babd266, type: 3}
+  samPortrait: {fileID: 21300000, guid: 6d8ac1f038791554e8474d27bbaa71a8, type: 3}
+  sentinelScreen: {fileID: 21300000, guid: 7c0fe71493dc2294d92db19b10fa3456, type: 3}
+  firstCommand: {fileID: 11400000, guid: fb6f5db135c5f394ebd54b9d1819cb8e, type: 2}
+  fallback: {fileID: 358771842}
+--- !u!4 &1806320491
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1806320489}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2039287988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1800,3 +1855,4 @@ SceneRoots:
   - {fileID: 391609937}
   - {fileID: 441195443}
   - {fileID: 358771843}
+  - {fileID: 1806320491}
