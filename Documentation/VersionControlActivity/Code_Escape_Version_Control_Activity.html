@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Version Control Activity: Code Escape</title>
+<style>
+  @page { size: A4; margin: 20mm 18mm 20mm 18mm;
+    @bottom-center { content: "Page " counter(page); font: 9pt Arial, sans-serif; color: #000; } }
+  @page :first { @bottom-center { content: ""; } }
+  html { font-family: Arial, Helvetica, sans-serif; font-size: 10pt; line-height: 1.4; color: #000; }
+  body { margin: 0; }
+  h1 { font-size: 14pt; margin: 0 0 4mm; border-bottom: 1px solid #000; padding-bottom: 1mm; break-after: avoid; }
+  h2 { font-size: 11pt; margin: 6mm 0 2mm; break-after: avoid; }
+  p { margin: 0 0 2.5mm; }
+  .part { break-before: page; }
+  table { width: 100%; border-collapse: collapse; margin: 2mm 0 4mm; font-size: 9pt; table-layout: fixed; }
+  thead { display: table-header-group; }
+  th, td { border: 1px solid #000; padding: 1.3mm 1.8mm; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+  th { background: #e6e6e6; }
+  tr { break-inside: avoid; }
+  code { font-family: Consolas, monospace; font-size: 8.5pt; }
+  pre { font-family: Consolas, monospace; font-size: 8pt; margin: 2mm 0 4mm; border: 1px solid #000; padding: 2mm; white-space: pre-wrap; break-inside: avoid; }
+  ul { margin: 0 0 3mm 5mm; padding: 0; }
+  .cover { text-align: center; padding-top: 55mm; page-break-after: always; break-after: page; }
+  .cover h1 { font-size: 22pt; border: 0; margin-bottom: 10mm; }
+  .cover table { width: 140mm; margin: 6mm auto; font-size: 10.5pt; }
+  .cover td:first-child { width: 42mm; font-weight: bold; }
+  .ph { font-style: italic; }
+  .note { border: 1px solid #000; padding: 2mm; margin: 2mm 0 4mm; font-size: 9pt; break-inside: avoid; }
+  .shot { border: 1px dashed #000; height: 40mm; margin: 1.5mm 0 4mm; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 9pt; padding: 0 4mm; break-inside: avoid; }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <h1>Version Control Activity</h1>
+  <p><b>Code Escape: Collaborative Development Workflow</b></p>
+  <p>Capstone Project (Unity, Git and GitHub)</p>
+  <table>
+    <tr><td>Group Number</td><td>IT22</td></tr>
+    <tr><td>Group Members</td><td style="text-align:left">Jean Joseph C. Mallari<br>Mark Daniel M. Haguisan<br>Louis Angelo D. Junio<br>Alynus Job C. Tombado</td></tr>
+    <tr><td>Version-Control Platform</td><td>Git + GitHub (GitHub Desktop as the client)</td></tr>
+    <tr><td>Repository</td><td>https://github.com/jjcmall/Code-Escape-IT22</td></tr>
+    <tr><td>Course / Section</td><td class="ph">[Course and section]</td></tr>
+    <tr><td>Instructor</td><td class="ph">[Instructor]</td></tr>
+    <tr><td>Date prepared</td><td>8 November 2026</td></tr>
+  </table>
+  <p style="margin-top:8mm; font-size:9pt">Status: Parts I, II, III, VII and VIII are filled from the actual repository. Mark Daniel M. Haguisan's branch and commits are recorded in Parts IV, VI and IX. The other members' work, the pull requests and the reviews are still to be done and are marked in italics.</p>
+</section>
+
+<!-- ================= PART I ================= -->
+<section>
+  <h1>Part I. Version-Control Readiness Check</h1>
+  <table>
+    <thead><tr><th style="width:27%">Requirement</th><th style="width:14%">Status</th><th>Evidence / Action Taken</th></tr></thead>
+    <tbody>
+      <tr><td>Repository exists</td><td>Complete</td><td>GitHub repository <code>jjcmall/Code-Escape-IT22</code>; the local copy has <code>origin</code> pointing to it.</td></tr>
+      <tr><td>All active members have appropriate access</td><td>Incomplete</td><td class="ph">To confirm: in GitHub, Settings &gt; Collaborators, all four members are listed with Write access. Today every one of the 33 commits comes from one account (<code>jjcmall</code>), so the other members have not yet committed.</td></tr>
+      <tr><td>Main / accepted development branch exists</td><td>Complete</td><td><code>main</code> (the remote default, <code>origin/HEAD</code> points to <code>origin/main</code>).</td></tr>
+      <tr><td>Project can be retrieved by another member</td><td>Incomplete</td><td class="ph">To confirm: a second member clones the repository with GitHub Desktop (File &gt; Clone repository) and shows it in the evidence.</td></tr>
+      <tr><td>Project opens correctly after retrieval</td><td>Incomplete</td><td class="ph">To confirm: the clone is added in Unity Hub with Editor 6000.5.10f1 (the version in <code>ProjectSettings/ProjectVersion.txt</code>) and opens without errors.</td></tr>
+      <tr><td>Generated / unnecessary files are handled appropriately</td><td>Complete</td><td><code>.gitignore</code> (Unity template) excludes <code>Library/</code>, <code>Temp/</code>, <code>Logs/</code>, <code>UserSettings/</code>, <code>obj/</code>, <code>Build/</code>, <code>*.csproj</code> and <code>*.sln</code>. Checked with <code>git check-ignore</code>: <code>Library</code>, <code>Temp</code>, <code>Logs</code> and <code>UserSettings</code> are ignored although they exist on disk.</td></tr>
+      <tr><td>Important project files are tracked</td><td>Complete</td><td>1672 tracked files: <code>Assets/</code> (1621, including 849 <code>.meta</code> files), <code>ProjectSettings/</code> (29), <code>Packages/</code> (<code>manifest.json</code>, <code>packages-lock.json</code>), <code>Documentation/</code> (13), <code>README.md</code>.</td></tr>
+      <tr><td>Change history is available</td><td>Complete</td><td>33 commits from 11 October 2026 (<code>git log</code>, also GitHub Commits page).</td></tr>
+    </tbody>
+  </table>
+  <table>
+    <tbody>
+      <tr><td style="width:34%">Project Title</td><td>Code Escape</td></tr>
+      <tr><td>Version-Control Platform</td><td>Git + GitHub</td></tr>
+      <tr><td>Repository Name</td><td>Code-Escape-IT22</td></tr>
+      <tr><td>Repository Link</td><td>https://github.com/jjcmall/Code-Escape-IT22</td></tr>
+      <tr><td>Main Branch</td><td><code>main</code></td></tr>
+      <tr><td>Development Platform / Game Engine</td><td>Unity 6000.5.10f1 (C#)</td></tr>
+      <tr><td>Repository Visibility / Access Setting</td><td class="ph">[Public or Private: confirm in GitHub Settings. If private, add the instructor as a collaborator.]</td></tr>
+    </tbody>
+  </table>
+  <div class="note">Honest status: the repository is set up correctly. Before this activity it had one contributor (<code>jjcmall</code>) and one working branch. Mark Daniel M. Haguisan now has a task branch with commits; the reviews and merges by different members are still to be done.</div>
+</section>
+
+<!-- ================= PART II ================= -->
+<section class="part">
+  <h1>Part II. Repository and Project Organization</h1>
+  <h2>Which project files are version controlled?</h2>
+  <ul>
+    <li><code>Assets/</code>: scripts, scenes, prefabs, art, audio, fonts, data and every <code>.meta</code> file. The <code>.meta</code> files hold the asset IDs, so they must be committed or references break for the other members.</li>
+    <li><code>ProjectSettings/</code> and <code>Packages/manifest.json</code> + <code>packages-lock.json</code>: the engine settings and package versions, so every member opens the same project.</li>
+    <li><code>Documentation/</code> and <code>README.md</code>.</li>
+    <li>Unity is set to <b>Force Text</b> serialization (<code>m_SerializationMode: 2</code>), so scenes and prefabs are text (YAML) and Git can show and merge differences.</li>
+  </ul>
+  <h2>Which generated files are excluded?</h2>
+  <p><code>Library/</code> (Unity's import cache), <code>Temp/</code>, <code>Logs/</code>, <code>obj/</code>, <code>Build/</code>, <code>UserSettings/</code> (per-user editor layout), generated <code>*.csproj</code> and <code>*.sln</code>, and <code>*.log</code>. They are rebuilt on each computer, and committing them would cause constant conflicts.</p>
+  <h2>How are large assets handled?</h2>
+  <p>The largest tracked file is <code>Assets/Animations/Sam/Sam.fbx</code> (32.7 MB), then a 17.2 MB and a 9.4 MB texture for the same character. No file is over 50 MB, so plain Git is used. <code>.gitattributes</code> only has <code>* text=auto</code> (line-ending normalisation). Decision: Git LFS is <b>not needed now</b>. If a model, audio or video file approaches 50 MB (GitHub warns at 50 MB and blocks at 100 MB), the group will add it to Git LFS before committing it.</p>
+  <h2>How does another member obtain a usable copy?</h2>
+  <ol style="margin:0 0 3mm 5mm; padding:0">
+    <li>Install Unity Editor 6000.5.10f1 through Unity Hub.</li>
+    <li>In GitHub Desktop, choose File &gt; Clone repository, pick <code>Code-Escape-IT22</code> and clone it (or use Unity Hub: Add &gt; Add project from repository &gt; GitHub).</li>
+    <li>In Unity Hub choose Add &gt; Add project from disk and select the cloned folder. The first open is slow because Unity rebuilds <code>Library/</code>.</li>
+    <li>Sign in to Unity with the group's agreed account if cloud features need to be tested (see <code>Documentation/CloudSave.md</code>).</li>
+  </ol>
+  <div class="shot">[Screenshot: the repository on GitHub (file list with Assets, ProjectSettings, Packages) and the .gitignore file. To be added by the group.]</div>
+</section>
+
+<!-- ================= PART III ================= -->
+<section class="part">
+  <h1>Part III. Branching Plan</h1>
+  <p><code>main</code> is the only accepted version. Every task below starts from the latest <code>main</code> and ends in a reviewed merge. The tasks come from the group's real pending work. The member column is a proposal for the group to confirm.</p>
+  <table>
+    <thead><tr><th style="width:23%">Branch</th><th style="width:28%">Purpose</th><th style="width:20%">Assigned Member/s</th><th>Expected Output</th></tr></thead>
+    <tbody>
+      <tr><td><code>main</code></td><td>Accepted / integrated project version</td><td>Group</td><td>Stable development baseline; changes arrive only by reviewed pull request</td></tr>
+      <tr><td><code>refactor/save-progress</code></td><td>Move record building and snapshot restoring out of <code>CloudProgressService</code></td><td>Mark Daniel M. Haguisan</td><td><code>ProgressRecordBuilder.cs</code>, <code>ProgressSnapshotApplier.cs</code>, slimmer <code>CloudProgressService.cs</code>; architecture report; tests of Part VII of the Architecture Activity</td></tr>
+      <tr><td><code>feature/cloud-accounts</code></td><td>Username and password accounts with Unity Authentication and Cloud Save</td><td class="ph">[Member, proposed]</td><td>Sign-in gate and account menu in <code>ProgressionUI.cs</code>, account methods in <code>CloudProgressService.cs</code>, <code>Documentation/CloudSave.md</code></td></tr>
+      <tr><td><code>feature/menu-theme</code></td><td>One shared look for the menus and screens</td><td class="ph">[Member, proposed]</td><td><code>MenuTheme.cs</code>, <code>MainMenuUI.cs</code>, related prefabs and sprites</td></tr>
+      <tr><td><code>docs/version-control-activity</code></td><td>This version-control report</td><td>Mark Daniel M. Haguisan</td><td>Files in <code>Documentation/VersionControlActivity/</code></td></tr>
+    </tbody>
+  </table>
+  <p><b>Naming.</b> <code>feature/</code> for new work, <code>fix/</code> for defects, <code>refactor/</code> for restructuring, <code>docs/</code> for documents, in lower case with hyphens. One branch is one task. Branches are deleted after the merge.</p>
+  <div class="note">Existing branches: <code>main</code>, plus <code>split-history</code>, <code>1</code>, <code>backup/initial-commit</code> and <code>backup/main-before-split</code> left over from the first upload on 11 October 2026. They are not part of the plan; the group should delete the extra ones from GitHub after confirming nothing is needed from them.</div>
+</section>
+
+<!-- ================= PART IV ================= -->
+<section class="part">
+  <h1>Part IV. Individual Development Work and Change History</h1>
+  <div class="note">Branches and commits for Mark Daniel M. Haguisan are real and were made on 8 November 2026. The other three members' rows are still empty and must only be filled with their own commits.</div>
+
+  <h2>Current history (actual)</h2>
+  <table>
+    <thead><tr><th style="width:22%">Author</th><th style="width:12%">Commits</th><th>Examples (hash, date, message)</th></tr></thead>
+    <tbody>
+      <tr><td>jjcmall</td><td>33 on <code>main</code></td><td><code>69731f9</code> 24 Oct 2026, Add code-driven devices, achievements, bug traps, alarm escape and Signal to Sam<br><code>b51c3cc</code> 20 Oct 2026, Make the game Python only<br><code>e1edf6e</code> 20 Oct 2026, Add sandboxed Python interpreter for running player code</td></tr>
+      <tr><td>Mark Daniel M. Haguisan</td><td>2 on <code>refactor/save-progress</code>; 1 on <code>docs/version-control-activity</code></td><td><code>3ac1680</code> 8 Nov 2026, Move record building and snapshot restore out of CloudProgressService<br><code>77a743a</code> 8 Nov 2026, Add software architecture activity report for the save progress refactor<br>Docs branch: Add version control activity report (hash on GitHub after publishing)</td></tr>
+      <tr><td>Other members</td><td>0</td><td class="ph">No commits yet.</td></tr>
+    </tbody>
+  </table>
+  <p>Good commit messages in this history describe the change. Messages such as "PACKAGES" and "GITIGNORE AND README" are too short, and the group will avoid them from now on.</p>
+
+  <h2>Per-member record (to be completed)</h2>
+  <table>
+    <thead><tr><th style="width:16%">Member</th><th style="width:19%">Branch</th><th style="width:20%">Assigned task</th><th style="width:15%">Commit hash</th><th style="width:15%">Description</th><th>File / component</th></tr></thead>
+    <tbody>
+      <tr><td>Jean Joseph C. Mallari</td><td class="ph">[branch]</td><td class="ph">[task]</td><td class="ph">[hash]</td><td class="ph">[message]</td><td class="ph">[file]</td></tr>
+      <tr><td>Mark Daniel M. Haguisan</td><td><code>refactor/save-progress</code></td><td>Separate record building and snapshot restoring from <code>CloudProgressService</code></td><td><code>3ac1680</code>, <code>77a743a</code></td><td>Move record building and snapshot restore out of CloudProgressService; Add software architecture activity report</td><td><code>Cloud/ProgressRecordBuilder.cs</code>, <code>Cloud/ProgressSnapshotApplier.cs</code>, <code>Cloud/CloudProgressService.cs</code></td></tr>
+      <tr><td>Louis Angelo D. Junio</td><td class="ph">[branch]</td><td class="ph">[task]</td><td class="ph">[hash]</td><td class="ph">[message]</td><td class="ph">[file]</td></tr>
+      <tr><td>Alynus Job C. Tombado</td><td class="ph">[branch]</td><td class="ph">[task]</td><td class="ph">[hash]</td><td class="ph">[message]</td><td class="ph">[file]</td></tr>
+    </tbody>
+  </table>
+  <p><b>Setting the author.</b> Each member must commit under their own GitHub account. In GitHub Desktop: File &gt; Options &gt; Git, set the name and the email that is added to their GitHub account. Otherwise the history shows the wrong person.</p>
+  <div class="shot">[Screenshot: GitHub commit history of each member's branch, showing author, message and hash.]</div>
+</section>
+
+<!-- ================= PART V ================= -->
+<section class="part">
+  <h1>Part V. Change Review</h1>
+  <p>Every branch is merged only through a Pull Request that another member reviews. The developer never reviews their own pull request.</p>
+  <h2>Pull Request template (used for every PR)</h2>
+<pre>Title: short description of the change (example: Move record building into ProgressRecordBuilder)
+What was changed:
+Why the change was needed:
+Feature / component it supports:
+How it was tested (Unity version, steps, result):
+Files that should be reviewed first:</pre>
+  <h2>Pull Request description for <code>refactor/save-progress</code> (ready to paste)</h2>
+<pre>Title: Move record building and snapshot restore out of CloudProgressService
+What was changed: Added ProgressRecordBuilder (game state to progression record and snapshot, score rule, achievements) and ProgressSnapshotApplier (restore a snapshot into the game). CloudProgressService now calls them and keeps connection, accounts and save timing. The same files also carry the username and password account changes made at the same time.
+Why: CloudProgressService mixed networking, account actions, save timing, the score rule and achievement rules, so a rule change meant editing the class that talks to Cloud Save.
+Feature / component: Save Player Progress (Assets/Scripts/Cloud).
+How it was tested: Unity 6000.5.10f1 compiled with no errors. In Play Mode, 8 of 8 save tests passed (solve a challenge, real save to Cloud Save and reload, nothing-changed, failed save and retry, level clearing, score rule, load, old record loads). See Documentation/ArchitectureActivity, Part VII.
+Review first: Cloud/ProgressRecordBuilder.cs, Cloud/ProgressSnapshotApplier.cs, Cloud/CloudProgressService.cs.</pre>
+  <h2>Reviewer checklist</h2>
+  <table>
+    <thead><tr><th style="width:62%">Check</th><th>Result (Yes / No / Comment)</th></tr></thead>
+    <tbody>
+      <tr><td>The change belongs to the assigned task</td><td class="ph">&nbsp;</td></tr>
+      <tr><td>No unrelated files were added (for example scene changes made by accident, <code>Library/</code>, <code>UserSettings/</code>)</td><td class="ph">&nbsp;</td></tr>
+      <tr><td>The code is understandable</td><td class="ph">&nbsp;</td></tr>
+      <tr><td>It follows the agreed architecture (view, controller, rules, data service)</td><td class="ph">&nbsp;</td></tr>
+      <tr><td>It does not duplicate logic that already exists</td><td class="ph">&nbsp;</td></tr>
+      <tr><td>It does not break another component</td><td class="ph">&nbsp;</td></tr>
+      <tr><td>It was tested and the Unity Console has no errors</td><td class="ph">&nbsp;</td></tr>
+      <tr><td>It is ready to merge</td><td class="ph">&nbsp;</td></tr>
+    </tbody>
+  </table>
+  <h2>Review log (to be completed)</h2>
+  <table>
+    <thead><tr><th style="width:24%">Pull Request</th><th style="width:17%">Developer</th><th style="width:17%">Reviewer</th><th style="width:24%">Feedback</th><th>Outcome</th></tr></thead>
+    <tbody>
+      <tr><td class="ph">[PR link]</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td><td class="ph">Approved / Changes requested</td></tr>
+      <tr><td class="ph">[PR link]</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td></tr>
+      <tr><td class="ph">[PR link]</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td></tr>
+      <tr><td class="ph">[PR link]</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td></tr>
+    </tbody>
+  </table>
+  <p><b>If changes are requested:</b> the reviewer comments on the line, the developer fixes it with a new commit on the same branch, the pull request updates itself, and the reviewer checks again before approving.</p>
+  <div class="shot">[Screenshot: a Pull Request with the description, the reviewer's comment and the Approved status.]</div>
+</section>
+
+<!-- ================= PART VI ================= -->
+<section class="part">
+  <h1>Part VI. Merging and Team Synchronization</h1>
+  <h2>Merge record (to be completed)</h2>
+  <table>
+    <thead><tr><th style="width:21%">Change</th><th style="width:14%">Developer</th><th style="width:14%">Reviewer</th><th style="width:15%">Review Status</th><th style="width:14%">Merge Status</th><th>Verification</th></tr></thead>
+    <tbody>
+      <tr><td>Move record building and snapshot restore out of CloudProgressService (<code>refactor/save-progress</code>)</td><td>Mark Daniel M. Haguisan</td><td class="ph">[another member]</td><td>Not yet reviewed</td><td>Not merged</td><td>Compiles in Unity; 8 of 8 save tests passed. After the merge: pull <code>main</code> and test again.</td></tr>
+      <tr><td class="ph">[PR title]</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td></tr>
+      <tr><td class="ph">[PR title]</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td></tr>
+      <tr><td class="ph">[PR title]</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td></tr>
+    </tbody>
+  </table>
+  <h2>After each merge</h2>
+  <ul>
+    <li>The merged feature is visible on <code>main</code> on GitHub (the merged pull request and the commits).</li>
+    <li>One member pulls <code>main</code> (GitHub Desktop: Fetch origin, then Pull origin), opens the project in Unity 6000.5.10f1 and checks that the Console has no errors.</li>
+    <li>That member plays the main flow (menu, sign in, a challenge, level map) to check that existing features still work, and notes the result in the pull request.</li>
+    <li>Every other member pulls the new <code>main</code> and merges or rebases it into their branch before continuing (in GitHub Desktop: Branch &gt; Update from main).</li>
+  </ul>
+  <div class="shot">[Screenshot: the merged pull request, and <code>main</code> commit history after the merge.]</div>
+</section>
+
+<!-- ================= PART VII ================= -->
+<section class="part">
+  <h1>Part VII. Merge Conflict and Game-Asset Collaboration</h1>
+  <p><b>Example from our own project:</b> two members change <code>Assets/Scripts/Cloud/CloudProgressService.cs</code> in different branches. One adds the username and password sign-in (<code>feature/cloud-accounts</code>); the other moves the record-building code into <code>ProgressRecordBuilder</code> (<code>refactor/save-progress</code>). Both edit the same file, and the second one to merge sees a conflict.</p>
+  <p><b>1. What could cause the conflict?</b> Two branches changed the same lines (or neighbouring lines) of the same script, or both changed the same scene or prefab, for example <code>00_MainMenu.unity</code>. It also happens when a member keeps working from an old <code>main</code> for days.</p>
+  <p><b>2. How does Git and GitHub identify or prevent it?</b> Git cannot merge overlapping changes by itself. GitHub shows "This branch has conflicts that must be resolved" on the pull request, and GitHub Desktop lists the conflicted files and marks them with <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code>. We reduce the risk by keeping branches small and short, updating from <code>main</code> before starting and before opening a pull request, and telling the group before editing a scene or prefab (only one member edits a given scene at a time).</p>
+  <p><b>3. How should the team resolve it?</b></p>
+  <ul>
+    <li>Talk first: both versions may be valid work, so the two developers decide together.</li>
+    <li>Update the branch from <code>main</code>. In the conflicted script, keep both changes and remove the conflict markers. For a scene or prefab, keep one version and redo the other member's edit in the Unity editor, because merged YAML can be invalid.</li>
+    <li>Commit the merge, push, and ask the reviewer to check the resolved file.</li>
+  </ul>
+  <p><b>4. What should be tested after resolution?</b> Unity opens the project and the Console has no compile errors; the project plays from the main menu; both features still work (sign in and save, and the refactored save path); and the pull request diff contains only the intended files.</p>
+  <p><b>Game assets.</b> Scenes and prefabs are saved as text, which helps, but they still conflict easily. Rules: one member owns a scene or prefab at a time; models, textures and audio are binary, so they cannot be merged and the later version simply replaces the earlier one. For those files, tell the group before replacing one, and use Git LFS if a file grows toward 50 MB. Git does not have file locking by default, so the agreement between members acts as the lock.</p>
+</section>
+
+<!-- ================= PART VIII ================= -->
+<section class="part">
+  <h1>Part VIII. Team Collaborative Workflow</h1>
+  <h2>Before starting development</h2>
+<pre>Fetch origin and pull the latest main
+-> confirm the assigned task with the group
+-> create a branch from main (Branch > New branch, name feature/... or fix/...)</pre>
+  <h2>During development</h2>
+<pre>Make a small change
+-> test in Unity (Console has no errors, the feature works)
+-> commit with a meaningful message (what and why), under your own account
+-> push the branch to GitHub often (Publish branch, then Push origin)
+-> update from main when others have merged</pre>
+  <h2>Before integration</h2>
+<pre>Finish the task and test it
+-> open a Pull Request with the template (what, why, component, how tested)
+-> a different member reviews with the checklist
+-> developer fixes issues with new commits if changes are requested</pre>
+  <h2>After approval</h2>
+<pre>Merge the Pull Request on GitHub (a merge commit, so each member's commits stay visible)
+-> delete the branch
+-> everyone fetches and pulls the new main
+-> one member tests the integrated project in Unity
+-> continue with the next task</pre>
+  <h2>Team rules</h2>
+  <ul>
+    <li>No direct commits to <code>main</code>. The group turns on branch protection in GitHub (Settings &gt; Branches &gt; Add rule for <code>main</code>: require a pull request and at least 1 approval).</li>
+    <li>One branch per task, merged within a few days.</li>
+    <li>Do not commit <code>Library/</code>, <code>Temp/</code>, <code>Logs/</code> or <code>UserSettings/</code> (already ignored). Do not commit passwords, keys or tokens.</li>
+    <li>Commit messages say what changed. Avoid "update", "final", "done" or "test".</li>
+    <li>Announce in the group chat before editing a scene, a prefab or a large asset.</li>
+  </ul>
+</section>
+
+<!-- ================= EVIDENCE ================= -->
+<section class="part">
+  <h1>Relevant Version-Control Evidence</h1>
+  <table>
+    <thead><tr><th style="width:8%">No.</th><th style="width:56%">Evidence</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>GitHub repository page with the file list and the repository link</td><td class="ph">To be added</td></tr>
+      <tr><td>2</td><td>Settings &gt; Collaborators showing all four members (and the instructor if private)</td><td class="ph">To be added</td></tr>
+      <tr><td>3</td><td><code>.gitignore</code> on GitHub, and the clone on a second computer</td><td class="ph">To be added</td></tr>
+      <tr><td>4</td><td>Branch list on GitHub (<code>main</code> and the task branches)</td><td class="ph">To be added</td></tr>
+      <tr><td>5</td><td>Each member's commit (hash, author, message, files)</td><td class="ph">To be added</td></tr>
+      <tr><td>6</td><td>Pull requests with the description, reviewer comments and approval</td><td class="ph">To be added</td></tr>
+      <tr><td>7</td><td>Merged pull requests and <code>main</code> history after the merge</td><td class="ph">To be added</td></tr>
+      <tr><td>8</td><td>Branch protection rule for <code>main</code></td><td class="ph">To be added</td></tr>
+    </tbody>
+  </table>
+  <div class="shot">[Screenshot area]</div>
+</section>
+
+<!-- ================= PART IX ================= -->
+<section class="part">
+  <h1>Part IX. Individual Contribution Record</h1>
+  <p class="ph">Each student submits their own PDF with their own record filled in with real work. The filename is Lastname_GroupNumber_VersionControl.pdf (for example Mallari_Group22_VersionControl.pdf). Keep only your own record, or fill all four if the group shares one file and each student then submits the file with their own part completed.</p>
+
+  <table>
+    <tbody>
+      <tr><th colspan="2">Member 1</th></tr>
+      <tr><td style="width:34%">Student Name</td><td>Jean Joseph C. Mallari</td></tr>
+      <tr><td>Group Number</td><td>IT22</td></tr>
+      <tr><td>Version-Control Platform Used</td><td>Git + GitHub</td></tr>
+      <tr><td>Username / Account</td><td class="ph">[GitHub username]</td></tr>
+      <tr><td>Branch Name</td><td class="ph">[branch]</td></tr>
+      <tr><td>Assigned Task</td><td class="ph">[task]</td></tr>
+      <tr><td>Commit Hash</td><td class="ph">[hash]</td></tr>
+      <tr><td>Relevant File or Component</td><td class="ph">[file]</td></tr>
+      <tr><td>Pull Request Reference</td><td class="ph">[PR link]</td></tr>
+      <tr><td>Reviewer</td><td class="ph">[name]</td></tr>
+      <tr><td>Final Status</td><td class="ph">Merged / Requires Revision / In Progress</td></tr>
+      <tr><td>What I learned (about 100 words)</td><td class="ph">[answer]</td></tr>
+    </tbody>
+  </table>
+  <table>
+    <tbody>
+      <tr><th colspan="2">Member 2</th></tr>
+      <tr><td style="width:34%">Student Name</td><td>Mark Daniel M. Haguisan</td></tr>
+      <tr><td>Group Number</td><td>IT22</td></tr>
+      <tr><td>Version-Control Platform Used</td><td>Git + GitHub</td></tr>
+      <tr><td>Username / Account</td><td class="ph">[GitHub username]. Commit identity: Mark Daniel M. Haguisan, c23-1182-636@uphsl.edu.ph</td></tr>
+      <tr><td>Branch Name</td><td><code>refactor/save-progress</code> (also <code>docs/version-control-activity</code>)</td></tr>
+      <tr><td>Assigned Task</td><td>Refactor the save progress path: separate record building and snapshot restoring from <code>CloudProgressService</code>, and document it</td></tr>
+      <tr><td>Commit Hash</td><td><code>3ac1680</code> (refactor), <code>77a743a</code> (architecture report)</td></tr>
+      <tr><td>Relevant File or Component</td><td><code>Assets/Scripts/Cloud/ProgressRecordBuilder.cs</code>, <code>ProgressSnapshotApplier.cs</code>, <code>CloudProgressService.cs</code></td></tr>
+      <tr><td>Pull Request Reference</td><td class="ph">[PR link, after the branch is published and the PR is opened]</td></tr>
+      <tr><td>Reviewer</td><td class="ph">[another member]</td></tr>
+      <tr><td>Final Status</td><td>In Progress (committed; publishing, review and merge still to be done)</td></tr>
+      <tr><td>What I learned (about 100 words)</td><td class="ph">[Write this in your own words: what you learned about branches, commits and reviews, and how you will use them in the remaining capstone work.]</td></tr>
+    </tbody>
+  </table>
+  <table>
+    <tbody>
+      <tr><th colspan="2">Member 3</th></tr>
+      <tr><td style="width:34%">Student Name</td><td>Louis Angelo D. Junio</td></tr>
+      <tr><td>Group Number</td><td>IT22</td></tr>
+      <tr><td>Version-Control Platform Used</td><td>Git + GitHub</td></tr>
+      <tr><td>Username / Account</td><td class="ph">[GitHub username]</td></tr>
+      <tr><td>Branch Name</td><td class="ph">[branch]</td></tr>
+      <tr><td>Assigned Task</td><td class="ph">[task]</td></tr>
+      <tr><td>Commit Hash</td><td class="ph">[hash]</td></tr>
+      <tr><td>Relevant File or Component</td><td class="ph">[file]</td></tr>
+      <tr><td>Pull Request Reference</td><td class="ph">[PR link]</td></tr>
+      <tr><td>Reviewer</td><td class="ph">[name]</td></tr>
+      <tr><td>Final Status</td><td class="ph">Merged / Requires Revision / In Progress</td></tr>
+      <tr><td>What I learned (about 100 words)</td><td class="ph">[answer]</td></tr>
+    </tbody>
+  </table>
+  <table>
+    <tbody>
+      <tr><th colspan="2">Member 4</th></tr>
+      <tr><td style="width:34%">Student Name</td><td>Alynus Job C. Tombado</td></tr>
+      <tr><td>Group Number</td><td>IT22</td></tr>
+      <tr><td>Version-Control Platform Used</td><td>Git + GitHub</td></tr>
+      <tr><td>Username / Account</td><td class="ph">[GitHub username]</td></tr>
+      <tr><td>Branch Name</td><td class="ph">[branch]</td></tr>
+      <tr><td>Assigned Task</td><td class="ph">[task]</td></tr>
+      <tr><td>Commit Hash</td><td class="ph">[hash]</td></tr>
+      <tr><td>Relevant File or Component</td><td class="ph">[file]</td></tr>
+      <tr><td>Pull Request Reference</td><td class="ph">[PR link]</td></tr>
+      <tr><td>Reviewer</td><td class="ph">[name]</td></tr>
+      <tr><td>Final Status</td><td class="ph">Merged / Requires Revision / In Progress</td></tr>
+      <tr><td>What I learned (about 100 words)</td><td class="ph">[answer]</td></tr>
+    </tbody>
+  </table>
+</section>
+
+</body>
+</html>
