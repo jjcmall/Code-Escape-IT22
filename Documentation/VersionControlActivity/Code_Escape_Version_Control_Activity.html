@@ -45,7 +45,7 @@
     <tr><td>Instructor</td><td class="ph">[Instructor]</td></tr>
     <tr><td>Date prepared</td><td>8 November 2026</td></tr>
   </table>
-  <p style="margin-top:8mm; font-size:9pt">Status: Parts I, II, III, VII and VIII are filled from the actual repository. Mark Daniel M. Haguisan's branch and commits are recorded in Parts IV, VI and IX. The other members' work, the pull requests and the reviews are still to be done and are marked in italics.</p>
+  <p style="margin-top:8mm; font-size:9pt">Status: Parts I, II, III, VII and VIII are filled from the actual repository. Mark Daniel M. Haguisan's and Jean Joseph C. Mallari's branches and commits are recorded in Parts IV, VI and IX. The other members' work, the pull requests and the reviews are still to be done and are marked in italics.</p>
 </section>
 
 <!-- ================= PART I ================= -->
@@ -75,7 +75,7 @@
       <tr><td>Repository Visibility / Access Setting</td><td class="ph">[Public or Private: confirm in GitHub Settings. If private, add the instructor as a collaborator.]</td></tr>
     </tbody>
   </table>
-  <div class="note">Honest status: the repository is set up correctly. Before this activity it had one contributor (Jean Joseph C. Mallari, <code>jjcmall</code>) and one working branch. Mark Daniel M. Haguisan now has a task branch with commits; the reviews and merges by different members are still to be done.</div>
+  <div class="note">Honest status: the repository is set up correctly. Before this activity it had one contributor (Jean Joseph C. Mallari, <code>jjcmall</code>) and one working branch. Mark Daniel M. Haguisan and Jean Joseph C. Mallari now have task branches with commits; the reviews and merges by different members are still to be done.</div>
 </section>
 
 <!-- ================= PART II ================= -->
@@ -112,7 +112,7 @@
       <tr><td><code>main</code></td><td>Accepted / integrated project version</td><td>Group</td><td>Stable development baseline; changes arrive only by reviewed pull request</td></tr>
       <tr><td><code>refactor/save-progress</code></td><td>Move record building and snapshot restoring out of <code>CloudProgressService</code></td><td>Mark Daniel M. Haguisan</td><td><code>ProgressRecordBuilder.cs</code>, <code>ProgressSnapshotApplier.cs</code>, slimmer <code>CloudProgressService.cs</code>; architecture report; tests of Part VII of the Architecture Activity</td></tr>
       <tr><td><code>feature/cloud-accounts</code></td><td>Username and password accounts with Unity Authentication and Cloud Save</td><td class="ph">[Member, proposed]</td><td>Sign-in gate and account menu in <code>ProgressionUI.cs</code>, account methods in <code>CloudProgressService.cs</code>, <code>Documentation/CloudSave.md</code></td></tr>
-      <tr><td><code>feature/menu-theme</code></td><td>One shared look for the menus and screens</td><td class="ph">[Member, proposed]</td><td><code>MenuTheme.cs</code>, <code>MainMenuUI.cs</code>, related prefabs and sprites</td></tr>
+      <tr><td><code>feature/menu-theme</code></td><td>One shared look for the menus, HUD and dialogs, and the prologue comic intro</td><td>Jean Joseph C. Mallari</td><td><code>MenuTheme</code> sprites and fonts in <code>Resources/</code>, restyled prefabs and scenes, <code>PrologueComic.cs</code>. Based on <code>refactor/save-progress</code> because the theme code (<code>MenuTheme.cs</code>) is in that branch.</td></tr>
       <tr><td><code>docs/version-control-activity</code></td><td>This version-control report</td><td>Mark Daniel M. Haguisan</td><td>Files in <code>Documentation/VersionControlActivity/</code></td></tr>
     </tbody>
   </table>
@@ -129,7 +129,7 @@
   <table>
     <thead><tr><th style="width:22%">Author</th><th style="width:12%">Commits</th><th>Examples (hash, date, message)</th></tr></thead>
     <tbody>
-      <tr><td>Jean Joseph C. Mallari (<code>jjcmall</code>, c23-2059-291@uphsl.edu.ph)</td><td>33 on <code>main</code></td><td><code>69731f9</code> 24 Oct 2026, Add code-driven devices, achievements, bug traps, alarm escape and Signal to Sam<br><code>b51c3cc</code> 20 Oct 2026, Make the game Python only<br><code>e1edf6e</code> 20 Oct 2026, Add sandboxed Python interpreter for running player code</td></tr>
+      <tr><td>Jean Joseph C. Mallari (<code>jjcmall</code>, c23-2059-291@uphsl.edu.ph)</td><td>33 on <code>main</code>; 2 on <code>feature/menu-theme</code></td><td><code>69731f9</code> 24 Oct 2026, Add code-driven devices, achievements, bug traps, alarm escape and Signal to Sam<br><code>b51c3cc</code> 20 Oct 2026, Make the game Python only<br><code>e1edf6e</code> 20 Oct 2026, Add sandboxed Python interpreter for running player code<br><code>ef25c98</code> 8 Nov 2026, Restyle menus, HUD and dialogs with one shared theme (feature/menu-theme)<br><code>f13eeb4</code> 8 Nov 2026, Add the prologue comic and the Python start question to the intro (feature/menu-theme)</td></tr>
       <tr><td>Mark Daniel M. Haguisan</td><td>2 on <code>refactor/save-progress</code>; 1 on <code>docs/version-control-activity</code></td><td><code>3ac1680</code> 8 Nov 2026, Move record building and snapshot restore out of CloudProgressService<br><code>77a743a</code> 8 Nov 2026, Add software architecture activity report for the save progress refactor<br>Docs branch: Add version control activity report (hash on GitHub after publishing)</td></tr>
       <tr><td>Other members</td><td>0</td><td class="ph">No commits yet.</td></tr>
     </tbody>
@@ -140,7 +140,7 @@
   <table>
     <thead><tr><th style="width:16%">Member</th><th style="width:19%">Branch</th><th style="width:20%">Assigned task</th><th style="width:15%">Commit hash</th><th style="width:15%">Description</th><th>File / component</th></tr></thead>
     <tbody>
-      <tr><td>Jean Joseph C. Mallari</td><td class="ph">[branch still to be created]</td><td class="ph">[task]</td><td>Existing on <code>main</code>: <code>69731f9</code>, <code>b51c3cc</code>, <code>e1edf6e</code> (not made through a branch)</td><td class="ph">[message of the branch commit]</td><td class="ph">[file]</td></tr>
+      <tr><td>Jean Joseph C. Mallari</td><td><code>feature/menu-theme</code></td><td>Shared menu theme and prologue comic intro</td><td><code>ef25c98</code>, <code>f13eeb4</code></td><td>Restyle menus, HUD and dialogs with one shared theme; Add the prologue comic and the Python start question to the intro</td><td><code>Resources/UI/*.png</code>, <code>Resources/Fonts</code>, <code>Prefabs/UI/*</code>, <code>Scenes/00_MainMenu</code>, <code>Cutscenes/PrologueComic.cs</code></td></tr>
       <tr><td>Mark Daniel M. Haguisan</td><td><code>refactor/save-progress</code></td><td>Separate record building and snapshot restoring from <code>CloudProgressService</code></td><td><code>3ac1680</code>, <code>77a743a</code></td><td>Move record building and snapshot restore out of CloudProgressService; Add software architecture activity report</td><td><code>Cloud/ProgressRecordBuilder.cs</code>, <code>Cloud/ProgressSnapshotApplier.cs</code>, <code>Cloud/CloudProgressService.cs</code></td></tr>
       <tr><td>Louis Angelo D. Junio</td><td class="ph">[branch]</td><td class="ph">[task]</td><td class="ph">[hash]</td><td class="ph">[message]</td><td class="ph">[file]</td></tr>
       <tr><td>Alynus Job C. Tombado</td><td class="ph">[branch]</td><td class="ph">[task]</td><td class="ph">[hash]</td><td class="ph">[message]</td><td class="ph">[file]</td></tr>
@@ -168,6 +168,14 @@ Why: CloudProgressService mixed networking, account actions, save timing, the sc
 Feature / component: Save Player Progress (Assets/Scripts/Cloud).
 How it was tested: Unity 6000.5.10f1 compiled with no errors. In Play Mode, 8 of 8 save tests passed (solve a challenge, real save to Cloud Save and reload, nothing-changed, failed save and retry, level clearing, score rule, load, old record loads). See Documentation/ArchitectureActivity, Part VII.
 Review first: Cloud/ProgressRecordBuilder.cs, Cloud/ProgressSnapshotApplier.cs, Cloud/CloudProgressService.cs.</pre>
+  <h2>Pull Request description for <code>feature/menu-theme</code> (ready to paste)</h2>
+<pre>Title: Restyle menus, HUD and dialogs with one shared theme
+What was changed: The Orbitron font and the shared menu sprites moved into Resources so MenuTheme can load them; the Orbitron and JetBrains Mono font atlases were regenerated; the main menu, level map, ending, results, challenge, clue journal, gameplay HUD, pause and settings screens were restyled; the prologue comic and its Python start question were added to the intro scene.
+Why: The screens had different looks. One theme keeps the game consistent.
+Feature / component: Menu and UI theme (Assets/Resources, Assets/Prefabs/UI, Assets/Scenes).
+How it was tested: [to be filled by the developer: Unity version, screens opened in Play Mode, Console has no errors].
+Note: based on refactor/save-progress (MenuTheme.cs is in that branch); merge that pull request first.
+Review first: Prefabs/UI/ChallengeUI.prefab, Scenes/00_MainMenu.unity, Cutscenes/PrologueComic.cs.</pre>
   <h2>Reviewer checklist</h2>
   <table>
     <thead><tr><th style="width:62%">Check</th><th>Result (Yes / No / Comment)</th></tr></thead>
@@ -204,7 +212,7 @@ Review first: Cloud/ProgressRecordBuilder.cs, Cloud/ProgressSnapshotApplier.cs, 
     <thead><tr><th style="width:21%">Change</th><th style="width:14%">Developer</th><th style="width:14%">Reviewer</th><th style="width:15%">Review Status</th><th style="width:14%">Merge Status</th><th>Verification</th></tr></thead>
     <tbody>
       <tr><td>Move record building and snapshot restore out of CloudProgressService (<code>refactor/save-progress</code>)</td><td>Mark Daniel M. Haguisan</td><td class="ph">[another member]</td><td>Not yet reviewed</td><td>Not merged</td><td>Compiles in Unity; 8 of 8 save tests passed. After the merge: pull <code>main</code> and test again.</td></tr>
-      <tr><td class="ph">[PR title]</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td></tr>
+      <tr><td class="ph">[PR title]</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td></tr><tr><td>Restyle menus, HUD and dialogs with one shared theme (<code>feature/menu-theme</code>)</td><td>Jean Joseph C. Mallari</td><td class="ph">[another member]</td><td>Not yet reviewed</td><td>Not merged</td><td>[to be filled: Unity compiles, screens checked in Play Mode]</td></tr>
       <tr><td class="ph">[PR title]</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td></tr>
       <tr><td class="ph">[PR title]</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td><td class="ph">&nbsp;</td></tr>
     </tbody>
@@ -300,14 +308,14 @@ Review first: Cloud/ProgressRecordBuilder.cs, Cloud/ProgressSnapshotApplier.cs, 
       <tr><td>Group Number</td><td>IT22</td></tr>
       <tr><td>Version-Control Platform Used</td><td>Git + GitHub</td></tr>
       <tr><td>Username / Account</td><td>jjcmall (commit email c23-2059-291@uphsl.edu.ph)</td></tr>
-      <tr><td>Branch Name</td><td class="ph">[branch]</td></tr>
-      <tr><td>Assigned Task</td><td class="ph">[task]</td></tr>
-      <tr><td>Commit Hash</td><td class="ph">[hash]</td></tr>
-      <tr><td>Relevant File or Component</td><td class="ph">[file]</td></tr>
-      <tr><td>Pull Request Reference</td><td class="ph">[PR link]</td></tr>
-      <tr><td>Reviewer</td><td class="ph">[name]</td></tr>
-      <tr><td>Final Status</td><td class="ph">Merged / Requires Revision / In Progress</td></tr>
-      <tr><td>What I learned (about 100 words)</td><td class="ph">[answer]</td></tr>
+      <tr><td>Branch Name</td><td><code>feature/menu-theme</code></td></tr>
+      <tr><td>Assigned Task</td><td>Give the menus, HUD and dialogs one shared theme, and add the prologue comic intro</td></tr>
+      <tr><td>Commit Hash</td><td><code>ef25c98</code> (theme), <code>f13eeb4</code> (prologue comic)</td></tr>
+      <tr><td>Relevant File or Component</td><td><code>Assets/Resources/UI</code>, <code>Assets/Prefabs/UI</code>, <code>Assets/Scenes/00_MainMenu.unity</code>, <code>Assets/Scripts/Cutscenes/PrologueComic.cs</code></td></tr>
+      <tr><td>Pull Request Reference</td><td class="ph">[PR link, after the branch is published and the PR is opened]</td></tr>
+      <tr><td>Reviewer</td><td class="ph">[another member]</td></tr>
+      <tr><td>Final Status</td><td>In Progress (committed; publishing, review and merge still to be done)</td></tr>
+      <tr><td>What I learned (about 100 words)</td><td class="ph">[Write this in your own words.]</td></tr>
     </tbody>
   </table>
   <table>
