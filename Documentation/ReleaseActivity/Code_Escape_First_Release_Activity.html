@@ -43,10 +43,10 @@
     <tr><td>Source</td><td>Branch <code>release-v0.1.0</code>, commit <code>f8b27a8</code>, tag <code>v0.1.0</code></td></tr>
     <tr><td>Repository</td><td>https://github.com/jjcmall/Code-Escape-IT22</td></tr>
     <tr><td>Release artifact</td><td><code>CodeEscape-v0.1.0.zip</code> (64.5 MB)</td></tr>
-    <tr><td>Course / Section</td><td class="ph">[Course and section]</td></tr>
-    <tr><td>Instructor</td><td class="ph">[Instructor]</td></tr>
+    <tr><td>Course / Section</td><td>BS-IT, J4T</td></tr>
+    <tr><td>Instructor</td><td>Grachel Eliza Ching</td></tr>
   </table>
-  <p style="margin-top:8mm; font-size:9pt">Status: the build, package, tag and release notes are done. The tests that need a real account, and a test on a second computer, are marked as not run and are still to be done by the group.</p>
+  <p style="margin-top:8mm; font-size:9pt">Status: the build, package, tag, release notes and release tests are done. A group member confirmed sign-in, account creation, playing a level and saving on the packaged build on Windows 11.</p>
 </section>
 
 <!-- ================= PART I ================= -->
@@ -111,7 +111,7 @@
       <tr><td>Correct source version is being used</td><td>Pass</td><td>The build was made from a clean checkout of commit <code>f8b27a8</code> (no uncommitted files), tagged <code>v0.1.0</code>.</td></tr>
       <tr><td>Project opens without critical errors</td><td>Pass</td><td>The Unity Console showed no errors in the editor, and the batch build compiled with 0 compile errors.</td></tr>
       <tr><td>Required scenes/modules are included</td><td>Pass</td><td>All 12 scenes are enabled in Build Settings (main menu, language select, level map, intro, six levels, ending, results).</td></tr>
-      <tr><td>Database/configuration is correct for testing</td><td>Pass</td><td>The project is linked to its Unity Cloud project. In the editor on 8 Nov 2026 the game signed in, loaded and saved progress to Cloud Save. The packaged build was only checked up to the welcome screen.</td></tr>
+      <tr><td>Database/configuration is correct for testing</td><td>Pass</td><td>The project is linked to its Unity Cloud project. In the editor on 8 Nov 2026 the game signed in, loaded and saved progress to Cloud Save. In the packaged build, a group member confirmed that sign-in, account creation and saving work (Part VI).</td></tr>
       <tr><td>Temporary/debug content is reviewed</td><td>Partial</td><td>The test scaffold folder <code>Assets/playmode test</code> is untracked and is not in the commit. A full review of debug content in scenes was not done.</td></tr>
       <tr><td>Target platform is selected correctly</td><td>Pass</td><td>Windows 64-bit (<code>StandaloneWindows64</code>).</td></tr>
       <tr><td>Version number is updated</td><td>Pass</td><td><code>bundleVersion</code> changed from 1.0 to 0.1.0 in commit <code>f8b27a8</code>.</td></tr>
@@ -146,19 +146,20 @@
 <!-- ================= PART VI ================= -->
 <section class="part">
   <h1>Part VI. Release Testing</h1>
-  <div class="note">Test environment: Windows 11 PC, the zip extracted to a clean folder, run as <code>CodeEscape.exe</code> (not from the Unity Editor). No previous game data existed for the standalone game on this PC (no saved settings, no log), so it ran as a first-time user. It is the same computer used for development, so a test on a second computer is still needed. Date: 8 November 2026.</div>
+  <div class="note"><b>Two test runs.</b> (1) The builder ran the zip from a clean folder on the development PC, with no previous game data, as <code>CodeEscape.exe</code> (not from the editor). (2) A group member then ran the packaged game on Windows 11 and reported the results marked "reported". <span class="ph">[Confirm: was the second run on a different computer from the development PC? If so, write it here.]</span> Date: 8 November 2026.</div>
   <table>
     <thead><tr><th style="width:21%">Release Test</th><th style="width:25%">Expected Result</th><th style="width:36%">Actual Result</th><th>Status</th></tr></thead>
     <tbody>
       <tr><td>Application launches</td><td>The application opens normally</td><td>The window titled "Code Escape" opened, stayed running and responsive after 25 seconds, using about 790 MB of memory.</td><td>Pass</td></tr>
-      <tr><td>Main feature works</td><td>A player can sign in and play a level</td><td>The welcome screen with SIGN IN and CREATE ACCOUNT appeared. Signing in and playing a level was not tested because it needs a real account.</td><td>Not run</td></tr>
-      <tr><td>Save/load works</td><td>Progress is saved and loaded with an account</td><td>Not tested on the packaged build (needs an account). The same save and load logic passed 8 of 8 tests in the Unity Editor on 8 Nov 2026.</td><td>Not run</td></tr>
+      <tr><td>Main feature works</td><td>A player can sign in and play a level</td><td>Reported by a group member: signing in and playing a level work in the packaged build on Windows 11.</td><td>Pass (reported)</td></tr><tr><td>Account creation and sign-in</td><td>A new account can be created and an existing account can sign in</td><td>Reported by a group member: both work in the packaged build on Windows 11.</td><td>Pass (reported)</td></tr>
+      <tr><td>Save/load works</td><td>Progress is saved and loaded with an account</td><td>Reported: progress saves. The tester's screenshot of the main menu after signing in shows "6 / 6 levels cleared" and the Cloud Progress panel, so the saved progress was loaded. The same logic also passed 8 of 8 tests in the Unity Editor.</td><td>Pass (reported)</td></tr>
       <tr><td>Required assets load</td><td>Menu scene, fonts, sprites and background load without errors</td><td>The main menu background, the Orbitron font and the themed panel and buttons are visible. <code>Player.log</code> has no errors or exceptions. Other scenes were not opened.</td><td>Pass (main menu only)</td></tr>
       <tr><td>Application can close normally</td><td>The window closes without a crash</td><td>The window was closed, the process ended, and the log ends with a normal shutdown.</td><td>Pass</td></tr>
       <tr><td>Version is identifiable</td><td>The version can be found</td><td><code>VERSION.txt</code> in the release folder says 0.1.0 with the commit and tag, and the zip name contains <code>v0.1.0</code>. The game menus do not show it.</td><td>Pass (by file)</td></tr>
     </tbody>
   </table>
-  <p>Result: 4 passed, 2 not run. The two that were not run are the ones that need a real account, so the group should run them on a second computer before calling the release tested.</p>
+  <div class="fig"><img src="evidence/02_tester_main_menu.webp" alt="Main menu in the packaged build"><p class="cap">Main menu after signing in, supplied by the tester: 6 / 6 levels cleared and the Cloud Progress panel, which shows the saved progress was loaded.</p></div>
+  <p>Result: all 7 tests passed (3 checked by the builder, 4 reported by a group member). The save and sign-in results are reports, not something the builder observed.</p>
 </section>
 
 <!-- ================= PART VII ================= -->
@@ -193,7 +194,7 @@
     <li>There is no password reset in the game; the owner sets a new password in the Unity Dashboard.</li>
     <li>The build is not code-signed, so Windows SmartScreen may warn on first run.</li>
     <li>Pull Request #1 is not reviewed or merged yet.</li>
-    <li>Not yet tested on a second computer, and sign-in and save were not tested on the packaged build.</li>
+    <li>At release time the packaged build had been tested only by the builder. A group member then confirmed sign-in, account creation, playing a level and saving on Windows 11 (Part VI).</li>
   </ul>
   <h2>Not Yet Included</h2>
   <ul>
@@ -244,7 +245,7 @@ Artifact        :  CodeEscape-v0.1.0.zip, SHA-256 6AA6FE43...43EC6A</pre>
   <table>
     <tbody>
       <tr><td style="width:30%">Repository</td><td>https://github.com/jjcmall/Code-Escape-IT22</td></tr>
-      <tr><td>Release branch</td><td><code>release-v0.1.0</code> (published on GitHub when the group publishes it)</td></tr>
+      <tr><td>Release branch</td><td><code>release-v0.1.0</code>, published on GitHub: <a href="https://github.com/jjcmall/Code-Escape-IT22/tree/release-v0.1.0">https://github.com/jjcmall/Code-Escape-IT22/tree/release-v0.1.0</a></td></tr>
       <tr><td>Release tag</td><td><code>v0.1.0</code> on commit <code>f8b27a8</code></td></tr>
       <tr><td>Version commit</td><td><code>f8b27a8</code>, "Set the version to 0.1.0 for the first controlled release" (Mark Daniel M. Haguisan)</td></tr>
     </tbody>
@@ -254,7 +255,7 @@ Artifact        :  CodeEscape-v0.1.0.zip, SHA-256 6AA6FE43...43EC6A</pre>
     <tbody>
       <tr><td style="width:30%">File</td><td><code>CodeEscape-v0.1.0.zip</code>, 64.5 MB</td></tr>
       <tr><td>Current location</td><td><code>C:\Users\Carl\Code Escape\Builds\CodeEscape-v0.1.0.zip</code> on the build computer (the <code>Builds/</code> folder is ignored by Git, as it should be)</td></tr>
-      <tr><td>Distribution</td><td class="ph">[To be done by the group: create a GitHub Release for tag v0.1.0 and attach the zip, or use the location approved by the instructor, and write the link here.]</td></tr>
+      <tr><td>Distribution</td><td>Source and release notes: <a href="https://github.com/jjcmall/Code-Escape-IT22/tree/release-v0.1.0">https://github.com/jjcmall/Code-Escape-IT22/tree/release-v0.1.0</a>. The zip itself is not stored in Git. <span class="ph">[Zip download link to be added: GitHub Release for tag v0.1.0, or the location approved by the instructor.]</span></td></tr>
       <tr><td>SHA-256</td><td><code>6AA6FE4345CE2A7C8FEA932C38A88EBCE57EF0D8E344744CBA8E29043F43EC6A</code></td></tr>
     </tbody>
   </table>
